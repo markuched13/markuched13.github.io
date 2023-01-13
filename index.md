@@ -27,4 +27,4 @@ Yo 👋, Welcome To My Cyber Security Blog I'm mark, I Post Different Hacking Tr
 * * *
 ### **TryHackMe Writeups:~#**
 * * *
-- [[Nov 13 2022]] [TryHackMe -- Cold VVars](https://github.com/markuched13/markuched13.github.io/posts/PG/pwned1.md) `Pwned`
+- [[Nov 13 2022]] [TryHackMe -- Cold VVars](https://github.com/markuched13.github.io/posts/PG/pwned1.md) `Pwned`
