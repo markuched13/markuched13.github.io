@@ -10,7 +10,7 @@ title: Home
 Yo 👋, Welcome To My Cyber Security Blog I'm mark, I Post Different Hacking Tricks, Writeups, Articles, Any Stuffs Related To Hacking That I Learn....
 
 * * *
-### WhoAmI:~#
+### Whoami:~#
 * * *
 
 - **My Name:**    `Mark Uche`
@@ -27,3 +27,4 @@ Yo 👋, Welcome To My Cyber Security Blog I'm mark, I Post Different Hacking Tr
 * * *
 ### **TryHackMe Writeups:~#**
 * * *
+
