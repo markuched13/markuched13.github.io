@@ -64,7 +64,7 @@ So here’s the decoding from cyberchef
 
 Flag: sabr{c00k13s_sh0uld_4lw4ys_b3_ch3ckEd!!!}
 
-### Seikooc:
+### Tunnel Vision:
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/tunnelvision/1.png)
 
 So on navigating to the web page we get two links to click.
