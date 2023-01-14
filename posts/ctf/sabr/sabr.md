@@ -18,7 +18,7 @@ We can see it just shows cookie and its more of a static page.
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/2.png)
 
-Next thing I did was to check the source code maybe we will see anything of interest there but too bad nothing really is there only a word which is embedded in the `<img src>` tag which is “Find the flag!”
+Next thing I did was to check the source code maybe I will see anything of interest there but too bad nothing really is there only a word which is embedded in the `<img src>` tag which is “Find the flag!”
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/3.png)
 
@@ -623,7 +623,7 @@ How can this be achieved ?
 
 Well by passing in junkdata +win
 
-So I did that on my terminal to create a's' ("a"*256 + "win"), how i knew to use a*256 was be calculating the amount of bytes needed to reach the win function in the memory address' 
+So I did that on my terminal to create a's' ("a"*256 + "win"), how i knew to use a*256 was by calculating the amount of bytes needed to reach the win function in the memory address' 
 
 ```                                                                                                        
 ┌──(mark㉿haxor)-[~/…/CTF/Sabr/misc/complexmachine]
