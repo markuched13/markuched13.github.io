@@ -801,6 +801,7 @@ So i then de-compiled it using ghidra to analyze the functions in it
 Now lets view the functions present but since its stripped we won’t exactly see the real function names.
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/5.png)
 
+
 So on checking the content of each functions I saw this in FUN_00401200 which is likely the main function.
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/6.png)
 
