@@ -9,7 +9,6 @@ sabrCTF is an online 7-day Jeopardy Capture The Flag competition that mainly fea
 
 ### Web Category 
 
--
 ### Seikooc: 
 So on navigating to the web page I got this:
 
