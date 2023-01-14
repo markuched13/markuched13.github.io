@@ -457,8 +457,9 @@ io.interactive()
 io.close()
 ```
 
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/simplemachine/scriptresult.png)
 Flag: sabr{S1MPL3_STACK_M4CH1N3}
 
 ### Complex machine:
-
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/complexmachine/1.png)
 
