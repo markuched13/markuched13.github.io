@@ -1149,7 +1149,7 @@ Now the wording looks more ok but one problem its scattered, so this is where it
 
 I had to rearrang it but since I know that the first four bytes would be `sabr` and the 5th byte will be `{` also the flag will also end with `}`
 
-And those underscore would be between 2 words `_` so the flag format should be like this `sabr{****_****_****}`
+And those underscore would be between 3 words `_` so the flag format should be like this `sabr{****_****_****_****}`
 
 I just had to keep on trying each alphabet manually and a script would have been better in this case but i couldn't find my way out
 
@@ -1157,7 +1157,7 @@ So after all the struggle I ended up with:
 
 ```
 art{rbasadnap_hsuc_era_set} 
-sabr{**_**_**} 
+sabr{**_**_**_**} 
                           
 baatdnaphsuceraset
 abr{**_**_**_**}
