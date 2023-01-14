@@ -1145,7 +1145,7 @@ Now I made a bash one linear command which will loop through each character in a
 a,r,t,{,r,b,a,s,a,d,n,a,p,_,h,s,u,c,_,e,r,a,_,s,e,t,}                                                                                                                                                                                            
 ```
 
-Now the wording looks more ok but one problem its scatter so this is where it took my time lol 😅
+Now the wording looks more ok but one problem its scattered, so this is where it took my time lol 😅
 
 I had to rearrang it but since I know that the first four bytes would be `sabr` and the 5th byte will be `{` also the flag will also end with `}`
 
