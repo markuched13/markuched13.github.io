@@ -12,15 +12,15 @@ sabrCTF is an online 7-day Jeopardy Capture The Flag competition that mainly fea
 ### Seikooc: 
 So on navigating to the web page I got this:
 
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/1.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/1.png)
 
 We can see it just shows cookie and its more of a static page.
 
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/2.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/2.png)
 
 Next thing I did was to check the source code maybe we will see anything of interest there but too bad nothing really is there only a word which is embedded in the <img src> tag which is “Find the flag!”
 
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/3.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/3.png)
 
 Now the challenge name has given us hint already seikooc == say cookie.
 
@@ -52,7 +52,7 @@ Lets check the cookie present in the web server using curl.
 * Connection #0 to host 13.36.37.184 left intact
 ```
 
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/4.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc4.png)
 
 We can see there’s a cookie present and its encoded now lets decode the value using cyberchef.
 
@@ -60,7 +60,7 @@ But also if we notice the end of the flag cookie we see its url encoded
 
 So here’s the decoding from cyberchef
 
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/5.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/5.png)
 
 Flag: sabr{c00k13s_sh0uld_4lw4ys_b3_ch3ckEd!!!}
 
