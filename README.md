@@ -9,4 +9,4 @@
 
 - 💞️ I’m looking to collaborate on Projects
 
-- 📫 How to reach me on Discord @n16hth4wk#8241 Twitter @n16hthawk
+- 📫 How to reach me on Discord @Hack.You#9120 Twitter @0xMarkUche
