@@ -1024,3 +1024,156 @@ io.interactive()
 
 Flag: sabr{m3m0ry_c0rrup710n_iz_fUNNNNNNNNNNNN}
 
+### Reverse Engineering Category 
+
+### Bandit: 
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/re/bandit/pic.png)
+
+So I downloaded the file to my machine to analyze it.
+
+It just shows a banner then takes in our input and then prints nope.
+
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/re/bandit/1.png)
+
+So next thing I did was to open it up in ghidra to see whats happening.
+
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/re/bandit/2.png)
+
+Now lets look at the main function.
+
+We see that there are hexadecimal values stored in local_30,local_28,local_20,local_1e.
+
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/re/bandit/3.png)
+
+```
+undefined8 main(void)
+
+{
+  int iVar1;
+  ushort **ppuVar2;
+  undefined8 uVar3;
+  long in_FS_OFFSET;
+  int local_40;
+  undefined8 local_38;
+  undefined8 local_30;
+  undefined8 local_28;
+  undefined2 local_20;
+  undefined local_1e;
+  long local_10;
+  
+  local_10 = *(long *)(in_FS_OFFSET + 0x28);
+  banner();
+  local_40 = 0;
+  local_38 = 0x6e65677b656f6e66;
+  local_30 = 0x6e71616e635f7566;
+  local_28 = 0x68705f72656e5f66;
+  local_20 = 0x7267;
+  local_1e = 0x7d;
+  do {
+    iVar1 = getchar();
+    if (iVar1 == -1) goto LAB_004012f4;
+    ppuVar2 = __ctype_b_loc();
+    if (((*ppuVar2)[iVar1] & 0x400) == 0) {
+      if (iVar1 != *(char *)((long)&local_38 + (long)local_40)) {
+        puts("Nope!\n");
+        uVar3 = 0xffffffff;
+        goto LAB_004012f9;
+      }
+    }
+    else {
+      iVar1 = tolower(iVar1);
+      if ((iVar1 + -0x54) % 0x1a + 0x61 != (int)*(char *)((long)&local_38 + (long)local_40)) {
+        puts("Nope!\n");
+        uVar3 = 0xffffffff;
+        goto LAB_004012f9;
+      }
+    }
+    local_40 = local_40 + 1;
+  } while (local_40 < 0x1b);
+  puts("You found the flag!\n");
+LAB_004012f4:
+  uVar3 = 0;
+LAB_004012f9:
+  if (local_10 != *(long *)(in_FS_OFFSET + 0x28)) {
+                    /* WARNING: Subroutine does not return */
+    __stack_chk_fail();
+  }
+  return uVar3;
+}
+```
+
+Now decoding that using xxd I got 
+
+```                       
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/re/bandit]
+└─$ echo 0x6e65677b656f6e660x6e71616e635f75660x68705f72656e5f660x72670x7d | xxd -r -p
+neg{eonfnqanc_ufhp_ren_frg} 
+```
+
+But now its encoded but not just encoded it doesn't seems arranged. 
+
+What I then did was that i assumed that since the flag format is `sabr{` which has 4 bytes before `{` I then did something quite dumb but it worked only that it took few minutes.
+
+I made a python script which would print out all the alphabets in the string then return the output as a list
+
+```
+#!/usr/bin/python3
+
+string = 'neg{eonfnqanc_ufhp_ren_frg}'
+char_list = list(string)
+print(char_list)
+```
+
+Now lets run it
+
+```                 
+┌──(mark㉿haxor)-[~/…/CTF/Sabr/re/bandit]
+└─$ python3 rearrang.py 
+['n', 'e', 'g', '{', 'e', 'o', 'n', 'f', 'n', 'q', 'a', 'n', 'c', '_', 'u', 'f', 'h', 'p', '_', 'r', 'e', 'n', '_', 'f', 'r', 'g', '}']
+```                                                                                                                                                                   
+
+Now what I did then was that since I didn't really know the encoding used to encode the string I tried out few stuffs and I found that its rot13.
+
+Now I made a bash one linear command which will loop through each character in a array then rot13 decode it.
+
+```
+┌──(mark㉿haxor)-[~/…/CTF/Sabr/re/bandit]
+└─$ array=('n', 'e', 'g', '{', 'e', 'o', 'n', 'f', 'n', 'q', 'a', 'n', 'c', '_', 'u', 'f', 'h', 'p', '_', 'r', 'e', 'n', '_', 'f', 'r', 'g', '}')
+                                                                                                                                                                                            
+┌──(mark㉿haxor)-[~/…/CTF/Sabr/re/bandit]
+└─$ for i in $array;do echo $i | rot13 >> decoded.txt | tr -d "\n"; done 
+a,r,t,{,r,b,a,s,a,d,n,a,p,_,h,s,u,c,_,e,r,a,_,s,e,t,}                                                                                                                                                                                            
+```
+
+Now the wording looks more ok but one problem its scatter so this is where it took my time lol 😅
+
+I had to rearrang it but since I know that the first four bytes would be `sabr` and the 5th byte will be `{` also the flag will also end with `}`
+
+And those underscore would be between 2 words `_` so the flag format should be like this `sabr{****_****_****}`
+
+I just had to keep on trying each alphabet manually and a script would have been better in this case but i couldn't find my way out
+
+So after all the struggle I ended up with: 
+
+```
+art{rbasadnap_hsuc_era_set} 
+sabr{**_**_**} 
+                          
+baatdnaphsuceraset
+abr{**_**_**_**}
+                          
+sabr{trash_pandas_are_cute}
+```
+
+Flag: sabr{trash_pandas_are_cute}
+
+
+
+
+
+
+
+
+
+
+
