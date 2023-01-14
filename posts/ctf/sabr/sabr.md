@@ -193,7 +193,9 @@ Now one way to take advantage of this vulnerability is by exploiting it via Loca
 
 So I tried basic LFI Payloads but none worked and since the description of the challenge says that no fuzzing required I then decided to read the source code of the vulnerably php file (index.php) using php filters.
 
-```php://filter/read=convert.base64-encode/resource=index.php```
+```
+php://filter/read=convert.base64-encode/resource=index.php
+```
 
 So that will read the file then convert it to base64 cause if no conversion is done the web page will treat is as a php code which won’t show the source code.
 
@@ -207,7 +209,8 @@ But on checking the source code we have a base64 encoded blob
 
 So I copied and saved the encoded blob on my machine to do the decoding.
 
-```┌──(mark㉿haxor)-[~/…/CTF/Sabr/web/wargamez]
+```
+┌──(mark㉿haxor)-[~/…/CTF/Sabr/web/wargamez]
 └─$ nano encodedblob
                                                                                                         
 ┌──(mark㉿haxor)-[~/…/CTF/Sabr/web/wargamez]
