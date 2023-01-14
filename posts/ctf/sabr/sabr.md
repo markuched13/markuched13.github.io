@@ -236,3 +236,229 @@ Flag: sabr{w3lc0m3_t0_th3_w0rld_0f_w4rg4m3s}
 This just checks whether you are sane 😂
 
 Flag: sabr{Welcome_To_Sabr_CTF}
+
+### Simple machine:
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/simplemachine/1.png)
+
+We are given a remote service to connect to now lets check out what it does
+
+```
+┌──(mark㉿haxor)-[~/…/CTF/Sabr/misc/simplemachine]
+└─$  nc 13.36.37.184 9099 
+
+ ▄▄█████████ ▄███▄   ▄▄███ ▄▄████████▄ ▄▄████████▄ ▄███   ▄███ ▄█████████ ▄███   ▄███ ▄▄█████████
+ ████▀▀▀▀▀▀▀ ██████▄██████ ████▀▀▀████ ████▀▀▀████ ████   ████ ▀▀▀████▀▀▀ █████▄ ████ ████▀▀▀▀▀▀▀
+ ████▄▄▄▄▄▄  ████▀███▀████ ████▄▄▄████ ████   ▀▀▀▀ ████▄▄▄████    ████    ███████████ ████▄▄▄    
+ ▀▀▀▀▀▀▀████ ████ ▀▀▀ ████ ████▀▀▀████ ████   ▄▄▄▄ ████▀▀▀████    ████    ████▀▀█████ ████▀▀▀    
+ ▄▄▄▄▄▄▄████ ████     ████ ████   ████ ████▄▄▄████ ████   ████ ▄▄▄████▄▄▄ ████  ▀████ ████▄▄▄▄▄▄▄
+ ██████████▀ ████     ████ ████   ████ ▀█████████▀ ████   ████ ██████████ ████   ████ ▀██████████
+ ▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀     ▀▀▀▀ ▀▀▀▀   ▀▀▀▀  ▀▀▀▀▀▀▀▀▀  ▀▀▀▀   ▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀   ▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀
+ Welcome to the Simple Machine. Type help or ? to list operations.
+
+
+#> help
+
+Documented commands (type help <topic>):
+========================================
+add  and  help  mul  or  regs  sub  win  xor
+
+#> 
+
+```
+
+We are greeted with a banner and some sort of command line interface.
+
+Using either ? or help we can view the commands that can be ran on this terminal.
+
+Now the goal of this task is to set any register to 0x1337.
+
+We can view the current state of all registers present using the regs comamnd
+
+```
+#> regs
+x0 = 0x0000
+x1 = 0x0000
+x2 = 0x0000
+x3 = 0x0000
+x4 = 0x0000
+x5 = 0x0000
+x6 = 0x0000
+x7 = 0x0000
+x8 = 0x0000
+x9 = 0x0000
+#> 
+```
+
+And we see that its all set to 0.
+
+From this now try using the help and see what each command does
+
+```
+#> help
+
+Documented commands (type help <topic>):
+========================================
+add  and  help  mul  or  regs  sub  win  xor
+
+#> 
+```
+
+This option (add) seems like the best to use right now.
+
+Now next thing I did was to obviously try adding 0x1337 to any of the register which in this case i used register x0
+
+```
+#> add x0 0x1337
+Invalid Syntax
+#> 
+```
+
+But we see that we can’t really include 0 in as a value to add
+
+So I tried adding 1337 to register x0 and checking the value using the regs command
+
+```
+#> add x0 1337
+#> regs
+x0 = 0x0a72
+x1 = 0x0000
+x2 = 0x0000
+x3 = 0x0000
+x4 = 0x0000
+x5 = 0x0000
+x6 = 0x0000
+x7 = 0x0000
+x8 = 0x0000
+x9 = 0x0000
+#> 
+```
+
+But weird when I checked the registers it showed another value.
+
+So it took me some hours to figure out that the value we give it is converted from decimal to hex. Now this is interesting.
+
+So next thing I did was to use the decimal representation of the hexadecimal value 0x1337 which is 4919
+
+But i had to first subtract the initial value i put in the register using the sub command.
+
+But on running it I got Bad Result as an output.
+
+```
+#> sub x0 1337
+#> regs
+x0 = 0x0000
+x1 = 0x0000
+x2 = 0x0000
+x3 = 0x0000
+x4 = 0x0000
+x5 = 0x0000
+x6 = 0x0000
+x7 = 0x0000
+x8 = 0x0000
+x9 = 0x0000
+#> add x0 4919
+Bad Result.
+#> 
+```
+
+Hmmm painful.. So next I tried add 4918 = 0x1336 to the register
+
+```
+#> add x0 4918
+#> regs
+x0 = 0x1336
+x1 = 0x0000
+x2 = 0x0000
+x3 = 0x0000
+x4 = 0x0000
+x5 = 0x0000
+x6 = 0x0000
+x7 = 0x0000
+x8 = 0x0000
+x9 = 0x0000
+#> 
+```
+Well that worked we wrote 0x1336 to the register but we need to add 1 to make it 0x1337 but when i try adding 1 i.e add x0 1 I still got `Bad Result` as an error
+
+So at this point I went to check other commands we can run
+
+Now xor also adds value to the register we specify.
+
+So next thing I did was to use it and add 1 to the register x0
+
+```
+#> help
+
+Documented commands (type help <topic>):
+========================================
+add  and  help  mul  or  regs  sub  win  xor
+
+#> xor x0 1
+#> regs
+x0 = 0x1337
+x1 = 0x0000
+x2 = 0x0000
+x3 = 0x0000
+x4 = 0x0000
+x5 = 0x0000
+x6 = 0x0000
+x7 = 0x0000
+x8 = 0x0000
+x9 = 0x0000
+#> 
+```
+
+Now that we have made the register the exact value lets call the win function
+
+```
+#> win
+You Win, Flag is sabr{S1MPL3_STACK_M4CH1N3}
+```
+
+Now from what I noticed the xor command adds the exact value of what we want the register to be, so for confirming sake I decided to try it out
+
+```
+#> xor x0 4919
+#> regs
+x0 = 0x1337
+x1 = 0x0000
+x2 = 0x0000
+x3 = 0x0000
+x4 = 0x0000
+x5 = 0x0000
+x6 = 0x0000
+x7 = 0x0000
+x8 = 0x0000
+x9 = 0x0000
+#> 
+```
+
+Nice it also was able to add any number we specify to any register from here we can call win function
+
+```
+#> win
+You Win, Flag is sabr{S1MPL3_STACK_M4CH1N3}
+```
+
+So here’s my python script to initialize the connection then do the evaluations and also call the win function
+
+It might take few seconds to print the flag
+
+```
+#!/usr/bin/python2
+from pwn import *
+io = remote("13.36.37.184", 9099)
+
+io.sendline("xor x1 4919")
+io.sendline("regs")
+io.send("win")
+io.send("\n")
+io.interactive()
+io.close()
+```
+
+Flag: sabr{S1MPL3_STACK_M4CH1N3}
+
+### Complex machine:
+
+
