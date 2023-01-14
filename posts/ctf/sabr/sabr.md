@@ -773,7 +773,7 @@ We see its a 64 bit binary, dynamically linked and its stripped (meaning we wonâ
 
 We can also see that the binary has partial relro, it has no canary (so if we can a buffer overflow we wonâ€™t be stopped by stack protector), nx enabled (if we can inject shellcode to the stack we won't be able to execute it), no pie ( the address when the binary loads is static)
 
-Please forgive me for not explaining those terms well am not that good at binary exploitation yet
+Please forgive me for not explaining those terms well as am not that good at binary exploitation yet
 
 Now lets run this binary to get an overview of what is happening
 
