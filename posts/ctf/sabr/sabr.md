@@ -52,7 +52,7 @@ Lets check the cookie present in the web server using curl.
 * Connection #0 to host 13.36.37.184 left intact
 ```
 
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc4.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/4.png)
 
 We can see there’s a cookie present and its encoded now lets decode the value using cyberchef.
 
