@@ -18,7 +18,7 @@ We can see it just shows cookie and its more of a static page.
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/2.png)
 
-Next thing I did was to check the source code maybe we will see anything of interest there but too bad nothing really is there only a word which is embedded in the <img src> tag which is “Find the flag!”
+Next thing I did was to check the source code maybe we will see anything of interest there but too bad nothing really is there only a word which is embedded in the `<img src>` tag which is “Find the flag!”
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/3.png)
 
