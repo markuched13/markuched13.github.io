@@ -10,9 +10,9 @@ sabrCTF is an online 7-day Jeopardy Capture The Flag competition that mainly fea
 ### Web Category 
 
 ### Seikooc: 
-So on navigating to the web page I got this:
-
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/1.png)
+
+So on navigating to the web page I got this
 
 We can see it just shows cookie and its more of a static page.
 
