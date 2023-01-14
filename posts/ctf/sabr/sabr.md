@@ -1027,7 +1027,7 @@ Flag: sabr{m3m0ry_c0rrup710n_iz_fUNNNNNNNNNNNN}
 ### Reverse Engineering Category 
 
 ### Bandit: 
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/re/bandit/pic.png)
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/re/bandit/pic.JPG)
 
 So I downloaded the file to my machine to analyze it.
 
