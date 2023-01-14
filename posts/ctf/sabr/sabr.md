@@ -623,7 +623,7 @@ How can this be achieved ?
 
 Well by passing in junkdata +win
 
-So I did that on my terminal to create a's' ("a"*256 + "win"), how i knew to use a*256 was by calculating the amount of bytes needed to reach the win function in the memory address' 
+So I did that on my terminal to create a's' ("a"*256 + "win"), how i knew to use a*256 was by calculating the amount of bytes needed to reach the echo function in the memory address' 
 
 ```                                                                                                        
 ┌──(mark㉿haxor)-[~/…/CTF/Sabr/misc/complexmachine]
@@ -771,7 +771,7 @@ So at this point I did basic file check
 
 We see its a 64 bit binary, dynamically linked and its stripped (meaning we won’t be able to see the functions name i.e main func)
 
-We can also see that the binary has partial relro, it has no canary (so if we can a buffer overflow we won’t be stopped by stack protector), nx enabled (if we can inject shellcode to the stack we won't be able to execute it), no pie ( the address when the binary loads is static)
+We can also see that the binary has partial relro, it has no canary (so if we can perform a buffer overflow we won’t be stopped by stack protector), nx enabled (if we can inject shellcode to the stack we won't be able to execute it), no pie ( the address when the binary loads is static)
 
 Please forgive me for not explaining those terms well as am not that good at binary exploitation yet
 
