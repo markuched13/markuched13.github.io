@@ -145,7 +145,8 @@ So after that a for loop is called which will iterate the values stored in the p
 Then the loop keeps on going till it finds `sabr{` in the response which is the flag format per se, after it does that it will then print out the content of the response.
 
 Now lets run the code:
-```┌──(mark㉿haxor)-[~/…/CTF/Sabr/web/tunnel_vision]
+```
+┌──(mark㉿haxor)-[~/…/CTF/Sabr/web/tunnel_vision]
 └─$ python3 exploit.py                               
 Getting page from: http://13.36.37.184:45260
 Found 2 possible paths: ['/?path=z6qpcm5thexk', '/?path=41ebqfmu6onizs8']
