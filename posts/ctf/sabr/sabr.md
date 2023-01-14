@@ -224,4 +224,11 @@ Now on reading the source code we can clearly see the flag which is commented
 Flag: sabr{w3lc0m3_t0_th3_w0rld_0f_w4rg4m3s}
 
 
+### Miscellaneous Category 
 
+### Sanity:
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/1.png)
+
+This just checks whether you are sane 😂
+
+Flag: sabr{Welcome_To_Sabr_CTF}
