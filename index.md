@@ -20,7 +20,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - **Github:** `https://github.com/markuched13`
 
 * * *
-### **CyberSecLabs:~#**
+### **CyberSecLabs Writeups:~#**
 * * *
 
 -
