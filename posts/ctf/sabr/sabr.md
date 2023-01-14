@@ -1020,6 +1020,7 @@ payload = padding + addr
 io.send(payload)
 io.interactive()
 ```
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/10.png)
 
 Flag: sabr{m3m0ry_c0rrup710n_iz_fUNNNNNNNNNNNN}
 
