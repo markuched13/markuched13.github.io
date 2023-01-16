@@ -1523,7 +1523,7 @@ Flag: sabr{trash_pandas_are_cute}
 Please If I made any sort of mistake be sure to DM me on discord Hack.You#9120
 
 <br> <br>
-[Back To Home](../../index.md)
+[Back To Home](../../../index.md)
 <br>
 
 
