@@ -57,6 +57,7 @@ So next thing is I moved to enumerate port 80 (http)
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Dibble/3.png)
 
 But I'm going to have to leave it cause its running a cms which is drupal 9 and the version doesn't have a known vulnerability
+
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Dibble/4.png)
 
 Now it feels like the attack surface is going to be from port 3000. Lets goooo!!
