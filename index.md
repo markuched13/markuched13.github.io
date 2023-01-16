@@ -49,6 +49,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 16 2023]] [Dibble](https://markuched13.github.io/posts/pg/dibble.html) `Node JS, Command Injection, Suid`
 - [[Jan 16 2023]] [Algeron](https://markuched13.github.io/posts/pg/algeron.html) `Smatter Mail `
 - [[Jan 16 2023]] [Bratarina](https://markuched13.github.io/posts/pg/bratarina.html) `Open SMTP `
+- [[Jan 16 2023]] [Squid](https://markuched13.github.io/posts/pg/squid.html) `Squid Proxy `
 
 
 -
