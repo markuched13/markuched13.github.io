@@ -1158,6 +1158,14 @@ print(''.join(result))
 
 ``` 
 
+On running it I got 
+
+```
+┌──(mark㉿haxor)-[~/…/CTF/Sabr/re/bandit]
+└─$ python3 decode.py
+art{rbasadnap_hsuc_era_set}
+```
+
 Now the wording looks more ok but one problem its scattered, so this is where it took my time lol 😅
 
 I had to rearrang it but since I know that the first four bytes would be `sabr` and the 5th byte will be `{` also the flag will also end with `}`
