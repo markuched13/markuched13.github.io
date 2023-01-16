@@ -1140,11 +1140,10 @@ There's no any form of buffer overflow cause it used fget to receive user input
 
 But whereas it uses printf without specifying the format and prints out the input we give
 
-The obvious thing to do is to call the function or rather call /bin/bash
+The obvious thing to do is to call the /bin/bash function 
 
 But there's no buffer overflow so we can't overwrite return address to call /bin/bash but instead we can overwrite the Global Offset Table (GOT) address for exit to 
-
-call rather call /bin/bash 
+call /bin/bash 
 
 So what GOT does is that it stores pointers to libc function or any other external libs and therefore when a binary wants to call a function it looks into the got 
 entry to find the pointer to that
