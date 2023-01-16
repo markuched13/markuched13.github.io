@@ -1150,10 +1150,9 @@ entry to find the pointer to that
 
 Since PIE is not enabled and we dont have full relro we know where the got lives and we can write there
 
-Therefore when you overwirte whats in the got for exit() you can make the process jump to that pointer when exit is called
+Therefore when you overwrite what's in the got for exit() you can make the process jump to that pointer when exit is called
 
 And why I used want to overwrite exit() is because from the decompiled code its basically useless there instead of overwriting printf we can take advantage of the 
-
 function that doesn't really do anything useful for us
 
 Now lets get to the exploitation part
