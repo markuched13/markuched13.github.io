@@ -1025,6 +1025,7 @@ io.interactive()
 Flag: sabr{m3m0ry_c0rrup710n_iz_fUNNNNNNNNNNNN}
 
 ### fsbeZ:
+
 I don't the images cause the ctf's is over and i didn't take capture while i was doing it
 
 But still I do have the binary stored in my pc
@@ -1057,7 +1058,32 @@ fsbeZ: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically lin
     PIE:      No PIE (0x8048000)
 ```
 
-We are dealing with a 32bits binary which is dynamically linked, stipped (meaning we won't be able to see the real function names), has partial relro, has stack enabled (so if we are to get a buffer overflow we 
+We are dealing with a `32BITS` binary which is `DYNAMICALLY LINKED`, `STRIPPED` (meaning we won't be able to see the real function names), has `PARTIAL RELRO`, has `STACK` enabled (so if we are to get a buffer overflow and want to jump to another address we will be stopped by stack protector), `NX` enabled ( we can't put shellcode in the stack and execute it) and lastly has no `PIE` ( meaning the base address from when the file is run will always be the same )
+
+Now lets do run check to know what the binary requires and what it does
+
+```                                       
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
+└─$ ./fsbeZ 
+ ▄▄█████████ ▄▄█████████ ▄█████████▄ ▄▄█████████ ▄██████████
+ ████▀▀▀▀▀▀▀ ████▀▀▀▀▀▀▀ ████▀▀▀████ ████▀▀▀▀▀▀▀ ▀▀▀▀▀▀█████
+ ████▄▄▄     ████▄▄▄▄▄▄  ████▄▄▄███▀ ████▄▄▄         ▄████▀▀
+ ████▀▀▀     ▀▀▀▀▀▀▀████ ████▀▀▀███▄ ████▀▀▀       ▄████▀▀  
+ ████        ▄▄▄▄▄▄▄████ ████▄▄▄████ ████▄▄▄▄▄▄▄ ▄█████▄▄▄▄▄
+ ████        ██████████▀ ██████████▀ ▀██████████ ███████████
+ ▀▀▀▀        ▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀▀
+
+fsb: hello
+hello
+```
+
+We see that it justs takes in our input then print it out back 
+
+Now I then decompiled the binary using ghidra 
+
+
+                                                         
+
 
 
 
