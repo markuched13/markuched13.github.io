@@ -1,4 +1,4 @@
-First thing first we start with scanning the host for open ports using rustscan then use nmap to further scan those ports open
+First thing first we start with scanning the host for open ports using rustscan then use nmap to further enumerate those ports open
 
 ```
 # Nmap 7.92 scan initiated Mon Jan 16 03:21:25 2023 as: nmap -sCV -A -p22,25,80,445 -oN nmapscan 192.168.144.71
