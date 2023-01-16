@@ -132,7 +132,7 @@ And we're root xD
 Incase you have any problem on this or I made a mistake please be sure to DM me on discord `Hack.You#9120`
 
 <br> <br>
-[Back To Home](../index.md)
+[Back To Home](../../index.md)
 <br>
 
 
