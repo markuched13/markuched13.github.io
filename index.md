@@ -47,6 +47,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 ### **ProvingGrounds Writeups:~#**
 * * *
 - [[Jan 16 2023]] [Dibble](https://markuched13.github.io/posts/pg/dibble.html) `Node JS, Command Injection, Suid`
+- [[Jan 16 2023]] [Algeron](https://markuched13.github.io/posts/pg/algeron.html) `Smatter Mail `
 
 -
 
