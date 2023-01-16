@@ -1024,6 +1024,46 @@ io.interactive()
 
 Flag: sabr{m3m0ry_c0rrup710n_iz_fUNNNNNNNNNNNN}
 
+### fsbeZ:
+I don't the images cause the ctf's is over and i didn't take capture while i was doing it
+
+But still I do have the binary stored in my pc
+
+Now this is a binary that is vulnerable to format string it was also clearly indicated in the description of the task
+
+But this took my time to solve cause I am not experienced in binary exploitation but after few days of research I was able to solve it and also got first blood 😁
+
+So lets start then 
+
+After downloading the binary the first thing to check is the protection enabled 
+
+So the basic checks is by using checksec command which should i think come installed when you download pwntools library
+
+Now lets check what kind of binary we're dealing it first
+
+```                                        
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
+└─$ file fsbeZ    
+fsbeZ: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, BuildID[sha1]=a0cb767c851f8f64c079def426155094559930a9, for GNU/Linux 3.2.0, stripped
+                                                                                                                                                                                                                   
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
+└─$ checksec fsbeZ 
+[!] Could not populate PLT: invalid syntax (unicorn.py, line 110)
+[*] '/home/mark/Desktop/CTF/Sabr/pwn/fsbeZ/fsbeZ'
+    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x8048000)
+```
+
+We are dealing with a 32bits binary which is dynamically linked, stipped (meaning we won't be able to see the real function names), has partial relro, has stack enabled (so if we are to get a buffer overflow we 
+
+
+
+
+
+
 ### Reverse Engineering Category 
 
 ### Bandit: 
