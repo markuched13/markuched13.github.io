@@ -1147,7 +1147,6 @@ But there's no buffer overflow so we can't overwrite return address to call /bin
 call rather call /bin/bash 
 
 So what GOT does is that it stores pointers to libc function or any other external libs and therefore when a binary wants to call a function it looks into the got 
-
 entry to find the pointer to that
 
 Since PIE is not enabled and we dont have full relro we know where the got lives and we can write there
