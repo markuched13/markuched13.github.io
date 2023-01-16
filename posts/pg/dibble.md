@@ -126,7 +126,7 @@ Lets try it out. The binary i would love to add suid perm set on it is /usr/bin/
 
 And it worked. Using gtfobins again to get a root shell via suid find 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Dibble/23.png)
-
+-
 And we're root xD
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Dibble/24.png)
 
