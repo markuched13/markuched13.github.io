@@ -41,6 +41,8 @@ Using foxy proxy we can access the internal web page using the squid ip and port
 Now lets access it by naviagating to http://127.0.0.1:8080/ we are presented with a default page for wampserver 
 
 Looking below we see a phpmyadmin link lets click on it
+![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Squid/7.png)
+
 
 Then logging in with the default cred `root:<blank_password>` we get access to the phpmyadmin panel
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Squid/8.png)
