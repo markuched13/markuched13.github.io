@@ -50,7 +50,8 @@ Service detection performed. Please report any incorrect results at https://nmap
 Now there's are 4 services running on the host ftp,ssh,http(80),http(3000).
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Dibble/1.png)
 
-FTP allows anonymous login but on trying to list files it hangs.
+
+FTP allows anonymous login but on trying to list files it hangs
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Dibble/2.png)
 
 So next thing is I moved to enumerate port 80 (http)
