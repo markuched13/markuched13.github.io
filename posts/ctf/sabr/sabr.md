@@ -1514,10 +1514,17 @@ Flag: sabr{trash_pandas_are_cute}
 
 - Kudos to the organizers for hosting the ctf 
 
-- So after all the struggle I managed to place 1st in the leaderboard scoring 1151 points overall 😅
+- So after all the struggle I managed to place 1st in the leaderboard scoring 1301 points overall 😅
 - The username I used for the ctf is `PlsHackMe` 😅
 ![image](https://user-images.githubusercontent.com/113513376/212760099-7cba7eb1-92e2-457d-832f-4bedc561b83d.png)
 ![image](https://user-images.githubusercontent.com/113513376/212760251-f0ffcb67-dcbd-44b4-91d0-14d3beeb7578.png)
+
+
+Please If I made any sort of mistake be sure to DM me on discord Hack.You#9120
+
+<br> <br>
+[Back To Home](../../index.md)
+<br>
 
 
 
