@@ -1112,7 +1112,7 @@ neg{eonfnqanc_ufhp_ren_frg}
 
 But now its encoded but not just encoded it doesn't seems arranged. 
 
-What I then did was that i assumed that since the flag format is `sabr{` which has 4 bytes before `{` I then did something quite dumb but it worked only that it took few minutes.
+What I then did was that i assumed that since the flag format is `sabr{` which has 4 bytes before `{` I then did something quite silly but it worked only that it took some minutes.
 
 I made a python script which would print out all the alphabets in the string then return the output as a list
 
@@ -1132,18 +1132,31 @@ Now lets run it
 ['n', 'e', 'g', '{', 'e', 'o', 'n', 'f', 'n', 'q', 'a', 'n', 'c', '_', 'u', 'f', 'h', 'p', '_', 'r', 'e', 'n', '_', 'f', 'r', 'g', '}']
 ```                                                                                                                                                                   
 
-Now what I did then was that since I didn't really know the encoding used to encode the string I tried out few stuffs and I found that its rot13.
+Now what I did then was that since I didn't really know the encoding used to encode the string but I remembered i saw some sort of operation performed in the decompiled code
 
-Now I made a bash one linear command which will loop through each character in a array then rot13 decode it.
+Here's the mathematical operation used in the binary
+`if ((iVar1 + -0x54) % 0x1a + 0x61 != (int)*(char *)((long)&local_38 + (long)local_40)) `
+which is the same as `(x -84) % 26 + 97` where x represents each character
+
+So I then tried using a python script which will find each value of the encoded characters using the mathematical operation above neglecting characters '{', '_' and '}'
+
+Here's the script 
 
 ```
-┌──(mark㉿haxor)-[~/…/CTF/Sabr/re/bandit]
-└─$ array=('n', 'e', 'g', '{', 'e', 'o', 'n', 'f', 'n', 'q', 'a', 'n', 'c', '_', 'u', 'f', 'h', 'p', '_', 'r', 'e', 'n', '_', 'f', 'r', 'g', '}')
-                                                                                                                                                                                            
-┌──(mark㉿haxor)-[~/…/CTF/Sabr/re/bandit]
-└─$ for i in $array;do echo $i | rot13 >> decoded.txt | tr -d "\n"; done 
-a,r,t,{,r,b,a,s,a,d,n,a,p,_,h,s,u,c,_,e,r,a,_,s,e,t,}                                                                                                                                                                                            
-```
+array = ['n', 'e', 'g', '{', 'e', 'o', 'n', 'f', 'n', 'q', 'a', 'n', 'c', '_', 'u', 'f', 'h', 'p', '_', 'r', 'e', 'n', '_', 'f', 'r', 'g', '}']
+
+result = []
+for char in array:
+    if char in ('{', '_', '}'):
+        result.append(char)
+    else:
+        ascii_val = ord(char)
+        decoded = (ascii_val - 84) % 26 + 97
+        result.append(chr(decoded))
+
+print(''.join(result))
+
+``` 
 
 Now the wording looks more ok but one problem its scattered, so this is where it took my time lol 😅
 
@@ -1170,17 +1183,15 @@ Flag: sabr{trash_pandas_are_cute}
 
 
 
-
 ### Overview:
 
-- This CTF was a really nice challenge which made me learn further things and not give up even though it was really painful  😂😂😂 
+- This CTF was a really nice challenge which made me learn further things and not give up even though it was really painful 😂😂😂 
 
 - Kudos to the organizers for hosting the ctf 
 
-- So after all the struggle I managed to place 3rd in the leaderboard scoring 1151 points overall 😅
+- So after all the struggle I managed to place 1st in the leaderboard scoring 1151 points overall 😅
 - The username I used for the ctf is `PlsHackMe` 😅
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/profile.JPG)
-![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/leaderboard.JPG)
+
 
 
 
