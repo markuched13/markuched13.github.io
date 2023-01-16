@@ -94,6 +94,7 @@ Lets run the exploit but before that start a netcat listening on the port specif
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Algeron/10.png)
 
 Back in our listener 
+
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/pg/images/Algeron/11.png)
 
 And we're root xD
