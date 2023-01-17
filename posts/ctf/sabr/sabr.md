@@ -1161,7 +1161,7 @@ Firstly we need to get the offset i.e the address where the input is being store
 
 A fuzzing script can be used but while i tried solving it i got the offset manually
 
-By giving it this input `AAAA%1$p` but i was incrementing the value but +1
+By giving it this input `AAAA%1$p` but i was incrementing the value by +1
 
 So at offset 7 we see that the result being printed out is hex of A's meaning that our input is being stored at the 7th parameter on the stack
 
