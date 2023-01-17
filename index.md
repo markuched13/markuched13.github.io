@@ -51,6 +51,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 16 2023]] [Bratarina](https://markuched13.github.io/posts/pg/bratarina.html) `Open SMTP `
 - [[Jan 16 2023]] [Squid](https://markuched13.github.io/posts/pg/squid.html) `Squid Proxy, PHPMyAdmin`
 - [[Jan 17 2023]] [Fantastic](https://markuched13.github.io/posts/pg/fantastic.html) `Grafana, Disk Group `
+- [[Jan 17 2023]] [PlanetExpress](https://markuched13.github.io/posts/pg/planetexpress.html) `RCE, Suid`
 
 
 -
