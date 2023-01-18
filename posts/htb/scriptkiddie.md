@@ -219,7 +219,7 @@ Privilege Escalation:
 On checking /home dir we have 2 users in the box
 ![image](https://user-images.githubusercontent.com/113513376/213203269-ed070447-4b3a-43af-b1cf-a40c3b4ca95c.png)
 
-The other user `pwn` has a script and we have read/ access over it
+The other user `pwn` has a script and we have read access over it
 
 So the script is running a scan command over the ip logged in /home/kid/logs/hacker and the output is redirected to /dev/null so we won't see any output
 
