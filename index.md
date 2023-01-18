@@ -35,7 +35,6 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 ### **HackTheBox Writeups:~#**
 * * *
 - [[Jan 18 2023]] [ScriptKiddie](https://markuched13.github.io/posts/htb/scriptkiddie.html) `Msfvenom, Command Injection, Sudo `
--
 
 * * *
 ### **PwnTillDawn Writeups:~#**
