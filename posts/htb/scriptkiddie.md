@@ -204,9 +204,9 @@ I get a call back from the listener
 So i'll get a more stable reverse shell now
 ![image](https://user-images.githubusercontent.com/113513376/213201587-13302ec6-2ed9-433b-92c7-c74ae554ae36.png)
 
-Now to stabilize the shell
 ![image](https://user-images.githubusercontent.com/113513376/213201851-115358d5-32c2-43d1-91d1-2eb872b10fe3.png)
 
+Now to stabilze the shell
 ```
 python3 -c "import pty; pty.spawn('/bin/bash')"
 export TERM=xterm
