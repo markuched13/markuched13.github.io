@@ -30,8 +30,7 @@ Nmap done: 1 IP address (1 host up) scanned in 17.16 seconds
 Web page:
 ![image](https://user-images.githubusercontent.com/113513376/213191746-5655ea76-3233-4880-bfcd-703cc1e3b959.png)
 
-Gobuster didn't return any result 
-![image](https://user-images.githubusercontent.com/113513376/213192989-bc2d73dd-79b6-4909-b8b2-e5a56df1c3ee.png)
+Gobuster didn't return any directory result 
 
 Checking the tcp port scanner from the web page shows it indeeds work
 ![image](https://user-images.githubusercontent.com/113513376/213192689-f8ddb4dd-eeaa-4586-9028-dfebd32c830a.png)
