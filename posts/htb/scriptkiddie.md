@@ -228,9 +228,9 @@ But also it just likes greps a specific line (third line ) in the hacker log fil
 Imitating the command
 
 ![image](https://user-images.githubusercontent.com/113513376/213206355-bddc11dd-fc7d-42a0-a384-5996cc519a3a.png)
+![image](https://user-images.githubusercontent.com/113513376/213206452-71a4f3b2-8db2-4d9a-b86a-98a111e8651c.png)
 
 I can get a command injection from here
-![image](https://user-images.githubusercontent.com/113513376/213206452-71a4f3b2-8db2-4d9a-b86a-98a111e8651c.png)
 
 So I'll edit the hacker log file to get a reverse shell by exploiting command injection
 
