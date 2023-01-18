@@ -226,6 +226,7 @@ So the script is running a scan command over the ip logged in /home/kid/logs/hac
 But also it just likes greps a specific line (third line ) in the hacker log file 
 
 Imitating the command
+
 ![image](https://user-images.githubusercontent.com/113513376/213206355-bddc11dd-fc7d-42a0-a384-5996cc519a3a.png)
 
 I can get a command injection from here
