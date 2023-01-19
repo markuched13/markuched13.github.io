@@ -1,4 +1,4 @@
-### Lame HTB
+### ScriptKiddie HTB
 
 ### IP Address = 10.10.10.226
 
