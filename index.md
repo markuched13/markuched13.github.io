@@ -40,6 +40,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 18 2023]] [Devel](https://markuched13.github.io/posts/htb/devel.html) `File Upload, RCE`
 - [[Jan 18 2023]] [Beep](https://markuched13.github.io/posts/htb/beep.html) `LFI, Hydra`
 - [[Jan 18 2023]] [Optimum](https://markuched13.github.io/posts/htb/optimum.html) `Command Injection`
+- [[Jan 18 2023]] [Arctic](https://markuched13.github.io/posts/htb/arctic.html) `ColdFusion, RCE`
 
 -
 
