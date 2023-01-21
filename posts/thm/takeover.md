@@ -56,5 +56,120 @@ Nmap done: 1 IP address (1 host up) scanned in 50.31 seconds
 Checking the web page
 ![image](https://user-images.githubusercontent.com/113513376/213868620-b59b630b-18b6-4ae2-b67b-c865327fab8a.png)
 
-Fuzzing for sub domains 
+Fuzzing for sub domains in http
+
+```
+┌──(mark__haxor)-[~/Desktop/B2B/THM/TakeOver]
+└─$ ffuf -c -u http://10.10.216.2 -H "Host: FUZZ.futurevera.thm" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -fs 0
+
+        /'___\  /'___\           /'___\       
+       /\ \__/ /\ \__/  __  __  /\ \__/       
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      
+         \ \_\   \ \_\  \ \____/  \ \_\       
+          \/_/    \/_/   \/___/    \/_/       
+
+       v1.5.0 Kali Exclusive <3
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : http://10.10.216.2
+ :: Wordlist         : FUZZ: /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt
+ :: Header           : Host: FUZZ.futurevera.thm
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
+ :: Filter           : Response size: 0
+________________________________________________
+
+portal                  [Status: 200, Size: 69, Words: 9, Lines: 2, Duration: 530ms]
+payroll                 [Status: 200, Size: 70, Words: 9, Lines: 2, Duration: 215ms]
+:: Progress: [110000/110000] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Errors: 0 ::
+```
+
+Now i'll edit the /etc/hosts and add the new subdomain
+
+```                                                        
+┌──(mark㉿haxor)-[~]
+└─$ cat /etc/hosts | grep fut
+10.10.216.2     futurevera.thm portal.futurevera.thm payroll.futurevera.thm              
+```
+
+Now accesssing the new subdomain
+![image](https://user-images.githubusercontent.com/113513376/213890212-67225b5c-b402-4540-afb1-12a90d3ba331.png)
+
+![image](https://user-images.githubusercontent.com/113513376/213890218-a5f989ac-651e-4299-837e-3a667f688332.png)
+
+Too bad we are not allowed to access it 
+
+Now lets fuzz for subdomain in https
+
+```
+┌──(mark__haxor)-[~/Desktop/B2B/THM/TakeOver]
+└─$ ffuf -c -u https://10.10.216.2 -H "Host: FUZZ.futurevera.thm" -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt -fl 92
+
+        /'___\  /'___\           /'___\       
+       /\ \__/ /\ \__/  __  __  /\ \__/       
+       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\      
+        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/      
+         \ \_\   \ \_\  \ \____/  \ \_\       
+          \/_/    \/_/   \/___/    \/_/       
+
+       v1.5.0 Kali Exclusive <3
+________________________________________________
+
+ :: Method           : GET
+ :: URL              : https://10.10.216.2
+ :: Wordlist         : FUZZ: /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt
+ :: Header           : Host: FUZZ.futurevera.thm
+ :: Follow redirects : false
+ :: Calibration      : false
+ :: Timeout          : 10
+ :: Threads          : 40
+ :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
+ :: Filter           : Response lines: 92
+________________________________________________
+
+blog                    [Status: 200, Size: 3838, Words: 1326, Lines: 81, Duration: 411ms]
+support                 [Status: 200, Size: 1522, Words: 367, Lines: 34, Duration: 607ms]
+:: Progress: [110000/110000] :: Job [1/1] :: 0 req/sec :: Duration: [0:00:00] :: Errors: 0 ::
+```
+
+Adding this also in the /etc/hosts file
+
+```
+┌──(mark㉿haxor)-[~]
+└─$ cat /etc/hosts | grep fut
+10.10.216.2     futurevera.thm portal.futurevera.thm payroll.futurevera.thm blog.futurevera.thm support.futurevera.thm
+```
+
+So lets try accessing the new sub domains
+
+Checking the blog subdomain returns something new 
+![image](https://user-images.githubusercontent.com/113513376/213890367-659e33d5-8b2a-4a0b-b156-d8e168c4d42b.png)
+
+Now lets also check the support subdomain
+![image](https://user-images.githubusercontent.com/113513376/213890383-10dfa23a-57f6-47ed-99b7-fb29f7bbc8e1.png)
+
+Checking the certificates
+![image](https://user-images.githubusercontent.com/113513376/213890395-fb88e6cc-40f9-4c72-86b5-9b49dc059608.png)
+
+We have a new subdomain `secrethelpdesk934752.support.futurevera.thm`
+
+Lets add that to /etc/hosts
+
+```
+┌──(mark㉿haxor)-[~]
+└─$ cat /etc/hosts | grep fut
+10.10.216.2     futurevera.thm portal.futurevera.thm payroll.futurevera.thm blog.futurevera.thm support.futurevera.thm secrethelpdesk934752.support.futurevera.thm
+```
+
+Accessing it now
+![image](https://user-images.githubusercontent.com/113513376/213890438-bb9a3b5f-d4b6-49df-b6c5-ce71a6854463.png)
+
+It leaks the flag needed for the room `flag{beea0d6edfcee06a59b83fb50ae81b2f}`
+
+And we're done 
 
