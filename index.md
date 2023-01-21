@@ -28,7 +28,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 * * *
 ### **TryHackMe Writeups:~#**
 * * *
-- [[Jan 21 2023]] [TakeOver](https://markuched13.github.io/posts/htb/takeover.html) `Enumeration`
+- [[Jan 21 2023]] [TakeOver](https://markuched13.github.io/posts/thm/takeover.html) `Enumeration`
 
 
 -
