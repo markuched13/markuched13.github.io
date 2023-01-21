@@ -61,7 +61,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 17 2023]] [PlanetExpress](https://markuched13.github.io/posts/pg/planetexpress.html) `RCE, Suid`
 - [[Jan 17 2023]] [Internal](https://markuched13.github.io/posts/pg/internal.html) `CVE-2009-3103`
 - [[Jan 21 2023]] [Jacko](https://markuched13.github.io/posts/pg/jacko.html) `H2 Database, PaperStream IP`
-- [[Jan 21 2023]] [BlackNote](https://markuched13.github.io/posts/pg/blacknote.html) `Redis`
+- [[Jan 21 2023]] [BlackNote](https://markuched13.github.io/posts/pg/blackgate.html) `Redis`
 
 
 -
