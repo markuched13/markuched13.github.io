@@ -343,6 +343,11 @@ lines 1-23
 
 So we can keep on scrolling down 
 
+Now there are two ways I got around getting root 
+
+The first one is likely unintended anyways lets see it
+
+### Likely Unintended 
 But what i did next was to try call /bin/bash 
 
 ```
