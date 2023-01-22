@@ -64,7 +64,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 17 2023]] [Internal](https://markuched13.github.io/posts/pg/internal.html) `CVE-2009-3103`
 - [[Jan 21 2023]] [Jacko](https://markuched13.github.io/posts/pg/jacko.html) `H2 Database, PaperStream IP`
 - [[Jan 21 2023]] [BlackNote](https://markuched13.github.io/posts/pg/blackgate.html) `Redis`
-- [[Jan 21 2023]] [Roquefort](https://markuched13.github.io/posts/pg/roguefort.html) `Gitea, Path Hijack, Cron`
+- [[Jan 21 2023]] [Roquefort](https://markuched13.github.io/posts/pg/roquefort.html) `Gitea, Path Hijack, Cron`
 
 
 -
