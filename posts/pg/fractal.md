@@ -300,7 +300,7 @@ mysql>
 
 We see that its more of a configuration table
 
-Which stores like ftp configuration
+Which stores like ftp configuration and the password column stores its password by getting its md5hash then base64 encoding in a binary format
 
 Lets try if we can add a user to the table 
 
