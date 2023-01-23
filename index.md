@@ -43,7 +43,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 18 2023]] [Beep](https://markuched13.github.io/posts/htb/beep.html) `LFI, Hydra`
 - [[Jan 18 2023]] [Optimum](https://markuched13.github.io/posts/htb/optimum.html) `Command Injection`
 - [[Jan 18 2023]] [Arctic](https://markuched13.github.io/posts/htb/arctic.html) `ColdFusion, RCE`
-- [[Jan 23 2023]] [Investigation](https://markuched13.github.io/posts/htb/investigation.html) `Command Injection, Cron, Outlook, Windows Event Logs, Ghidra`
+- [[Jan 23 2023]] [Investigation](https://markuched13.github.io/posts/htb/investigation.html) `Command Injection, Cron, Outlook, Windows Event Logs, Reverse Engineering`
 - [[Jan 23 2023]] [Stocker](https://markuched13.github.io/posts/htb/stocker.html) `NoSQl Auth Bypass, LFI, Misconfiguration`
 - [[Jan 23 2023]] [Driver](https://markuched13.github.io/posts/htb/driver.html) `SCF Attack, Outdated Driver`
 
@@ -69,6 +69,8 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 21 2023]] [BlackNote](https://markuched13.github.io/posts/pg/blackgate.html) `Redis`
 - [[Jan 21 2023]] [Roquefort](https://markuched13.github.io/posts/pg/roquefort.html) `Gitea, Path Hijack, Cron`
 - [[Jan 22 2023]] [Fractal](https://markuched13.github.io/posts/pg/fractal.html) `Symfony, Mysql, Ftp `
+- [[Jan 23 2023]] [Wheel](https://markuched13.github.io/posts/pg/wheel.html) `XPATH Injection, Reverse Engineering `
+
 
 
 -
