@@ -44,6 +44,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 18 2023]] [Optimum](https://markuched13.github.io/posts/htb/optimum.html) `Command Injection`
 - [[Jan 18 2023]] [Arctic](https://markuched13.github.io/posts/htb/arctic.html) `ColdFusion, RCE`
 - [[Jan 23 2023]] [Investigation](https://markuched13.github.io/posts/htb/investigation.html) `Command Injection, Cron, Outlook, Windows Event Logs, Ghidra`
+- [[Jan 23 2023]] [Stocker](https://markuched13.github.io/posts/htb/stocker.html) `NoSQl Auth Bypass, LFI, Misconfiguration`
 
 -
 
