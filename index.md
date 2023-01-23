@@ -70,6 +70,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 21 2023]] [Roquefort](https://markuched13.github.io/posts/pg/roquefort.html) `Gitea, Path Hijack, Cron`
 - [[Jan 22 2023]] [Fractal](https://markuched13.github.io/posts/pg/fractal.html) `Symfony, Mysql, Ftp `
 - [[Jan 23 2023]] [Wheel](https://markuched13.github.io/posts/pg/wheel.html) `XPATH Injection, Reverse Engineering `
+- [[Jan 23 2023]] [Lunar](https://markuched13.github.io/posts/pg/lunar.html) `PHP Type Juggling, LFI2RCE, NFS`
 
 
 
