@@ -407,11 +407,11 @@ smb: \>
 
 Now i also noticed it uses readObject() function which is vulnerable to deserilization 
 
-So this is an insecure deserilization attack and i got more details about it from https://book.hacktricks.xyz/pentesting-web/deserialization#java-http
+So this is an insecure deserilization attack and i got more details about it from []https://book.hacktricks.xyz/pentesting-web/deserialization#java-http
 
 Lets create the payload then xD
 
-Using (https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Insecure%20Deserialization/Java.md) & (https://book.hacktricks.xyz/pentesting-web/deserialization#java-http) i was able to generate my payload
+Using [](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Insecure%20Deserialization/Java.md) & [](https://book.hacktricks.xyz/pentesting-web/deserialization#java-http) i was able to generate my payload
 
 ```
 ┌┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
