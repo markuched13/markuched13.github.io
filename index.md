@@ -73,6 +73,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 23 2023]] [Wheel](https://markuched13.github.io/posts/pg/wheel.html) `XPATH Injection, Reverse Engineering `
 - [[Jan 23 2023]] [Lunar](https://markuched13.github.io/posts/pg/lunar.html) `PHP Type Juggling, LFI2RCE, NFS`
 - [[Jan 23 2023]] [Born2Root](https://markuched13.github.io/posts/pg/born2root.html) `Cron, Misconfiguration, Weak Password`
+- [[Jan 24 2023]] [Nappa](https://markuched13.github.io/posts/pg/nappa.html) `Command Injection`
 
 
 
