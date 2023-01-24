@@ -512,7 +512,7 @@ User samantha may run the following commands on cassios:
    
 ```
 
-Searching for exploits leads me to https://www.exploit-db.com/exploits/37710
+Searching for exploits leads me to [Exploit](https://www.exploit-db.com/exploits/37710)
 
 ```
 [samantha@cassios ~]$ mkdir shell
