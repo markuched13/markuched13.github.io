@@ -47,6 +47,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 23 2023]] [Stocker](https://markuched13.github.io/posts/htb/stocker.html) `NoSQl Auth Bypass, LFI, Misconfiguration`
 - [[Jan 23 2023]] [Driver](https://markuched13.github.io/posts/htb/driver.html) `SCF Attack, Outdated Driver`
 - [[Jan 23 2023]] [Armageddon](https://markuched13.github.io/posts/htb/armageddon.html) `Drupal, Mysql, Snap`
+- [[Jan 25 2023]] [Grandpa](https://markuched13.github.io/posts/htb/grandpa.html) `Webdav, Metasploit`
 
 -
 
