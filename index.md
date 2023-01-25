@@ -78,6 +78,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 24 2023]] [Cassios](https://markuched13.github.io/posts/pg/cassios.html) `Source Code Review, Insecure Deserialization (Java), Sudoedit `
 - [[Jan 24 2023]] [Flimsy](https://markuched13.github.io/posts/pg/flimsy.html) `Outdated Web Server, Cron, Apt `
 - [[Jan 25 2023]] [NullByte](https://markuched13.github.io/posts/pg/nullbyte.html) `Sqli, Reverse Engineering, Path Hijack`
+- [[Jan 25 2023]] [HelpDesk](https://markuched13.github.io/posts/pg/helpdesk.html) `ManageEngine ServiceDesk Plus`
 
 
 -
