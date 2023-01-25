@@ -75,6 +75,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 23 2023]] [Born2Root](https://markuched13.github.io/posts/pg/born2root.html) `Cron, Misconfiguration, Weak Password`
 - [[Jan 24 2023]] [Nappa](https://markuched13.github.io/posts/pg/nappa.html) `Command Injection`
 - [[Jan 24 2023]] [Cassios](https://markuched13.github.io/posts/pg/cassios.html) `Source Code Review, Insecure Deserialization (Java), Sudoedit `
+- [[Jan 24 2023]] [Flimsy](https://markuched13.github.io/posts/pg/flimsy.html) `Outdated Web Server, Cron, Apt `
 
 
 
