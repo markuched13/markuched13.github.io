@@ -210,7 +210,8 @@ Lets try performing basic arithmetic maybe it will be evaluated
 
 Ah sweet it evaluated the value
 
-I don't know what programming language uses. I used wappalyzer to get it but it isn't 100% sure of it lol
+I don't know what programming language uses. I used wappalyzer to get it, but it isn't 100% sure of it lol
+
 ![image](https://user-images.githubusercontent.com/113513376/214732338-cfd8d46c-aefb-4f0d-8c6d-c907ea248857.png)
 
 So i just tried injecting ruby command execution maybe it will execute but it doesn't meaning that the programming language the web uses isn't ruby
