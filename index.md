@@ -84,6 +84,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 25 2023]] [Assignment](https://markuched13.github.io/posts/pg/assignment.html) `Misconfiguration, Gogs, Command Injection`
 - [[Jan 26 2023]] [Twiggy](https://markuched13.github.io/posts/pg/twiggy.html) `Salt API RCE`
 - [[Jan 26 2023]] [Hetemit](https://markuched13.github.io/posts/pg/hetemit.html) `Python Wergzeug Misconfiguration, Service`
+- [[Jan 26 2023]] [XposedAPI](https://markuched13.github.io/posts/pg/xposedapi.html) `API, Command Injection, Suid`
 
 
 -
