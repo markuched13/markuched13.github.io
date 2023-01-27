@@ -650,7 +650,7 @@ cat: pwned: Permission denied
 git@breakout:/var/log/gitlab/puma$
 ```
 
-Now after cron runs i'll unzip the zip file to see if succesfully extracted the root's ssh key
+Now after cron runs i'll unzip the zip file to see if we succesfully extracted the root's ssh key
 
 ```
 coaran@breakout:~$ cd /opt/backups/
