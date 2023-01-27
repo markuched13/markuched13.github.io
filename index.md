@@ -86,6 +86,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 26 2023]] [Hetemit](https://markuched13.github.io/posts/pg/hetemit.html) `Python Wergzeug Misconfiguration, Service`
 - [[Jan 26 2023]] [XposedAPI](https://markuched13.github.io/posts/pg/xposedapi.html) `API, Command Injection, Suid`
 - [[Jan 27 2023]] [Breakout](https://markuched13.github.io/posts/pg/breakout.html) `Gitlab, Cron, Symbolic Link`
+- [[Jan 27 2023]] [Peppo](https://markuched13.github.io/posts/pg/peppo.html) `Ident, Rbash, Docker`
 
 
 -
