@@ -508,6 +508,112 @@ We're given hint to read the source code
 
 So i'll open this binary up in ghidra to decompile it
 
+So on checking the main function we get this
+![image](https://user-images.githubusercontent.com/113513376/215239291-aec06ba2-e752-4833-872e-70e5e05537d0.png)
+
+So i'll try to rewrite it
+
+```
+int main(int argc,char **argv)
+{
+  if (argc == 2) {
+    compare_pwd(argv[1]);
+  }
+  else {
+    printf("Usage : %s password\nGood luck, read the source\n",*argv);
+  }
+  return 0;
+}
+```
+
+So what the main function just does is that
+
+```
+1. It checks if the argument count is equal to 2 i.e the binary + the input 
+2. If that is true it then calls the compare_pwd function and gives the password we input as the parameter the function should use
+3. But if its false it then prints the usage on how to run the binary
+```
+
+Now lets check out the compare_pwd function
+![image](https://user-images.githubusercontent.com/113513376/215239527-1b4766ea-4997-4132-b377-4f000950d120.png)
+
+I'll try to edit it to how the main C code is supposed to look
+
+```
+void compare_pwd(char **input)
+{
+  int password_check;
+  
+  password_check = my_secure_test(input);
+  if (password_check == 0) {
+    puts("password OK");
+  }
+  else {
+    printf("password \"%s\" not OK\n",input);
+  }
+  return;
+}
+```
+
+Now what this does is this
+
+```
+1. It uses the argument we passed on earlier then it calls another function called my_secure_test 
+2. It then checks if the password we passed into is the same as the password in mysecuretest
+3. If it is it prints password ok
+4. But if it isn't it prints password notoky
+```
+
+Time to check out the other function where the password is stored
+![image](https://user-images.githubusercontent.com/113513376/215239822-c9da22e6-ed76-4bc6-b7a6-b4c128908168.png)
+
+Here's the code i tried re-editing
+
+```
+
+int my_secure_test(char *input)
+
+{
+  int error;
+  
+  if ((*input == '\0') || (*input != '1')) {
+    error = -1;
+  }
+  else if ((input[1] == '\0') || (input[1] != '3')) {
+    error = -1;
+  }
+  else if ((input[2] == '\0') || (input[2] != '3')) {
+    error = -1;
+  }
+  else if ((input[3] == '\0') || (input[3] != '7')) {
+    error = -1;
+  }
+  else if ((input[4] == '\0') || (input[4] != '_')) {
+    error = -1;
+  }
+  else if ((input[5] == '\0') || (input[5] != 'p')) {
+    error = -1;
+  }
+  else if ((input[6] == '\0') || (input[6] != 'w')) {
+    error = -1;
+  }
+  else if ((input[7] == '\0') || (input[7] != 'd')) {
+    error = -1;
+  }
+  else if (input[8] == '\0') {
+    error = 0;
+  }
+  else {
+    error = -1;
+  }
+  return error;
+}
+```
+
+
+
+
+
 
 
 
