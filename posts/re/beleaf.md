@@ -130,6 +130,39 @@ Now that looks better. So here's what happening
 6. Checking the tranformFunc shows that the data in stored in the .bss section of the binary
 ```
 
+Now we know that our first output is going to be equal to 0x1, the second wil be 0x9 and so on .....
+
+```
+                             desiredOutput                                   XREF[2]:     main:0010096b(*), 
+                                                                                          main:00100972(R)  
+        003014e0 01              ??         01h
+        003014e1 00              ??         00h
+        003014e2 00              ??         00h
+        003014e3 00              ??         00h
+        003014e4 00              ??         00h
+        003014e5 00              ??         00h
+        003014e6 00              ??         00h
+        003014e7 00              ??         00h
+        003014e8 09              ??         09h
+        003014e9 00              ??         00h
+        003014ea 00              ??         00h
+        003014eb 00              ??         00h
+        003014ec 00              ??         00h
+        003014ed 00              ??         00h
+        003014ee 00              ??         00h
+        003014ef 00              ??         00h
+        003014f0 11              ??         11h
+        003014f1 00              ??         00h
+        003014f2 00              ??         00h
+        003014f3 00              ??         00h
+        003014f4 00              ??         00h
+        003014f5 00              ??         00h
+        003014f6 00              ??         00h
+        003014f7 00              ??         00h
+        003014f8 27              ??         27h    '
+        003014f9 00              ??         00h
+```
+
 Here's the decompiled code for the transformFunc
 
 ```
@@ -152,6 +185,8 @@ long transformFunc(char input)
 }
 
 ```
+
+
 
 
 
