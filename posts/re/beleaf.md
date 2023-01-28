@@ -186,8 +186,118 @@ long transformFunc(char input)
 
 ```
 
+Here we can see that it essentially just takes a character, and looks at what it's index is in the lookup bss array. The characters are stored at offsets of 4 bytes. Let's take a look at the array
 
+```
+                             lookup                                          XREF[6]:     transformFunc:00100820(*),
+                                                                                          transformFunc:00100827(R),
+                                                                                          transformFunc:00100844(*),
+                                                                                          transformFunc:0010084b(R),
+                                                                                          transformFunc:00100873(*),
+                                                                                          transformFunc:0010087a(R)  
+        00301020 77              ??         77h    w
+        00301021 00              ??         00h
+        00301022 00              ??         00h
+        00301023 00              ??         00h
+        00301024 66              ??         66h    f
+        00301025 00              ??         00h
+        00301026 00              ??         00h
+        00301027 00              ??         00h
+        00301028 7b              ??         7Bh    {
+        00301029 00              ??         00h
+        0030102a 00              ??         00h
+        0030102b 00              ??         00h
+        0030102c 5f              ??         5Fh    _
+        0030102d 00              ??         00h
+        0030102e 00              ??         00h
+        0030102f 00              ??         00h
+        00301030 6e              ??         6Eh    n
+        00301031 00              ??         00h
+        00301032 00              ??         00h
+        00301033 00              ??         00h
+        00301034 79              ??         79h    y
+        00301035 00              ??         00h
+        00301036 00              ??         00h
+        00301037 00              ??         00h
+        00301038 7d              ??         7Dh    }
+        00301039 00              ??         00h
+        0030103a 00              ??         00h
+        0030103b 00              ??         00h
+        0030103c ff              ??         FFh
+        0030103d ff              ??         FFh
+        0030103e ff              ??         FFh
+        0030103f ff              ??         FFh
+        00301040 62              ??         62h    b
+        00301041 00              ??         00h
+        00301042 00              ??         00h
+        00301043 00              ??         00h
+        00301044 6c              ??         6Ch    l
+        00301045 00              ??         00h
+        00301046 00              ??         00h
+        00301047 00              ??         00h
+        00301048 72              ??         72h    r
+        00301049 00              ??         00h
+        0030104a 00              ??         00h
+        0030104b 00              ??         00h
+        0030104c ff              ??         FFh
+        0030104d ff              ??         FFh
+        0030104e ff              ??         FFh
+        0030104f ff              ??         FFh
+        00301050 ff              ??         FFh
+        00301051 ff              ??         FFh
+        00301052 ff              ??         FFh
+        00301053 ff              ??         FFh
+        00301054 ff              ??         FFh
+        00301055 ff              ??         FFh
+        00301056 ff              ??         FFh
+        00301057 ff              ??         FFh
+        00301058 ff              ??         FFh
+        00301059 ff              ??         FFh
+        0030105a ff              ??         FFh
+        0030105b ff              ??         FFh
+        0030105c ff              ??         FFh
+        0030105d ff              ??         FFh
+        0030105e ff              ??         FFh
+        0030105f ff              ??         FFh
+        00301060 ff              ??         FFh
+        00301061 ff              ??         FFh
+        00301062 ff              ??         FFh
+        00301063 ff              ??         FFh
+        00301064 61              ??         61h    a
+        00301065 00              ??         00h
+        00301066 00              ??         00h
+        00301067 00              ??         00h
+        00301068 65              ??         65h    e
+        00301069 00              ??         00h
+        0030106a 00              ??         00h
+        0030106b 00              ??         00h
+        0030106c 69              ??         69h    i
+ ```
+ 
+Here we can see that the character f is stored at 00301024. This will output 1 since ((0x00301024 - 0x00301020) / 4) = 1 (0x00301020 is the start of the array). This also corresponds to the first byte of the desiredOutput array, since it is 1. The second byte is 0x9, so the character that should correspond to it is (0x00301020 + (4*9)) = 0x301044, and we can see that the character there is l
 
+```
+        00301044 6c              ??         6Ch    l
+        00301045 00              ??         00h
+        00301046 00              ??         00h
+        00301047 00              ??         00h
+        00301048 72              ??         72h    r
+ ```
+ 
+ So the second character is l. Moving on through the rest of the list, we can find the full string `flag{we_beleaf_in_your_re_future}`
+ 
+ Lets check it out now
+ 
+ ```
+ ┌──(mark㉿haxor)-[~/Documents/Pentest/BOF/02-beginner_re]
+└─$ ./csaw19_beleaf
+Enter the flag
+>>> flag{we_beleaf_in_your_re_future}
+Correct!
+```
+
+And we're done
+ 
 
 
 
