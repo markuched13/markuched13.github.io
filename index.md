@@ -28,8 +28,9 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 * * *
 ### **TryHackMe Writeups:~#**
 * * *
-- [[Jan 21 2023]] [TakeOver](https://markuched13.github.io/posts/thm/takeover.html) `Enumeration`
+- [[Jan 21 2023]] [TakeOver](https://markuched13.github.io/posts/thm/takeover.html) `Subdomain Enumeration`
 - [[Jan 28 2023]] [ReversingELF](https://markuched13.github.io/posts/thm/reversingelf.html) `Reverse Engineering`
+- [[Jan 28 2023]] [0x41haz](https://markuched13.github.io/posts/thm/0x41haz.html) `Reverse Engineering`
 
 
 -
