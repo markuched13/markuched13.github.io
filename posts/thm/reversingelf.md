@@ -1124,8 +1124,104 @@ gef➤
 We have the flag
 
 Flag: `flag{at_least_this_cafe_wont_leak_your_credit_card_numbers}`
-                               
-And we're done xD
+
+But lets just do it by giving it the right password 
+
+On diassembling the main function we see this value `0xcafef00d` being put in the eax register
+
+```
+gef➤  disass main
+Dump of assembler code for function main:
+   0x0804849b <+0>:     lea    ecx,[esp+0x4]
+   0x0804849f <+4>:     and    esp,0xfffffff0
+   0x080484a2 <+7>:     push   DWORD PTR [ecx-0x4]
+   0x080484a5 <+10>:    push   ebp
+   0x080484a6 <+11>:    mov    ebp,esp
+   0x080484a8 <+13>:    push   ecx
+   0x080484a9 <+14>:    sub    esp,0x4
+   0x080484ac <+17>:    mov    eax,ecx
+   0x080484ae <+19>:    cmp    DWORD PTR [eax],0x2
+   0x080484b1 <+22>:    je     0x80484d0 <main+53>
+   0x080484b3 <+24>:    mov    eax,DWORD PTR [eax+0x4]
+   0x080484b6 <+27>:    mov    eax,DWORD PTR [eax]
+   0x080484b8 <+29>:    sub    esp,0x8
+   0x080484bb <+32>:    push   eax
+   0x080484bc <+33>:    push   0x8048660
+   0x080484c1 <+38>:    call   0x8048340 <printf@plt>
+   0x080484c6 <+43>:    add    esp,0x10
+   0x080484c9 <+46>:    mov    eax,0x1
+   0x080484ce <+51>:    jmp    0x804851c <main+129>
+   0x080484d0 <+53>:    mov    eax,DWORD PTR [eax+0x4]
+   0x080484d3 <+56>:    add    eax,0x4
+   0x080484d6 <+59>:    mov    eax,DWORD PTR [eax]
+   0x080484d8 <+61>:    sub    esp,0xc
+   0x080484db <+64>:    push   eax
+   0x080484dc <+65>:    call   0x8048380 <atoi@plt>
+   0x080484e1 <+70>:    add    esp,0x10
+   0x080484e4 <+73>:    cmp    eax,0xcafef00d
+   0x080484e9 <+78>:    je     0x8048502 <main+103>
+   0x080484eb <+80>:    sub    esp,0xc
+   0x080484ee <+83>:    push   0x8048674
+   0x080484f3 <+88>:    call   0x8048350 <puts@plt>
+   0x080484f8 <+93>:    add    esp,0x10
+   0x080484fb <+96>:    mov    eax,0x1
+   0x08048500 <+101>:   jmp    0x804851c <main+129>
+   0x08048502 <+103>:   sub    esp,0xc
+   0x08048505 <+106>:   push   0x8048683
+   0x0804850a <+111>:   call   0x8048350 <puts@plt>
+   0x0804850f <+116>:   add    esp,0x10
+   0x08048512 <+119>:   call   0x8048524 <giveFlag>
+   0x08048517 <+124>:   mov    eax,0x0
+   0x0804851c <+129>:   mov    ecx,DWORD PTR [ebp-0x4]
+   0x0804851f <+132>:   leave  
+   0x08048520 <+133>:   lea    esp,[ecx-0x4]
+   0x08048523 <+136>:   ret    
+End of assembler dump.
+gef➤
+```
+
+Now lets run the binary again using that password `0xcafef00d`
+
+```
+┌──(mark㉿haxor)-[~/Desktop/B2B/THM/Reversingelf]
+└─$ ./crackme8 0xcafe00d
+Access denied.
+```
+
+It doesn't work i have no idea why 
+
+I also did decompile using ghidra and i see that it does an if check on if the user input is `0xcadef00d`
+
+```
+
+int main(int argc,char *argv)
+
+{
+  int input;
+  
+  if (argc == 2) {
+    input = atoi(*(char **)(argv + 4));
+    if (input == '0xcafef00d') {
+      puts("Access granted.");
+      giveFlag();
+      input = 0;
+    }
+    else {
+      puts("Access denied.");
+      input = 1;
+    }
+  }
+  else {
+    printf("Usage: %s password\n",*(undefined4 *)argv);
+    input = 1;
+  }
+  return input;
+}
+```
+
+Since i have no idea why it isn't working 
+
+So we're done xD
 
 P.S Why i check the file type is to know if its x86 or x64 and if the biary is stripped or non stripped 
 
