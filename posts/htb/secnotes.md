@@ -1,6 +1,6 @@
 ### Secnotes HTB
 
-### Difficulty = Easy
+### Difficulty = Medium
 
 ### IP Address = 10.10.10.97
 
