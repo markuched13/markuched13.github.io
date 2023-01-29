@@ -51,6 +51,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 23 2023]] [Armageddon](https://markuched13.github.io/posts/htb/armageddon.html) `Drupal, Mysql, Snap`
 - [[Jan 25 2023]] [Grandpa](https://markuched13.github.io/posts/htb/grandpa.html) `Webdav, Metasploit`
 - [[Jan 25 2023]] [Granny](https://markuched13.github.io/posts/htb/granny.html) `Webdav, Metasploit`
+- [[Jan 29 2023]] [Secnotes](https://markuched13.github.io/posts/htb/secnotes.html) `CSRF, Linux Subsystem`
 
 -
 
