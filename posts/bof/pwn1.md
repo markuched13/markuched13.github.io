@@ -194,12 +194,11 @@ Lets run it
 └─$ python2 pwnexploit.py
 [+] Starting local process './tamu19_pwn1': pid 103999
 [*] Switching to interactive mode
-
 [*] Process './tamu19_pwn1' stopped with exit code 0 (pid 103999)
 What... is your quest?
 What... is my secret?
 Right. Off you go.
-FLAG(this_is_a_fake_flag}
+FLAG{this_is_a_fake_flag}
 
 [*] Got EOF while reading in interactive
 $ 
