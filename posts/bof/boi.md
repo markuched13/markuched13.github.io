@@ -126,9 +126,9 @@ We have extra 0x4 bytes
 
 From this we know that we can since we have 0x18 bytes to write we can fill up the 0x14 bytes and overwrite target with 0x4 byte
 
-Here's the bug, since we are given 0x18 which is then written in a 0x14 space making 0x4 bytes overflown in target
+Here's the bug, since we are given 0x18 which is then written in a 0x14 space making 0x4 bytes free 
 
-That gives us the ability to control the value. And why would we want to control we value is to bypass the check to grant to shell
+That gives us the ability to control the value which will be stored in the variable `expectedValue`. And why would we want to control we value is to bypass the check to grant to shell
 
 Lets hope on to gdb
 
