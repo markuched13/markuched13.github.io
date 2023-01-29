@@ -53,7 +53,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 25 2023]] [Granny](https://markuched13.github.io/posts/htb/granny.html) `Webdav, Metasploit`
 - [[Jan 29 2023]] [Secnotes](https://markuched13.github.io/posts/htb/secnotes.html) `CSRF, Linux Subsystem`
 - [[Jan 29 2023]] [Bashed](https://markuched13.github.io/posts/htb/bashed.html) `Php Bash, Cron`
-- [[Jan 29 2023]] [Nibbles](https://markuched13.github.io/posts/htb/nibbles.html) `NibbleBlog, Sudo`
+- [[Jan 29 2023]] [Nibbles](https://markuched13.github.io/posts/htb/nibble.html) `NibbleBlog, Sudo`
 
 -
 
