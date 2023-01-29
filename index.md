@@ -105,6 +105,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 * * *
 ### **Buffer Overflow Practice:~#**
 - [[Jan 29 2023]] [CSAW_18](https://markuched13.github.io/posts/bof/boi.html) `Variable Overwrite`
+- [[Jan 29 2023]] [TAMU_19](https://markuched13.github.io/posts/bof/pwn1.html) `Variable Overwrite`
 
 * * *
 ### **CTF Writeups:~#**
