@@ -126,7 +126,7 @@ Now here's what i'm going to do
 3. Craft the exploit
 ```
 
-Now lets hope on to gdb to get the offset
+Now lets hop on to gdb to get the offset
 
 I'll set a breakpoint immediately after the call to get and run it giving `1234567890` as input
 
