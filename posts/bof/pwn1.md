@@ -133,7 +133,7 @@ zsh: segmentation fault  ./tamu19_pwn1
 
 Sweet we get a segfault
 
-Now lets get the offset. Which we will get from looking at the stack frame in ghidra
+Now lets get the offset. Which we will get from looking at the stack layout in ghidra
 
 
 ```
