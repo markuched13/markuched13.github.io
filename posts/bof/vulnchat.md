@@ -103,7 +103,7 @@ We know that the format variable holds us 30bytes
 %30s 
 ```
 
-So lets take a look at the stack frame
+So lets take a look at the stack layout
 
 ```
                              **************************************************************
