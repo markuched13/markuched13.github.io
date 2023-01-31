@@ -79,7 +79,7 @@ We see its a simple C code here's what it does
 3. Does an if check which compares the user input to 0xaabbccdd twice
 ```
 
-So on checking the stack main function part I see that the input variable starts with an offset of 0x28 bytes but the input being received is 0x20 bytes
+So on checking the stack layout I see that the input variable starts with an offset of 0x28 bytes but the input being received is 0x20 bytes
 
 ```
                              **************************************************************
