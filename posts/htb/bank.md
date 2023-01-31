@@ -34,5 +34,43 @@ Nmap done: 1 IP address (1 host up) scanned in 27.88 seconds
 So we have 3 ports open which are 22,53 & 80
 
 I'll start enumeration on port 80
+![image](https://user-images.githubusercontent.com/113513376/215743324-40100887-d58f-4fc6-80f5-ef7b4f394233.png)
 
-on heading over to it in my web browser i see just the default apache site
+Since the box name is bank i'll assume the domain is bank.htb
+
+So i'll check a quick zone transfer
+
+```
+└─$ dig axfr bank.htb @10.10.10.29
+
+; <<>> DiG 9.18.4-2-Debian <<>> axfr bank.htb @10.10.10.29
+;; global options: +cmd
+bank.htb.               604800  IN      SOA     bank.htb. chris.bank.htb. 5 604800 86400 2419200 604800
+bank.htb.               604800  IN      NS      ns.bank.htb.
+bank.htb.               604800  IN      A       10.10.10.29
+ns.bank.htb.            604800  IN      A       10.10.10.29
+www.bank.htb.           604800  IN      CNAME   bank.htb.
+bank.htb.               604800  IN      SOA     bank.htb. chris.bank.htb. 5 604800 86400 2419200 604800
+;; Query time: 447 msec
+;; SERVER: 10.10.10.29#53(10.10.10.29) (TCP)
+;; WHEN: Tue Jan 31 12:26:28 WAT 2023
+;; XFR size: 6 records (messages 1, bytes 171)
+```
+
+So i'm right. Now i'll add the domain name to /etc/hosts then run a vhost scan
+
+```
+└─$ cat /etc/hosts | grep "bank.htb"
+10.10.10.29     bank.htb
+```
+
+Now on heading over to the domain on the web browser, I see a different web page
+![image](https://user-images.githubusercontent.com/113513376/215749387-c7f8a0dd-09cd-446a-8634-9bd2b0ff78b5.png)
+
+It requires login, I tried various injection attack but non worked for me
+
+So lets fuzz for files and directories
+
+```
+
+
