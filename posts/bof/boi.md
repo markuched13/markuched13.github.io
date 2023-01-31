@@ -89,7 +89,7 @@ From this we know that
 3. Then after it reads the user input, it compares the expectedValue with 0xcaf3baee
 ```
 
-Now to see where our input reached i'll take a look at the stack from ghidra
+Now to see where our input reached i'll take a look at the stack layout from ghidra
 
 ```
                              **************************************************************
