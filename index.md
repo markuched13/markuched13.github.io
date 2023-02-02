@@ -55,6 +55,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 29 2023]] [Bashed](https://markuched13.github.io/posts/htb/bashed.html) `Php Bash, Cron`
 - [[Jan 29 2023]] [Nibbles](https://markuched13.github.io/posts/htb/nibble.html) `NibbleBlog, Sudo`
 - [[Jan 30 2023]] [Blue](https://markuched13.github.io/posts/htb/blue.html) `EternalBlue, Msf`
+- [[Jan 30 2023]] [Bank](https://markuched13.github.io/posts/htb/bank.html) `DNS, File Upload, Suid`
 
 -
 
