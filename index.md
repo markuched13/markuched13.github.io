@@ -57,6 +57,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 30 2023]] [Blue](https://markuched13.github.io/posts/htb/blue.html) `EternalBlue, Msf`
 - [[Jan 30 2023]] [Bank](https://markuched13.github.io/posts/htb/bank.html) `DNS, File Upload, Suid`
 - [[Jan 2 2023]] [Blocky](https://markuched13.github.io/posts/htb/blocky.html) `Wordpress, Java Reverse Engineering, Sudo`
+- [[Jan 2 2023]] [Miraj](https://markuched13.github.io/posts/htb/miraj.html) `Pi, Sudo`
 
 -
 
