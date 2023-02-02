@@ -44,6 +44,7 @@ Lots of great stuff planned for the future 🙂
 Now we know that this web server uses wordpress 
 
 To confirm i'll check wappalyzer
+
 ![image](https://user-images.githubusercontent.com/113513376/216232229-264093ad-fa84-4adf-94e4-98f60262a514.png)
 
 I'll run wpscan 
