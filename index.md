@@ -56,10 +56,10 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 29 2023]] [Nibbles](https://markuched13.github.io/posts/htb/nibble.html) `NibbleBlog, Sudo`
 - [[Jan 30 2023]] [Blue](https://markuched13.github.io/posts/htb/blue.html) `EternalBlue, Msf`
 - [[Jan 30 2023]] [Bank](https://markuched13.github.io/posts/htb/bank.html) `DNS, File Upload, Suid`
-- [[Jan 2 2023]] [Blocky](https://markuched13.github.io/posts/htb/blocky.html) `Wordpress, Java Reverse Engineering, Sudo`
-- [[Jan 2 2023]] [Miraj](https://markuched13.github.io/posts/htb/miraj.html) `Pi, Sudo`
-- [[Jan 2 2023]] [Shocker](https://markuched13.github.io/posts/htb/shocker.html) `Shellshock, Sudo`
-- [[Jan 3 2023]] [Valentine](https://markuched13.github.io/posts/htb/valentine.html) `HeartBleed, Openssl, Tmux`
+- [[Feb 02 2023]] [Blocky](https://markuched13.github.io/posts/htb/blocky.html) `Wordpress, Java Reverse Engineering, Sudo`
+- [[Feb 02 2023]] [Miraj](https://markuched13.github.io/posts/htb/miraj.html) `Pi, Sudo`
+- [[Feb 02 2023]] [Shocker](https://markuched13.github.io/posts/htb/shocker.html) `Shellshock, Sudo`
+- [[Feb 03 2023]] [Valentine](https://markuched13.github.io/posts/htb/valentine.html) `HeartBleed, Openssl, Tmux`
 
 -
 
@@ -119,6 +119,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 31 2023]] [TU_17](https://markuched13.github.io/posts/bof/vulnchat.html) `Variable Overwrite, Ret2Win`
 - [[Jan 31 2023]] [CSAW_17](https://markuched13.github.io/posts/bof/pilot.html) `Ret2ShellCode`
 - [[Jan 31 2023]] [CSAW_19](https://markuched13.github.io/posts/bof/babyboi.html) `Ret2Libc`
+- [[Feb 03 2023]] [TAMU_19](https://markuched13.github.io/posts/bof/pwn3.html) `Ret2ShellCode`
 
 * * *
 ### **CTF Writeups:~#**
