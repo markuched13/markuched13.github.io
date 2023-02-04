@@ -156,7 +156,7 @@ io.interactive()
 
 So lets run it locally
 
-````
+```
 └─$ python2 exploit.py                                    
 [+] Starting local process './ez-pwn-1': pid 215751
 [*] Switching to interactive mode
