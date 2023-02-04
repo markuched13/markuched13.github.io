@@ -126,6 +126,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 04 2023]] [BBCTF_23](https://markuched13.github.io/posts/bof/ezpwn1.html) `Variable Overwrite`
 - [[Feb 04 2023]] [HTB_REG](https://markuched13.github.io/posts/bof/reg.html) `Ret2Win`
 - [[Feb 04 2023]] [HTB_JEEVEZ](https://markuched13.github.io/posts/bof/jeevez.html) `Variable Overwrite`
+- [[Feb 04 2023]] [HTB_BATCOMPUTER](https://markuched13.github.io/posts/bof/bat.html) `Ret2ShellCode`
 
 * * *
 ### **CTF Writeups:~#**
