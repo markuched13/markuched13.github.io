@@ -123,6 +123,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 03 2023]] [Imagine_CTF](https://markuched13.github.io/posts/bof/stackoverflow.html) `Variable Overwrite`
 - [[Feb 03 2023]] [DAWG_21](https://markuched13.github.io/posts/bof/bofit.html) `Ret2Win`
 - [[Feb 03 2023]] [SpaceHeros_22](https://markuched13.github.io/posts/bof/vader.html) `Ret2Win With Parameters`
+- [[Feb 04 2023]] [BBCTF_23](https://markuched13.github.io/posts/bof/ezpwn1.html) `Variable Overwrite`
 
 * * *
 ### **CTF Writeups:~#**
