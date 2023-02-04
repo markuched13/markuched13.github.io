@@ -144,6 +144,7 @@ Here's how the exploit will go
 1. I'll get the offset 
 2. Put shellcode in the stack address leaked when option 1 is chosen
 3. Overwrite the rip to call the shellcode
+4. Cause the binary to jump to the return call by giving it a value not necessary
 ```
 
 Now lets get the offset 
