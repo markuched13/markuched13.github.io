@@ -766,8 +766,3 @@ And we're done
 [Back_To_Home](../../index.md)
 </br>
 
-
-
-<br> <br>
-[Back_To_Home](../../index.md)
-</br>
