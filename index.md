@@ -131,6 +131,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 05 2023]] [HTB_Blacksmith](https://markuched13.github.io/posts/bof/blacksmith.html) `Seccomp Protections, Shellcode`
 - [[Feb 05 2023]] [TU_19](https://markuched13.github.io/posts/bof/shellme.html) `Ret2Shellcode`
 - [[Feb 05 2023]] [TU_19](https://markuched13.github.io/posts/bof/thefirst.html) `Ret2Win`
+- [[Feb 05 2023]] [INTIGRITI_22](https://markuched13.github.io/posts/bof/searchengine.html) `Format String`
 
 
 * * *
