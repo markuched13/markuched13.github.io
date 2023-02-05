@@ -124,9 +124,10 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 03 2023]] [DAWG_21](https://markuched13.github.io/posts/bof/bofit.html) `Ret2Win`
 - [[Feb 03 2023]] [SpaceHeros_22](https://markuched13.github.io/posts/bof/vader.html) `Ret2Win With Parameters`
 - [[Feb 04 2023]] [BBCTF_23](https://markuched13.github.io/posts/bof/ezpwn1.html) `Variable Overwrite`
-- [[Feb 04 2023]] [HTB_REG](https://markuched13.github.io/posts/bof/reg.html) `Ret2Win`
-- [[Feb 04 2023]] [HTB_JEEVEZ](https://markuched13.github.io/posts/bof/jeevez.html) `Variable Overwrite`
-- [[Feb 04 2023]] [HTB_BATCOMPUTER](https://markuched13.github.io/posts/bof/bat.html) `Ret2ShellCode`
+- [[Feb 04 2023]] [HTB_Reg](https://markuched13.github.io/posts/bof/reg.html) `Ret2Win`
+- [[Feb 04 2023]] [HTB_Jeevez](https://markuched13.github.io/posts/bof/jeevez.html) `Variable Overwrite`
+- [[Feb 04 2023]] [HTB_BatComputer](https://markuched13.github.io/posts/bof/bat.html) `Ret2ShellCode`
+- [[Feb 05 2023]] [HTB_Blacksmith](https://markuched13.github.io/posts/bof/blacksmith.html) `Seccomp Protections, Shellcode`
 
 * * *
 ### **CTF Writeups:~#**
