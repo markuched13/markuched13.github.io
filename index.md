@@ -134,6 +134,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 05 2023]] [INTIGRITI_22](https://markuched13.github.io/posts/bof/searchengine.html) `Format String`
 - [[Feb 05 2023]] [INTIGRITI_22](https://markuched13.github.io/posts/bof/easyregister.html) `Ret2Shellcode`
 - [[Feb 06 2023]] [PICO_22](https://markuched13.github.io/posts/bof/bof1.html) `Ret2Win`
+- [[Feb 06 2023]] [PICO_22](https://markuched13.github.io/posts/bof/xsixtywhat.html) `Ret2Win, Movap Stack Allignment`
 
 
 * * *
