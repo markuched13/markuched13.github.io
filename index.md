@@ -64,6 +64,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 07 2023]] [Nest](https://markuched13.github.io/posts/htb/nest.html) `SMB, Reverse Engineering, Not Completed Yet ............`
 - [[Feb 07 2023]] [Timelapse](https://markuched13.github.io/posts/htb/timelapse.html) `SMB, Openssl, LAPS`
 - [[Feb 07 2023]] [Trick](https://markuched13.github.io/posts/htb/trick.html) `Auth Bypass, LFI, SQli, Fail2ban`
+- [[Feb 07 2023]] [Paper](https://markuched13.github.io/posts/htb/paper.html) `Wordpress, RocketChat, RCE, Kernel`
 
 -
 
