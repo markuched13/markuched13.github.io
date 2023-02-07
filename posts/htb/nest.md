@@ -651,7 +651,7 @@ I'll get it by just connecting to the share
 
 ```
 ┌──(venv)─(mark__haxor)-[~/Desktop/B2B/HTB/Nest]
-└─$ smbclient -U TempUser //10.10.10.178/data welcome2019
+└─$ smbclient -U TempUser //10.10.10.178/data 
 Password for [WORKGROUP\TempUser]:
 Try "help" to get a list of possible commands.
 smb: \> ls
@@ -806,4 +806,136 @@ I'll cat the file
 </ConfigFile> 
 ```
 
-Cool we have the cred for another user called c.smith and her password which is 
+Cool we have the cred for another user called c.smith and her password which is encrypted
+
+Now we know theres a path which is leaked from the notepadplusplus config file 
+
+I'll try accessing it
+
+```
+┌──(venv)─(mark__haxor)-[~/Desktop/B2B/HTB/Nest]
+└─$ smbclient -U TempUser '//10.10.10.178/Secure$'            
+Password for [WORKGROUP\TempUser]:
+Try "help" to get a list of possible commands.
+smb: \> ls
+  .                                   D        0  Thu Aug  8 00:08:12 2019
+  ..                                  D        0  Thu Aug  8 00:08:12 2019
+  Finance                             D        0  Wed Aug  7 20:40:13 2019
+  HR                                  D        0  Thu Aug  8 00:08:11 2019
+  IT                                  D        0  Thu Aug  8 11:59:25 2019
+
+                5242623 blocks of size 4096. 1839999 blocks available
+smb: \> cd IT\Carl
+smb: \IT\Carl\> ls
+  .                                   D        0  Wed Aug  7 20:42:14 2019
+  ..                                  D        0  Wed Aug  7 20:42:14 2019
+  Docs                                D        0  Wed Aug  7 20:44:00 2019
+  Reports                             D        0  Tue Aug  6 14:45:40 2019
+  VB Projects                         D        0  Tue Aug  6 15:41:55 2019
+\IT\Carl\Docs
+  .                                   D        0  Wed Aug  7 20:44:00 2019
+  ..                                  D        0  Wed Aug  7 20:44:00 2019
+  ip.txt                              A       56  Wed Aug  7 20:44:16 2019
+  mmc.txt                             A       73  Wed Aug  7 20:43:42 2019
+                                                                                                                                                                                                                   
+\IT\Carl\Reports
+  .                                   D        0  Tue Aug  6 14:45:40 2019
+  ..                                  D        0  Tue Aug  6 14:45:40 2019                                                                                                                                         
+\IT\Carl\VB Projects
+  .                                   D        0  Tue Aug  6 15:41:55 2019
+  ..                                  D        0  Tue Aug  6 15:41:55 2019
+  Production                          D        0  Tue Aug  6 15:07:13 2019
+  WIP                                 D        0  Tue Aug  6 15:47:41 2019                                                                                                                                         
+\IT\Carl\VB Projects\Production
+  .                                   D        0  Tue Aug  6 15:07:13 2019
+  ..                                  D        0  Tue Aug  6 15:07:13 2019
+
+\IT\Carl\VB Projects\WIP
+  .                                   D        0  Tue Aug  6 15:47:41 2019
+  ..                                  D        0  Tue Aug  6 15:47:41 2019
+  RU                                  D        0  Fri Aug  9 16:36:45 2019                                                                                                                                         
+\IT\Carl\VB Projects\WIP\RU
+  .                                   D        0  Fri Aug  9 16:36:45 2019
+```
+
+It worked 🙂. So i'll just dump the whole content in my cwd using mget
+
+```
+smb: \IT\Carl\> mget *
+getting file \IT\Carl\Docs\ip.txt of size 56 as Docs/ip.txt (0.1 KiloBytes/sec) (average 0.1 KiloBytes/sec)
+getting file \IT\Carl\Docs\mmc.txt of size 73 as Docs/mmc.txt (0.1 KiloBytes/sec) (average 0.1 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner.sln of size 871 as VB Projects/WIP/RU/RUScanner.sln (1.6 KiloBytes/sec) (average 0.5 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\ConfigFile.vb of size 772 as VB Projects/WIP/RU/RUScanner/ConfigFile.vb (0.8 KiloBytes/sec) (average 0.6 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\Module1.vb of size 279 as VB Projects/WIP/RU/RUScanner/Module1.vb (0.5 KiloBytes/sec) (average 0.6 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\RU Scanner.vbproj of size 4828 as VB Projects/WIP/RU/RUScanner/RU Scanner.vbproj (6.7 KiloBytes/sec) (average 1.6 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\RU Scanner.vbproj.user of size 143 as VB Projects/WIP/RU/RUScanner/RU Scanner.vbproj.user (0.2 KiloBytes/sec) (average 1.4 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\SsoIntegration.vb of size 133 as VB Projects/WIP/RU/RUScanner/SsoIntegration.vb (0.2 KiloBytes/sec) (average 1.3 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\Utils.vb of size 4888 as VB Projects/WIP/RU/RUScanner/Utils.vb (6.8 KiloBytes/sec) (average 2.0 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\My Project\Application.Designer.vb of size 441 as VB Projects/WIP/RU/RUScanner/My Project/Application.Designer.vb (0.8 KiloBytes/sec) (average 1.9 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\My Project\Application.myapp of size 481 as VB Projects/WIP/RU/RUScanner/My Project/Application.myapp (0.8 KiloBytes/sec) (average 1.8 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\My Project\AssemblyInfo.vb of size 1163 as VB Projects/WIP/RU/RUScanner/My Project/AssemblyInfo.vb (1.9 KiloBytes/sec) (average 1.8 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\My Project\Resources.Designer.vb of size 2776 as VB Projects/WIP/RU/RUScanner/My Project/Resources.Designer.vb (3.7 KiloBytes/sec) (average 2.0 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\My Project\Resources.resx of size 5612 as VB Projects/WIP/RU/RUScanner/My Project/Resources.resx (5.5 KiloBytes/sec) (average 2.3 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\My Project\Settings.Designer.vb of size 2989 as VB Projects/WIP/RU/RUScanner/My Project/Settings.Designer.vb (2.9 KiloBytes/sec) (average 2.4 KiloBytes/sec)
+getting file \IT\Carl\VB Projects\WIP\RU\RUScanner\My Project\Settings.settings of size 279 as VB Projects/WIP/RU/RUScanner/My Project/Settings.settings (0.3 KiloBytes/sec) (average 2.2 KiloBytes/sec)
+smb: \IT\Carl\> q
+```
+
+Just to get an understanding of what i downloaded i ran tree command and i see that theres a vscode project file
+
+```
+┌──(venv)─(mark__haxor)-[~/Desktop/B2B/HTB/Nest]
+└─$ tree 
+.
+├── Docs
+│__ ├── ip.txt
+│__ └── mmc.txt
+├── dump
+├── Finance
+├── HR
+├── IT
+├── nmapscan
+├── Reports
+├── users
+└── VB Projects
+    ├── Production
+    └── WIP
+        └── RU
+            ├── RUScanner
+            │__ ├── bin
+            │__ │__ ├── Debug
+            │__ │__ └── Release
+            │__ ├── ConfigFile.vb
+            │__ ├── Module1.vb
+            │__ ├── My Project
+            │__ │__ ├── Application.Designer.vb
+            │__ │__ ├── Application.myapp
+            │__ │__ ├── AssemblyInfo.vb
+            │__ │__ ├── Resources.Designer.vb
+            │__ │__ ├── Resources.resx
+            │__ │__ ├── Settings.Designer.vb
+            │__ │__ └── Settings.settings
+            │__ ├── obj
+            │__ │__ └── x86
+            │__ ├── RU Scanner.vbproj
+            │__ ├── RU Scanner.vbproj.user
+            │__ ├── SsoIntegration.vb
+            │__ └── Utils.vb
+            └── RUScanner.sln
+
+17 directories, 18 files
+```
+
+And from there we see that the main vs studio file is RUScanner.sln 
+
+I'll open it on vscode 
+
+Looking through the code, one of the things that jumps out to me is Utils.vb.
+It’s a class that’s designed to provide EncryptString and DecryptString functions to the rest of the project.
+I see this is called from the main code in Module1.vb1:
+![image](https://user-images.githubusercontent.com/113513376/217137940-a31d3ec0-6545-4055-8936-11599fe3d402.png)
+![image](https://user-images.githubusercontent.com/113513376/217138046-1bb77612-b66b-411e-9084-37eaa37b7282.png)
+
+
+So i don't really know how to go around from here .............................. I'll complete it soooon xD
+
