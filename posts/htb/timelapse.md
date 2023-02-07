@@ -7,7 +7,51 @@
 Nmap Scan:
 
 ```
+┌──(venv)─(mark__haxor)-[~/Desktop/B2B/HTB/Timelapse]
+└─$ nmap -sCV -A 10.10.11.152 -p53,88,135,139,389,445,464,593,636,3268,3269,5986,9389 -oN nmapscan -Pn
+Starting Nmap 7.92 ( https://nmap.org ) at 2023-02-07 04:18 WAT
+Nmap scan report for 10.10.11.152
+Host is up (0.29s latency).
+
+PORT     STATE SERVICE           VERSION
+53/tcp   open  domain            Simple DNS Plus
+88/tcp   open  kerberos-sec      Microsoft Windows Kerberos (server time: 2023-02-07 11:18:35Z)
+135/tcp  open  msrpc             Microsoft Windows RPC
+139/tcp  open  netbios-ssn       Microsoft Windows netbios-ssn
+389/tcp  open  ldap              Microsoft Windows Active Directory LDAP (Domain: timelapse.htb0., Site: Default-First-Site-Name)
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
+593/tcp  open  ncacn_http        Microsoft Windows RPC over HTTP 1.0
+636/tcp  open  ldapssl?
+3268/tcp open  ldap              Microsoft Windows Active Directory LDAP (Domain: timelapse.htb0., Site: Default-First-Site-Name)
+3269/tcp open  globalcatLDAPssl?
+5986/tcp open  ssl/http          Microsoft HTTPAPI httpd 2.0 (SSDP/UPnP)
+| tls-alpn: 
+|_  http/1.1
+|_http-title: Not Found
+|_ssl-date: 2023-02-07T11:19:59+00:00; +7h59m59s from scanner time.
+| ssl-cert: Subject: commonName=dc01.timelapse.htb
+| Not valid before: 2021-10-25T14:05:29
+|_Not valid after:  2022-10-25T14:25:29
+|_http-server-header: Microsoft-HTTPAPI/2.0
+9389/tcp open  mc-nmf            .NET Message Framing
+Service Info: Host: DC01; OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+|_clock-skew: mean: 7h59m58s, deviation: 0s, median: 7h59m57s
+| smb2-time: 
+|   date: 2023-02-07T11:19:21
+|_  start_date: N/A
+| smb2-security-mode: 
+|   3.1.1: 
+|_    Message signing enabled and required
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 97.14 seconds
+                                                                
 ```
+
+From the result nmap gave we can tell its an AD box
 
 Checking smb shows we have only read access over the Share `shares` in smb
 
@@ -136,3 +180,17 @@ uUh2s
 It's just a data file but we geta valid email `legacyy@timelapse.htb`
 
 I'll check the other directory
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/HelpDesk]
+└─$ ls -al
+total 1904
+drwxr-xr-x 2 mark mark    4096 Feb  7 04:21 .
+drwxr-xr-x 4 mark mark    4096 Feb  7 04:22 ..
+-rw-r--r-- 1 mark mark  104422 Feb  7 04:21 LAPS_Datasheet.docx
+-rw-r--r-- 1 mark mark  641378 Feb  7 04:21 LAPS_OperationsGuide.docx
+-rw-r--r-- 1 mark mark   72683 Feb  7 04:21 LAPS_TechnicalSpecification.docx
+-rw-r--r-- 1 mark mark 1118208 Feb  7 04:21 LAPS.x64.msi
+```
+
+Word document file. I'll open it up on windows since libreoffice refuses to work for me
