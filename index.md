@@ -61,6 +61,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 02 2023]] [Miraj](https://markuched13.github.io/posts/htb/miraj.html) `Pi, Sudo`
 - [[Feb 02 2023]] [Shocker](https://markuched13.github.io/posts/htb/shocker.html) `Shellshock, Sudo`
 - [[Feb 03 2023]] [Valentine](https://markuched13.github.io/posts/htb/valentine.html) `HeartBleed, Openssl, Tmux`
+- [[Feb 07 2023]] [Nest](https://markuched13.github.io/posts/htb/nest.html) `Smb, Reverse Engineering, Not Completed Yet ............`
 
 -
 
