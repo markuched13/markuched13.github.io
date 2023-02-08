@@ -287,7 +287,7 @@ payload = flat([
 # Send the payload
 io.sendlineafter(b'>', payload)
 
-# Got Shell?
+# Got Flag?
 io.interactive()
 ```
 
@@ -354,7 +354,7 @@ payload = flat([
 # Send the payload
 io.sendlineafter(b'>', payload)
 
-# Got Shell?
+# Got Flag?
 io.interactive()
 ```
 And we're done
