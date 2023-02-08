@@ -63,4 +63,16 @@ void echo(void)
 
 ```
 
-Her'
+Here's whats happening
+
+```
+1. It receives our input using fget and can receive about 0x100 bytes
+2. Stores the input in the input buffer which can hold up to 256 bytes
+3. Prints the value of our input #bug here
+```
+
+So though we have extra `0x100 - 256 = 2` bytes to overwrite the input buffer
+
+But the main bug is that it doesn't specify a format when printing the input given meaning we have a format string vulnerability
+
+With this .................................................... It harder than i thought i'll come back to it later
