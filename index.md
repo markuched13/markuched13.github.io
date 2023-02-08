@@ -32,7 +32,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 28 2023]] [ReversingELF](https://markuched13.github.io/posts/thm/reversingelf.html) `Reverse Engineering`
 - [[Jan 28 2023]] [0x41haz](https://markuched13.github.io/posts/thm/0x41haz.html) `Reverse Engineering`
 - [[Feb 05 2023]] [EavesDropper](https://markuched13.github.io/posts/thm/eavesdrop.html) `Pspy, Path Hijack, Script`
-- [[Feb 08 2023]] [PythonBasic](https://markuched13.github.io/posts/thm/pythonbasic.html) `Python`
+- [[Feb 08 2023]] [PythonBasic](https://markuched13.github.io/posts/thm/pythonbasics.html) `Python`
 
 
 -
