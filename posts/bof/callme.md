@@ -256,7 +256,7 @@ x86 elf architecture, arguments are passed onto the stack
 ```
 
 
-So basically since we're passing in 3 arguments the registers needed should pop 3 values off the stack
+So basically since we're passing in 3 arguments, the registers needed should pop 3 values off the stack
 
 I can get that with ropper 
 
