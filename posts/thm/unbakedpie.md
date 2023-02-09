@@ -132,6 +132,7 @@ So now we want to perform deserialization attack we can leverage this instead of
 ![image](https://user-images.githubusercontent.com/113513376/217816914-222fb7e7-660e-4a9b-ba46-440bb569f05a.png)
 
 Now the next thing i did was to make a python script to perfrom a deserialization attack in which the web server will deserialize the malicious content given then run it.
+
 ![image](https://user-images.githubusercontent.com/113513376/217817145-2698891e-783f-482a-baaf-64cae35bb055.png)
 
 ```
@@ -203,6 +204,7 @@ Viewing the content of this file shows this.
 Checking the file we see that the root user in the docker container tried to ssh to another subnet on the box. So I'll just perform the same step.
 
 The problem is that there's no ssh on this docker container.
+
 ![image](https://user-images.githubusercontent.com/113513376/217818501-7e1f3e87-0320-4fa4-9f67-e958f15bb10e.png)
 
 To move over this we are going to have to port forward the internal subnet ssh over to our localhost and i'll be using chisel to perform this.
@@ -223,6 +225,7 @@ So the next thing i did was to brute force ssh using hydra and after few seconds
 ![image](https://user-images.githubusercontent.com/113513376/217819080-d02964d2-28fb-4ce6-a7ac-758f045c79ff.png)
 
 Now lets login via ssh. And now we're in.
+
 ![image](https://user-images.githubusercontent.com/113513376/217819357-806b38c0-2e1c-4c40-ba8e-43abdab6dfff.png)
 
 Lets escalate our privilege 🤓
