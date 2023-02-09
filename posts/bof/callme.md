@@ -229,6 +229,8 @@ Here's the way argument are passed onto the stack
 ```
 x86 elf architecture, arguments are passed onto the stack
 
+x86 elf architecture, arguments are passed onto the stack
+
 +-----------------+---------------+---------------+------------+
 | 8 Byte Register | Lower 4 Bytes | Lower 2 Bytes | Lower Byte |
 +-----------------+---------------+---------------+------------+
@@ -250,7 +252,9 @@ x86 elf architecture, arguments are passed onto the stack
 |   r14           |     r14d      |     r14w      |     r14b   |
 |   r15           |     r15d      |     r15w      |     r15b   |
 +-----------------+---------------+---------------+------------+
+
 ```
+
 
 So basically since we're passing in 3 arguments the registers needed should pop 3 values off the stack
 
