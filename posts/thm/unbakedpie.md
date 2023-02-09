@@ -3,10 +3,11 @@
 ### Difficulty = Medium
 
 Nmap Scan:
+![image](https://user-images.githubusercontent.com/113513376/217822200-0eb47c29-3d76-4a0b-a91e-67823ceaadde.png)
 
 ```
-# Nmap 7.92 scan initiated Sat Jan  7 04:17:47 2023 as: nmap -sCV -p 5003 -oN nmapscan -Pn 10.10.186.73
-Nmap scan report for 10.10.186.73
+# Nmap 7.92 scan initiated Sat Jan  7 04:17:47 2023 as: nmap -sCV -p 5003 -oN nmapscan -Pn 10.10.10.82
+Nmap scan report for 10.10.10.82
 Host is up (0.17s latency).
 
 PORT     STATE SERVICE    VERSION
