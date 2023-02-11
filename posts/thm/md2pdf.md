@@ -26,7 +26,9 @@ Checking the web server on port 80 shows that it converts markdown file to pdf
 ![image](https://user-images.githubusercontent.com/113513376/218225529-7bc01174-6686-4a9b-a582-8469db003229.png)
 
 So if i include things markdown uses it will be converted to pdf
-![image](https://user-images.githubusercontent.com/113513376/218225870-99385672-ac3f-4d49-84f3-165b8ef1a73f.png)
+![image](https://user-images.githubusercontent.com/113513376/218227544-e3e7083b-0c3b-4db5-a0b8-108c3f598587.png)
+![image](https://user-images.githubusercontent.com/113513376/218227568-a270702e-dd8f-47f8-a238-ed28d7403bbb.png)
+
 
 Now i'll download the generated pdf file to check out the metadata
 
