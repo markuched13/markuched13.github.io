@@ -39,5 +39,7 @@ Flag67: 2971f3459fe55db1237aad5e0f0a259a41633962
 
 And we're done
 
+Write-ups have been authorized for this machine by the PwnTillDawn Crew! Here's the link to access it https://www.wizlynxgroup.com/ and https://online.pwntilldawn.com/
+
 <br> <br>
 [Back To Home](../../index.md)
