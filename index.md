@@ -70,6 +70,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 07 2023]] [Paper](https://markuched13.github.io/posts/htb/paper.html) `Wordpress, RocketChat, RCE, Kernel`
 - [[Feb 07 2023]] [Pandora](https://markuched13.github.io/posts/htb/pandora.html) `SNMP, PandoraFMS, SQli, Suid, Reverse Engineering, Path Hijack`
 - [[Feb 12 2023]] [Encoding](https://markuched13.github.io/posts/htb/encoding.html) `LFI, GIT, SSRF, PHP Filter Chain, GIT Indent, Service Abuse `
+- [[Feb 12 2023]] [Photobomb](https://markuched13.github.io/posts/htb/photobomb.html) `Command Injection, Path Hijack`
 
 -
 
