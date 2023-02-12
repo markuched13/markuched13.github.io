@@ -177,10 +177,62 @@ Decoding it
 The php code does quite some function but what got me interested is this portion of the code
 ![image](https://user-images.githubusercontent.com/113513376/218310702-9bf4f257-f018-4ecb-b606-d2e57d806e96.png)
 
-From that we know that it's pointed from 127.0.0.1 meaning if the ip isn't coming from localhost we get access denied 
+From that we know that it's checks is the hostname is 127.0.0.1 meaning if the ip isn't coming from localhost we get access denied 
 
-Also this does some git stuff
+Reading the image vhost index.php file shows this
+![image](https://user-images.githubusercontent.com/113513376/218310961-31f0a4e1-c377-479e-98f1-e626547f93bf.png)
 
+It includes utils.php so i'll read it also 
+![image](https://user-images.githubusercontent.com/113513376/218311062-76870b33-c353-427d-a2ca-3986c4d0264f.png)
 
+Decoding it shows this
+![image](https://user-images.githubusercontent.com/113513376/218311125-3c34d9c8-b82c-4bb3-a615-a133aaaade78.png)
+![image](https://user-images.githubusercontent.com/113513376/218311132-630d60da-e647-438d-bce2-393ae4e0cbc2.png)
+
+Using chatgpt i got what the get_url_content does lool
+
+```
+This is a PHP function that uses the cURL library to fetch the contents of a given URL.
+
+The function starts by parsing the host of the URL using the parse_url function and checking if the host's IP address is "127.0.0.1", which is a special IP address used to represent the local host on a computer. If the host's IP is "127.0.0.1", the function returns a JSON-encoded message saying "Unacceptable URL".
+
+Next, the function initializes a cURL session using curl_init. The URL to fetch is set using curl_setopt with CURLOPT_URL option. The function then sets the allowed protocols to only HTTP and HTTPS using cURLOPT_PROTOCOLS and CURLOPT_REDIR_PROTOCOLS. The timeout is set to 2 seconds using CURLOPT_CONNECTTIMEOUT and CURLOPT_RETURNTRANSFER is set to 1 to return the contents of the URL as a string.
+
+Finally, the function fetches the contents of the URL using curl_exec and closes the cURL session using curl_close. The contents of the URL are then returned.
+```
+
+Basically it checks if the connection is coming from localhost if it isn't we get an error else it executes the curl command
+
+Noticing another function called git_status, git_log & git_commit it runs those command so maybe there's a git project in image vhost
+
+```
+function git_status()
+{
+    $status = shell_exec('cd /var/www/image && /usr/bin/git status');
+    return $status;
+}
+
+function git_log($file)
+{
+    $log = shell_exec('cd /var/www/image && /ust/bin/git log --oneline "' . addslashes($file) . '"');
+    return $log;
+}
+
+function git_commit()
+{
+    $commit = shell_exec('sudo -u svc /var/www/image/scripts/git-commit.sh');
+    return $commit;
+}
+?>
+```
+
+Accessing the image vhost shows what we expected lool 
+![image](https://user-images.githubusercontent.com/113513376/218311419-bd6a9542-4508-49f3-824f-d5b3e8c4988f.png)
+
+Anyways to dump the .git project is going to be a problem cause we can't directly dump it from the image vhost since our ip isn't coming from localhost
+
+To get around this i'll leverage the file inclusion to dump the git project
+
+To achieve a successfull dump i'll modify the curl query with the following parameters: the content-type in the header will be application/json, a binary file will be sent with the data specified in the --data-binary argument, which includes the str2hex action values and the address URL of the file file:///var/www/image/.git/$objname in the haxtables API http://api.haxtables.htb/v3/tools/string/index.php. The response will be processed with jq to extract only the relevant data and then xxd will be used to convert the hexadecimal output to a binary file which will be saved to $target
 
 
