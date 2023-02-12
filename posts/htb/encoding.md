@@ -40,7 +40,7 @@ Also it shows the vhost i'll add that to my `/etc/hosts` file
 10.10.11.198    api.haxtables.htb haxtables.htb
 ```
 
-Now noticing the url schema shows a possible but i tried it doesn't seem to work 
+Now noticing the url schema shows a possible LFI but i tried it doesn't seem to work 
 
 Anyways after looking through the api request that can be sent i found this interesting
 
