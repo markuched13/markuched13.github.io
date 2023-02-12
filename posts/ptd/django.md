@@ -62,7 +62,7 @@ Lets get our reverse shell. I used powershell reverse shell from revshells.com
 So since chuck.norris also has admin right on the machine there's no need to pivot unless we want to do post exploitation :(
 ![image](https://user-images.githubusercontent.com/113513376/218338587-ac3d6fa2-764d-49fc-bdac-1b8a4c3e6028.png)
 
-Write-ups have been authorized for this machine by the PwnTillDawn Crew! Here's the link to access it https://www.wizlynxgroup.com/ and https://online.pwntilldawn.com/
+Write-ups have been authorized for this machine by the PwnTillDawn Crew! Here's the link to access it [Wizlynx](https://www.wizlynxgroup.com/) and [PwntillDawn]( https://online.pwntilldawn.com/)
 
 ```
 Flags:
