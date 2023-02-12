@@ -80,6 +80,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 12 2023]] [PwnDrive Academy](https://markuched13.github.io/posts/ptd/pwndriveacademy.html) `Weak Authentication, File Upload`
 - [[Feb 12 2023]] [DOOMOPS](https://markuched13.github.io/posts/ptd/doomops.html) `[Not Authorized]`
 - [[Feb 12 2023]] [ElMariachi-PC](https://markuched13.github.io/posts/ptd/elmariachipc.html) `ThinVNC`
+- [[Feb 12 2023]] [Django](https://markuched13.github.io/posts/ptd/django.html) `FTP, PhpMyAdmin`
 
 -
 
