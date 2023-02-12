@@ -24,7 +24,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 * * *
 - [[Feb 12 2023]] [Casino](https://markuched13.github.io/posts/cyberseclabs/CTF--CyberSecLabs--Linux--Challenge_Labs.pdf) `SSTI, XSS, SSRF, GIT, Python Library Hijack `
 - [[Feb 12 2023]] [Stack](https://markuched13.github.io/posts/cyberseclabs/CTF--CyberSecLabs--Windows--Beginner_Lab--Stack.pdf) `GitStack, Keepass`
-- [[Feb 12 2023]] [Dictionary](https://markuched13.github.io/posts/cyberseclabs/CTF--CyberSecLabs--Windows--Beginner_Lab--Stack.pdf) `AD, Scripting, Firefox Saved Cred`
+- [[Feb 12 2023]] [Dictionary](https://markuched13.github.io/posts/cyberseclabs/CTF--CyberSecLabs--Windows--Challenge_Lab--Dictionary.pdf) `AD, Scripting, Firefox Saved Cred`
 - [[Feb 12 2023]] [Sync](https://markuched13.github.io/posts/cyberseclabs/CTF--CyberSecLabs--Windows--Challenge_Lab--Sync.pdf) `AD, Ink Attack, DCSync Delegation`
 
 * * *
