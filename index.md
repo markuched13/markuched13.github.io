@@ -77,6 +77,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 * * *
 ### **PwnTillDawn Writeups:~#**
 * * *
+- [[Feb 12 2023]] [PwnDrive Academy](https://markuched13.github.io/posts/ptd/pwndriveacademy.html) `Weak Authentication, File Upload`
 
 -
 
