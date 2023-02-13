@@ -1,6 +1,5 @@
 ### Escape Proving Grounds Practice
 
-### File Upload, Docker, SNMP, Reverse Engineering, Path Hijack, 
 ### IP Address = 192.168.202.113
 
 ### Difficulty = Hard
