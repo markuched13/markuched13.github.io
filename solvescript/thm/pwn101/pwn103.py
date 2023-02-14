@@ -47,3 +47,5 @@ send_payload()
 
 # Got Shell?
 io.interactive()
+
+# python3 pwn103.py | python3 pwn103.py REMOTE 127.0.0.1 9001
