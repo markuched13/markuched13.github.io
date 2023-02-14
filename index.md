@@ -122,7 +122,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 27 2023]] [Breakout](https://markuched13.github.io/posts/pg/breakout.html) `Gitlab, Cron, Symbolic Link`
 - [[Jan 27 2023]] [Peppo](https://markuched13.github.io/posts/pg/peppo.html) `Ident, Rbash, Docker`
 - [[Jan 27 2023]] [Readys](https://markuched13.github.io/posts/pg/readys.html) `Wordpress, LFI, Redis, Cron`
-- [[Feb 14 2023]] [Readys](https://markuched13.github.io/posts/pg/escape.html) `File Upload, Docker, SNMP, Reverse Engineering, Path Hijack, Capabilities`
+- [[Feb 14 2023]] [Escape](https://markuched13.github.io/posts/pg/escape.html) `File Upload, Docker, SNMP, Reverse Engineering, Path Hijack, Capabilities`
 
 -
 
