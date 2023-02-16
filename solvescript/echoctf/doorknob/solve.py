@@ -27,4 +27,4 @@ else:
         print('Hmmmmm flag not found')
 
     
-# python solve.py
+# python2 solve.py
