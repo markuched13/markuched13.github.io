@@ -255,8 +255,8 @@ From there we know that:
 ```
 1. It does stringcopy of /usr/bin/id to variable id
 2. It does stringcopy of ddddddddddddddd to variable random
-3. It goes in a loop for 9 times that does this `'!' + random % (('!' - '}') + 1) which is saved in local_20
-4. Next the value the loop forms is saved in random_value
+3. It loops for 9 times that does this `'!' + random % (('!' - '}') + 1) which is saved in local_20
+4. Next the value the loop formed is saved in random_value
 5. It asks for our input and uses get to receive our input # bug here
 6. It then does a string compare of our input to the value in random_value
 7. If the check is met it does system on variable id
