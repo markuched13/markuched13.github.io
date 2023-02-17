@@ -164,12 +164,12 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 05 2023]] [TU_19](https://markuched13.github.io/posts/bof/thefirst.html) `Ret2Win`
 - [[Feb 05 2023]] [INTIGRITI_22](https://markuched13.github.io/posts/bof/searchengine.html) `Format String`
 - [[Feb 05 2023]] [INTIGRITI_22](https://markuched13.github.io/posts/bof/easyregister.html) `Ret2Shellcode`
-- [[Feb 06 2023]] [PICO_22](https://markuched13.github.io/posts/bof/bof1.html) `Ret2Win`
-- [[Feb 06 2023]] [PICO_22](https://markuched13.github.io/posts/bof/xsixtywhat.html) `Ret2Win, Movap Stack Allignment`
-- [[Feb 06 2023]] [PICO_22](https://markuched13.github.io/posts/bof/bof2.html) `Ret2Win + Arguments`
-- [[Feb 06 2023]] [PICO_22](https://markuched13.github.io/posts/bof/bof2.html) `Format String`
-- [[Feb 06 2023]] [PICO_22](https://markuched13.github.io/posts/bof/ropfu.html) `ROP --> Coming soon 😞`
-- [[Feb 06 2023]] [PICO_22](https://markuched13.github.io/posts/bof/wine.html) `Ret2Win, Windows`
+- [[Feb 06 2023]] [PICO_22 Bof1](https://markuched13.github.io/posts/bof/bof1.html) `Ret2Win`
+- [[Feb 06 2023]] [PICO_22 Xsixtywhat](https://markuched13.github.io/posts/bof/xsixtywhat.html) `Ret2Win, Movap Stack Allignment`
+- [[Feb 06 2023]] [PICO_22 Bof2](https://markuched13.github.io/posts/bof/bof2.html) `Ret2Win + Arguments`
+- [[Feb 06 2023]] [PICO_22 FlagLeak](https://markuched13.github.io/posts/bof/flagleak.html) `Format String`
+- [[Feb 06 2023]] [PICO_22 Ropfu](https://markuched13.github.io/posts/bof/ropfu.html) `ROP --> Coming soon 😞`
+- [[Feb 06 2023]] [PICO_22 Ret2Win](https://markuched13.github.io/posts/bof/wine.html) `Ret2Win, Windows`
 - [[Feb 08 2023]] [RopEmporium_Ret2Win](https://markuched13.github.io/posts/bof/ret2win.html) `Ret2Win`
 - [[Feb 08 2023]] [RopEmporium_Split](https://markuched13.github.io/posts/bof/split.html) `ROP`
 - [[Feb 09 2023]] [RopEmporium_Callme](https://markuched13.github.io/posts/bof/callme.html) `ROP + Argument`
