@@ -21,7 +21,7 @@ exe = './pwn109.pwn109'
 # This will automatically get context arch, bits, os etc
 elf = context.binary = ELF(exe, checksec=False)
 # Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'debug'
+context.log_level = 'info'
 
 # ===========================================================
 #                    EXPLOIT GOES HERE
