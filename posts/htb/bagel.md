@@ -743,3 +743,15 @@ I tried putting like various sort of bypass in order to read like local files bu
 ```
 order = {"ReadOrder":"././/././/././/././/././/etc//passwd"}
 ```
+
+Now if you remember the handler function code it serialize the value from the ws socket data
+
+So if we pass in a serialized object it will deserialize and evaluate it therefore this is an insecure deserialization vulnerability
+
+With this i searched for json deserialzation attack and used chatgpt to make the payload 🤓
+
+Using the deserialization vulnerability i can leverage it to read the user's ssh key cause the value will be converted to a serialzied object which will bypass the lfi filter in place 
+
+Here's the exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/b2b/bagel/deserialize.py)
+
+So what the exploit script does is that it abuses the ReadFile function class of the ws socket
