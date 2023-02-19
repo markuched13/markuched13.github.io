@@ -47,3 +47,12 @@ From the scan we can tell this is a windows AD environment
 I'll add the domain to my /etc/hosts file
 
 ```
+└─$ cat /etc/hosts | grep supp
+10.129.159.23   support.htb
+```
+
+Time to start enumerating 
+
+#### SMB Enumeration
+
+```
