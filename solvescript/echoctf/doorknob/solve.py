@@ -29,4 +29,4 @@ else:
         print('Hmmmmm flag not found')
 
     
-# python2 solve.py
+# python3 solve.py
