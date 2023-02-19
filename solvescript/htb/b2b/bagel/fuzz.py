@@ -18,6 +18,6 @@ with open("output.txt", "w") as output_file:
         # Build the URL for this process number
         url = base_url.format(number)
         # Send the curl request and write the output to the output file
-        curl_output = os.popen(f"curl {url}").read()
+        curl_output = os.popen(f"curl -s {url}").read()
         output_file.write(curl_output + number)
         output_file.write("\n")  # Add a blank line between requests
