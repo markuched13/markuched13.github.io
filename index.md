@@ -177,6 +177,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 08 2023]] [RopEmporium_Split](https://markuched13.github.io/posts/bof/split.html) `ROP`
 - [[Feb 09 2023]] [RopEmporium_Callme](https://markuched13.github.io/posts/bof/callme.html) `ROP + Argument`
 - [[Feb 18 2023]] [HackTheBox_Controller](https://markuched13.github.io/posts/bof/controller.html) `Ret2Plt`
+- [[Feb 20 2023]] [PICO ClutterOverflow](https://markuched13.github.io/posts/bof/clutter.html) `Variable Overwrite`
 
 * * *
 ### **CTF Writeups:~#**
