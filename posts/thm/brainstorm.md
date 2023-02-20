@@ -175,9 +175,18 @@ va       true
 
 We see that its a x86 binary and no canary found, no nx which is equivalent to DEP i.e prevents shellcode injection to the stack and execution
 
-Since we're given both 2 files i'll decompile the .exe file using ghidra 
+#### Binary File Analysis
 
-#### Binary Analysis
+At first i would want to open the binary up in ghidra but that isn't going to decompile to a high level language
+
+Reason below: 
+
+```
+Firstly, MS-DOS executables were typically written in assembly language, which is a low-level language that is difficult to decompile back into high-level source code. While Ghidra can disassemble such executables and show the assembly instructions, it may not be able to generate high-level code that is easy to read and understand.
+```
+
+So i'll run the binary to know what it does
+
 
 
 
