@@ -133,6 +133,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 * * *
 ### **EchoCTF Writeups:~#**
 - [[Feb 16 2023]] [Doorknob](https://markuched13.github.io/posts/echoctf/doorknob.html) `NSE Command Injection, Buffer Overflow, Scripting`
+- [[Feb 20 2023]] [Stackler](https://markuched13.github.io/posts/echoctf/stackler.html) `Buffer Overflow`
 
 
 * * *
