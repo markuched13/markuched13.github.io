@@ -7,12 +7,12 @@ warnings.filterwarnings("ignore")
 # Get menu option
 io.recvuntil('menu: Option ')
 menu = io.recvline().strip().decode()
-info("Menu option found: %#x", menu)
+print("Menu option found: ", menu)
 
 # Get submenu option
 io.recvuntil('submenu: Sub Option')
 submenu = io.recvline().strip().decode()
-info("Submenu option found: %#x", submenu)
+print("Submenu option found: ", submenu)
 
 # Send the corresponding menu & submenu options
 io.recvuntil('Choose option or press enter to reprint:')
@@ -23,7 +23,7 @@ io.recvlineS()
 
 response = io.recv()
 
-if 'ETS' in response:
+if b'ETS' in response:
         success(response)
 else:
         print('Hmmmmm flag not found')
