@@ -48,8 +48,14 @@ I'll create the file `snmpd-tests.sh` in the `/tmp` directory and add the conten
 ![image](https://user-images.githubusercontent.com/113513376/220217801-3c8efba5-693f-4ddc-9fe9-30b9f4788031.png)
 
 With that i'll set a listener on port 1337 and run the snmpwalk command
-![image](https://user-images.githubusercontent.com/113513376/220217966-979b432f-2bed-45ae-b426-26297a81617b.png)
 
+```
+cd /tmp
+snmpwalk localhost -c public -v1 . 
+```
+
+Running it pops our shell 🤓
+![image](https://user-images.githubusercontent.com/113513376/220217966-979b432f-2bed-45ae-b426-26297a81617b.png)
 
 And we're done xD
 
