@@ -15,8 +15,6 @@ zodiac = ['aries', 'tauras', 'gemini', 'cancer', 'leo', 'virgo', 'libra', 'scorp
 
 for i in zodiac:
     io = remote(ip, port)
-    io.sendline('HINT')
-    io.recvline()
     val = f"{i}"
     io.sendline(val)
     response = io.recvall().decode()
