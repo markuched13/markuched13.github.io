@@ -26,14 +26,3 @@ for i in zodiac:
         break
 
 
-
-# colour = ['blue', 'yellow', 'green', 'indigo', 'white']
-
-# for i in colour:
-#     io = remote(ip, port)
-#     msg = f"ANSTWO {i}\n"
-#     io.sendline(msg)
-#     response = io.recvline()
-#     if b'Incorrect' not in response:
-#         print(c)
-#     break
