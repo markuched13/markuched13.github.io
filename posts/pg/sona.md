@@ -523,6 +523,14 @@ Noticing the top of the web server shows this `OSS 3.21.1-1 `
 
 Searching for exploit leads here [Exploit](https://www.exploit-db.com/exploits/49385)
 
+I had to tweak the exploit code to this [Tweaked_Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/pg/sona/exploit.py)
+
+With this i'll host a python web server on port 80 which has the content of a reverse shell in its cwd
+
+Running the exploit pops the shell
+![Uploading image.png…]()
+
+
 
 
 
