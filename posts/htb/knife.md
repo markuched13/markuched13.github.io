@@ -104,7 +104,7 @@ stty raw -echo;fg
 reset
 ```
 
-Only a user is prevent on the box
+Only a user is present on the box
 
 ```
 james@knife:/$ cd /home
