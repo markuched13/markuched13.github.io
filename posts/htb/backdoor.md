@@ -207,4 +207,18 @@ Now if you remember there's a service running on port 1337
 
 I will fuzz for process in /proc/FUZZ/cmdline
 
-I made a quick script which is dirty but will do the work smh [Fuzz]()
+I made a quick script which is dirty but will do the work smh [Fuzz](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/b2b/backdoor/fuzz.py)
+
+After running the script eventually it runs finish 
+
+On checking the process.txt file shows lot of thing and some are real process some are not
+
+I edited it to form [this](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/b2b/backdoor/process.txt)
+
+Looking at it you will see 
+
+```
+/bin/sh -c while true;do su user -c "cd /home/user;gdbserver --once 0.0.0.0:1337 /bin/true;"; done
+```
+
+Now with this we know that its gdbserver thats running on port 1337
