@@ -270,3 +270,17 @@ user
 user@Backdoor:/home/user$ 
 ```
 
+If you remember there's a screen process running
+
+```
+```
+
+Checking the version of screen present
+
+```
+user@Backdoor:/home/user$ screen -version
+Screen version 4.08.00 (GNU) 05-Feb-20
+user@Backdoor:/home/user$ 
+```
+
+
