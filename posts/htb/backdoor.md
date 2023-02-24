@@ -41,7 +41,8 @@ Its an instance of wordpress and we can confirm by checking wappalyzer or source
 
 I'll run wpscan on it to enumerate the wordpress cms
 
-```└─$ wpscan --url http://10.10.11.125/ -e u
+```
+└─$ wpscan --url http://10.10.11.125/ -e u
 _______________________________________________________________
          __          _______   _____
          \ \        / /  __ \ / ____|
