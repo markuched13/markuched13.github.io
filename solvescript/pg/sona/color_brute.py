@@ -22,3 +22,4 @@ for c in colour:
         break
         
   
+# Doesn't work as i expected but at least it worked \o/
