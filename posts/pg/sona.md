@@ -528,7 +528,8 @@ I had to tweak the exploit code to this [Tweaked_Exploit](https://github.com/mar
 With this i'll host a python web server on port 80 which has the content of a reverse shell in its cwd
 
 Running the exploit pops the shell
-![Uploading image.png…]()
+![image](https://user-images.githubusercontent.com/113513376/221120955-de78725e-f587-4ada-a8da-b7fbaf473192.png)
+
 
 
 
