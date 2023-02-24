@@ -82,7 +82,21 @@ I'll save my sheet as shell.ods, and exit LibreOffice.
 
 Reference to this [0xdf](https://0xdf.gitlab.io/2020/02/01/htb-re.html)
 
-Cool with this payload i'll set up a listener and a http server on port 80 hosting a powershell reverse shell
+Cool with this payload i'll set up a listener on port 1337 and a http server on port 80 hosting a powershell reverse shell
+
+I will rename shell.ods file to shell.odt
+
+After uploading the shell.odt file i get back a connection after few seconds
+![image](https://user-images.githubusercontent.com/113513376/221061013-fe9ebccc-8cb5-4f1e-900f-c9a0e1f8e8de.png)
+
+Lets escalate priv 🤓
+
+Uploading WinPEAS.exe and running it shows we have write access over the 
+![image](https://user-images.githubusercontent.com/113513376/221062028-7aa9a78d-e0cd-4e37-b4e1-b4daae4f7c2a.png)
+![image](https://user-images.githubusercontent.com/113513376/221062284-aea7f49a-d6e3-4709-aaac-2fa25b8c2349.png)
+![image](https://user-images.githubusercontent.com/113513376/221062753-559a4f6f-4ccd-4e27-89df-b1544b4ff805.png)
+
+It shows that two printer services are running i'll get a shell via msf then run exploit suggester
 
 
 
