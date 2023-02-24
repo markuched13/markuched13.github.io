@@ -72,7 +72,17 @@ End Sub
 Now I need to make sure this macro is run when the document is opened. I'll close the macro editors, and back in the document, go to Tools –> Customize -> Events tab:
 ![image](https://user-images.githubusercontent.com/113513376/221057696-e6d15dd4-c16c-4427-9b8c-79b4bc4a60fb.png)
 
-I’ll select "Open Document" and click on the "Macro…" button. I'll navigte to select my macro:
+I'll select "Open Document" and click on the "Macro…" button. I'll navigte to select my macro:
+![image](https://user-images.githubusercontent.com/113513376/221059441-f630cdc9-d34e-47af-8b55-4d03bc709e02.png)
+
+When I hit "OK", I see it now in the list:
+![image](https://user-images.githubusercontent.com/113513376/221059503-f810f247-f894-461d-9aa4-bde2e5a4805b.png)
+
+I'll save my sheet as shell.ods, and exit LibreOffice.
+
+Reference to this [0xdf](https://0xdf.gitlab.io/2020/02/01/htb-re.html)
+
+Cool with this payload i'll set up a listener and a http server on port 80 hosting a powershell reverse shell
 
 
 
