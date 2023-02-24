@@ -91,7 +91,7 @@ After uploading the shell.odt file i get back a connection after few seconds
 
 Lets escalate priv 🤓
 
-Uploading WinPEAS.exe and running it shows we have write access over the 
+Uploading WinPEAS.exe and running it 
 ![image](https://user-images.githubusercontent.com/113513376/221062028-7aa9a78d-e0cd-4e37-b4e1-b4daae4f7c2a.png)
 ![image](https://user-images.githubusercontent.com/113513376/221062284-aea7f49a-d6e3-4709-aaac-2fa25b8c2349.png)
 ![image](https://user-images.githubusercontent.com/113513376/221062753-559a4f6f-4ccd-4e27-89df-b1544b4ff805.png)
