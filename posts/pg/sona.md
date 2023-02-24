@@ -509,6 +509,22 @@ blackleo
 3e409e89-514c-4f9f-955e-dfa5c4083518
 ```
 
+Now lets go back to the web server
+
+#### Web Server Enumeration
+
+On heading to the web server shows an instance of nexus respository manager
+![image](https://user-images.githubusercontent.com/113513376/221117659-42628ea0-0ffb-4c92-afcc-013cb49ffeb9.png)
+
+Trying to login with the cred `admin:3e409e89-514c-4f9f-955e-dfa5c4083518` works
+![image](https://user-images.githubusercontent.com/113513376/221117838-680bdf4a-421a-404f-a7af-1ee885ed4fdc.png)
+
+Noticing the top of the web server shows this `OSS 3.21.1-1 `
+
+Searching for exploit leads here [Exploit](https://www.exploit-db.com/exploits/49385)
+
+
+
 
  
 
