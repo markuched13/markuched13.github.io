@@ -78,6 +78,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 12 2023]] [Photobomb](https://markuched13.github.io/posts/htb/photobomb.html) `Command Injection, Path Hijack`
 - [[Feb 15 2023]] [OpenAdmin](https://markuched13.github.io/posts/htb/openadmin.html) `OpenNetAdmin, MYSQL, Port Forwarding, Sudo`
 - [[Feb 19 2023]] [Bagel](https://markuched13.github.io/posts/htb/bagel.html) `LFI, Reverse Engineering, Insecure Deserialization, Dotnet`
+- [[Feb 24 2023]] [Knife](https://markuched13.github.io/posts/htb/knife.html) `PHP 8.1.0-dev Exploit, Sudo`
 
 -
 
