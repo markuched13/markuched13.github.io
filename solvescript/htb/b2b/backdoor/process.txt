@@ -1,0 +1,46 @@
+/sbin/initautoautomatic-ubiquitynoprompt
+/lib/systemd/systemd-journald
+/lib/systemd/systemd-udevd
+/lib/systemd/systemd-networkd
+/sbin/multipathd-d-s
+/sbin/multipathd-d-s
+/sbin/multipathd-d-s
+/sbin/multipathd-d-s
+/sbin/multipathd-d-s
+/sbin/multipathd-d-s
+/sbin/multipathd-d-s
+/lib/systemd/systemd-resolved
+/lib/systemd/systemd-timesyncd
+/usr/bin/VGAuthService
+/usr/bin/vmtoolsd
+/lib/systemd/systemd-timesyncd
+/usr/lib/accountsservice/accounts-daemon
+/usr/bin/dbus-daemon--system--address=systemd:--nofork--nopidfile--systemd-activation--syslog-only
+/usr/sbin/irqbalance--foreground
+/usr/lib/accountsservice/accounts-daemon
+/usr/sbin/irqbalance--foreground
+/usr/bin/python3/usr/bin/networkd-dispatcher--run-startup-triggers
+/usr/sbin/rsyslogd-n-iNONE
+/lib/systemd/systemd-logind
+/usr/sbin/rsyslogd-n-iNONE
+/usr/sbin/rsyslogd-n-iNONE
+/usr/sbin/rsyslogd-n-iNONE
+/usr/bin/vmtoolsd
+/usr/bin/vmtoolsd
+/usr/bin/vmtoolsd
+/usr/sbin/cron-f
+/usr/sbin/CRON-f
+/usr/sbin/CRON-f
+/bin/sh -c while true;do su user -c "cd /home/user;gdbserver --once 0.0.0.0:1337 /bin/true;"; done
+/bin/sh -c while true;do sleep 1;find /var/run/screen/S-root/ -empty -exec screen -dmS root \;; done
+/usr/sbin/atd-f
+/usr/sbin/apache2-kstart
+//usr/lib/accountsservice/accounts-daemon
+/sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups
+/usr/lib/policykit-1/polkitd--no-debug/usr/lib/policykit-1/polkitd--no-debug
+/usr/lib/policykit-1/polkitd--no-debug
+/lib/systemd/systemd--user
+/(sd-pam)
+/sbin/agetty-o-p -- \u--nocleartty1linux
+-/bin/bash
+/usr/sbin/mysqld
