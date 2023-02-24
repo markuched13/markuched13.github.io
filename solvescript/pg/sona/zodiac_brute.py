@@ -25,4 +25,7 @@ for i in zodiac:
     else:
         break
 
+print(f"Zodiac sign found: {i}")
 
+
+# Doesn't work as i expected but at least it worked \o/
