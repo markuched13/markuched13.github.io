@@ -1,4 +1,4 @@
-rom pwn import *
+from pwn import *
 import warnings
 
 # Allows you to switch between local/GDB/remote from terminal
