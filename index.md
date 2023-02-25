@@ -80,6 +80,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 19 2023]] [Bagel](https://markuched13.github.io/posts/htb/bagel.html) `LFI, Reverse Engineering, Json Insecure Deserialization, Dotnet`
 - [[Feb 24 2023]] [Knife](https://markuched13.github.io/posts/htb/knife.html) `PHP 8.1.0-dev Exploit, Sudo`
 - [[Feb 24 2023]] [BackDoor](https://markuched13.github.io/posts/htb/backdoor.html) `Wordpress, LFI, GdbServer, Screen`
+- [[Feb 25 2023]] [NodeBlog](https://markuched13.github.io/posts/htb/nodeblog.html) `NOSQl Injection, XXE, NodeJS Insecure Deserialization, MongoDB`
 
 -
 
