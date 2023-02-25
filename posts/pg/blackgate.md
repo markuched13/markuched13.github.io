@@ -1,4 +1,4 @@
-### BlackNote Proving Grounds Practice
+### BlackGate Proving Grounds Practice
 
 ### Difficulty = Intermediate
 
