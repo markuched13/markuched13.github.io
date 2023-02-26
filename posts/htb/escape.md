@@ -88,4 +88,125 @@ I'll add the domain name to my `/etc/hosts` file
 
 From the scan we know that this is a windows box and its running an active directory environment
 
-I'll start 
+I'll start with ldap but i wasn't able to get anything from using nmap scripting engine for ldap
+
+```
+└─$ nmap --script "*ldap*" -p389,636 10.129.157.76 -Pn
+Starting Nmap 7.92 ( https://nmap.org ) at 2023-02-26 18:11 WAT
+Nmap scan report for sequel.htb (10.129.157.76)
+Host is up (0.28s latency).
+
+PORT    STATE SERVICE
+389/tcp open  ldap
+|_ldap-brute: ERROR: Script execution failed (use -d to debug)
+636/tcp open  ldapssl
+
+Nmap done: 1 IP address (1 host up) scanned in 90.07 seconds
+```
+
+Now lets move on to smb
+
+#### SMB Enumeration
+
+I'll check if we can list our shares anonymously
+
+```
+└─$ smbclient -L 10.129.157.76
+Password for [WORKGROUP\mark]:
+
+        Sharename       Type      Comment
+        ---------       ----      -------
+        ADMIN$          Disk      Remote Admin
+        C$              Disk      Default share
+        IPC$            IPC       Remote IPC
+        NETLOGON        Disk      Logon server share 
+        Public          Disk      
+        SYSVOL          Disk      Logon server share 
+Reconnecting with SMB1 for workgroup listing.
+do_connect: Connection to 10.129.157.76 failed (Error NT_STATUS_RESOURCE_NAME_NOT_FOUND)
+Unable to connect with SMB1 -- no workgroup available
+```
+
+Ok cool we can now i'll connect to each share
+
+```
+└─$ smbclient //10.129.157.76/NETLOGON
+Password for [WORKGROUP\mark]:
+Try "help" to get a list of possible commands.
+smb: \> ls
+NT_STATUS_ACCESS_DENIED listing \*
+smb: \> q
+                                                                                                        
+┌──(mark㉿haxor)-[~/Desktop/B2B/HTB/Escape]
+└─$ smbclient //10.129.157.76/Public  
+Password for [WORKGROUP\mark]:
+Try "help" to get a list of possible commands.
+smb: \> ls
+  .                                   D        0  Sat Nov 19 12:51:25 2022
+  ..                                  D        0  Sat Nov 19 12:51:25 2022
+  SQL Server Procedures.pdf           A    49551  Fri Nov 18 14:39:43 2022
+
+                5184255 blocks of size 4096. 1315642 blocks available
+smb: \> mget *
+Get file SQL Server Procedures.pdf? y
+getting file \SQL Server Procedures.pdf of size 49551 as SQL Server Procedures.pdf (45.7 KiloBytes/sec) (average 45.7 KiloBytes/sec)
+smb: \> q
+                                                                                                        
+┌──(mark㉿haxor)-[~/Desktop/B2B/HTB/Escape]
+└─$ smbclient //10.129.157.76/SYSVOL
+Password for [WORKGROUP\mark]:
+Try "help" to get a list of possible commands.
+smb: \> ls
+NT_STATUS_ACCESS_DENIED listing \*
+smb: \> q
+                                                                                                        
+┌──(mark㉿haxor)-[~/Desktop/B2B/HTB/Escape]
+└─$ 
+```
+
+Since we're given a sql procedure pdf file lets check it out
+
+I'll check our the metadata of the file first 
+
+```
+└─$ exiftool SQL\ Server\ Procedures.pdf 
+ExifTool Version Number         : 12.44
+File Name                       : SQL Server Procedures.pdf
+Directory                       : .
+File Size                       : 50 kB
+File Modification Date/Time     : 2023:02:26 18:18:02+01:00
+File Access Date/Time           : 2023:02:26 18:18:01+01:00
+File Inode Change Date/Time     : 2023:02:26 18:18:02+01:00
+File Permissions                : -rw-r--r--
+File Type                       : PDF
+File Type Extension             : pdf
+MIME Type                       : application/pdf
+PDF Version                     : 1.4
+Linearized                      : No
+Page Count                      : 2
+Creator                         : Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) obsidian/0.15.6 Chrome/100.0.4896.160 Electron/18.3.5 Safari/537.36
+Producer                        : Skia/PDF m100
+Create Date                     : 2022:11:18 13:39:43+00:00
+Modify Date                     : 2022:11:18 13:39:43+00:00
+```
+
+Now lets read it 
+![image](https://user-images.githubusercontent.com/113513376/221426011-72006f6c-bbeb-499c-a691-6222d84f074e.png)
+![image](https://user-images.githubusercontent.com/113513376/221426019-8cb35945-daad-4ce3-a621-a383c5ba0cc3.png)
+
+With that we know that we looted cred and users from it
+
+```
+
+ryan
+Ryan
+tom
+Tom
+brandon.brown
+
+
+* Cred *
+PublicUser:GuestUserCantWrite1
+```
+
+
