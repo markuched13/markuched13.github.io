@@ -215,6 +215,6 @@ We know that we can access the mssql server running on the host using the cred `
 We can connect to it using `impacket-mssqlclient`
 
 ```
-
+b
 
 
