@@ -85,3 +85,7 @@ I'll add the domain name to my `/etc/hosts` file
 └─$ cat /etc/hosts | grep sequel                     
 10.129.157.76   sequel.htb dc.sequel.htb
 ```
+
+From the scan we know that this is a windows box and its running an active directory environment
+
+I'll start 
