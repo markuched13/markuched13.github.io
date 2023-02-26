@@ -81,6 +81,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 24 2023]] [Knife](https://markuched13.github.io/posts/htb/knife.html) `PHP 8.1.0-dev Exploit, Sudo`
 - [[Feb 24 2023]] [BackDoor](https://markuched13.github.io/posts/htb/backdoor.html) `Wordpress, LFI, GdbServer, Screen`
 - [[Feb 25 2023]] [NodeBlog](https://markuched13.github.io/posts/htb/nodeblog.html) `NOSQl Injection, XXE, NodeJS Insecure Deserialization, MongoDB`
+- [[Feb 26 2023]] [Escape](https://markuched13.github.io/posts/htb/escape.html) `SMB, MSSQl, Log File Review, Certificate Template Abuse`
 
 -
 
