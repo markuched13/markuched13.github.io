@@ -238,7 +238,7 @@ Doing the math i get the offset `0xffbee6ec - 0xffbee6c0 = 0x2c`
 
 I can make the exploit now using pwntools 
 
-Here's my solve script [Exploit](https://github.com/markuched13/markuched13.github.io/tree/main/solvescript/ropemporium/ret2win/exploit32.py))
+Here's my solve script [Exploit](https://github.com/markuched13/markuched13.github.io/tree/main/solvescript/ropemporium/ret2win/exploit32.py)
 
 On running it, it works
 
