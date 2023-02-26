@@ -335,7 +335,7 @@ ROPE{a_placeholder_32byte_flag!}
 [*] Got EOF while reading in interactive
 ```
 
-Here's the autopwn script using ROP [Script]([Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/callme/autopwn32.py))
+Here's the autopwn script using ROP [Script](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/callme/autopwn32.py)
 
 It automates the stress 😭😭 but its cool 🙂
 
