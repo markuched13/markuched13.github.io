@@ -222,7 +222,7 @@ Key to Flags:
 Note that .data has 8bytes of free space and it can be confirmed by checking it in ghidra
 ![image](https://user-images.githubusercontent.com/113513376/221391354-dbe9c969-1236-4173-94a2-fab45c3b8c5f.png)
 
-From there we know the address also 
+From there we know the address of the .data section is :
 
 ```
 Address = 0x804a018
@@ -282,7 +282,7 @@ And in order to move the value of flag.txt to .data, i'll do this
 4. Then call printfile(.data)
 ```
 
-Note that we can't just directly put in flag.txt in to ebp since its a x86 binary we need to put in 4 bytes at a time thats why i separated `flag & .txt` 
+Note that we can't just directly put in flag.txt in to ebp since its a x86 binary we need to put in 4 bytes at a time thats why i separated `flag & .txt` in the exploit script  
 
 Here's the exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ropemporium/write/exploit32.py)
 
@@ -299,4 +299,4 @@ Running it works
 [*] Stopped process './write432' (pid 136934)
 ```
 
-Here's the solution for the x64 binary
+Here's the solution for the x64 binary ................coming soon i when i come back from church today
