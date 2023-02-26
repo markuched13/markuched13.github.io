@@ -373,3 +373,9 @@ Info: Establishing connection to remote endpoint
 sequel\ryan.cooper
 *Evil-WinRM* PS C:\Users\Ryan.Cooper\Documents>
 ```
+
+I upload winPEAS.exe to the target and run it
+
+After running it I got this which i found suspicious
+
+```
