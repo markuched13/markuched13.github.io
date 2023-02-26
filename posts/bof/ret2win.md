@@ -238,7 +238,7 @@ Doing the math i get the offset `0xffbee6ec - 0xffbee6c0 = 0x2c`
 
 I can make the exploit now using pwntools 
 
-Here's my solve script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ret2win/exploit32.py)
+Here's my solve script [Exploit](https://github.com/markuched13/markuched13.github.io/tree/main/solvescript/ropemporium/ret2win/exploit32.py))
 
 On running it, it works
 
@@ -249,7 +249,7 @@ On running it, it works
 [*] Process './ret2win' stopped with exit code -11 (SIGSEGV) (pid 107638)
 ```
 
-Here's the solve script for the x64 binary [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/ret2win/exploit64.py)
+Here's the solve script for the x64 binary [Exploit](https://github.com/markuched13/markuched13.github.io/tree/main/solvescript/ropemporium/ret2win/exploit64.py)
 
 And we're done
 
