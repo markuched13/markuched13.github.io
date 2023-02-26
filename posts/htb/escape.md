@@ -197,7 +197,6 @@ Now lets read it
 With that we know that we looted cred and users from it
 
 ```
-
 ryan
 Ryan
 tom
@@ -208,5 +207,14 @@ brandon.brown
 * Cred *
 PublicUser:GuestUserCantWrite1
 ```
+
+We know that we can access the mssql server running on the host using the cred `PublicUser:GuestUserCantWrite1`
+
+#### Enumerating MSSQL 
+
+We can connect to it using `impacket-mssqlclient`
+
+```
+
 
 
