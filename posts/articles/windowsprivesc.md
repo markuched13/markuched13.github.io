@@ -38,3 +38,14 @@ Get-AppLockerPolicy -Effective | select -ExpandProperty RuleCollections
 Get-AppLockerPolicy -Local | Test-AppLockerPolicy -path C:\Windows\System32\cmd.exe -User Everyone
 `
 
+#### Checking Running Processes
+
+`
+tasklist /svc
+`
+
+#### Get All Environment Variable
+
+`
+set
+`
