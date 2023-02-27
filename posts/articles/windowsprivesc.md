@@ -2,6 +2,24 @@
 
 ### Cheatsheet
 
+#### Interface(s), IP Address(es), DNS Information
+
+`
+ipconfig /all
+`
+
+#### ARP Table
+
+`
+arp -a
+`
+
+#### Routing Table
+
+`
+route print
+`
+
 #### Check Windows Defender Status
 
 `
