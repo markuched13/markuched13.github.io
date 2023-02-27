@@ -71,3 +71,43 @@ C:\Users\HP> wmic product get name
 
 PS C:\Users\HP> Get-WmiObject -Class Win32_Product |  select Name, Version
 ```
+
+#### Display Running Processes
+
+```
+C:\Users\HP> netstat -ano
+```
+
+#### Logged-In Users
+
+```
+C:\Users\HP> query user
+
+C:\Users\HP> qwinsta
+```
+
+#### Current User
+
+```
+C:\Users\HP> echo %USERNAME%
+
+C:\Users\HP> whoami
+```
+
+#### Current User Privileges
+
+```
+C:\Users\HP> whoami /priv
+```
+
+#### Current User Group Information
+
+```
+C:\Users\HP> whoami /groups
+```
+
+#### Get All Users
+
+```
+C:\Users\HP> net user
+```
