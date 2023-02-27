@@ -60,6 +60,7 @@ C:\Users\HP> systeminfo
 
 `
 C:\Users\HP> wmic qfe
+
 PS C:\Users\HP>  Get-HotFix | ft -AutoSize
 `
 
@@ -67,5 +68,6 @@ PS C:\Users\HP>  Get-HotFix | ft -AutoSize
 
 `
 C:\Users\HP> wmic product get name
+
 PS C:\Users\HP> Get-WmiObject -Class Win32_Product |  select Name, Version
 `
