@@ -129,3 +129,14 @@ C:\Users\HP> net localgroup administrators
 ```
 C:\Users\HP> net accounts
 ```
+
+
+
+
+
+
+
+#### Resources
+[PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)
+[HackTricks](https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation)
+[IredTeam](https://www.ired.team/offensive-security/)
