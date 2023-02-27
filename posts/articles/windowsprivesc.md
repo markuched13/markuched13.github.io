@@ -118,3 +118,14 @@ C:\Users\HP> net user
 C:\Users\HP> net localgroup
 ```
 
+#### Details About a Group
+
+```
+C:\Users\HP> net localgroup administrators
+```
+
+#### Get Password Policy & Other Account Information
+
+```
+C:\Users\HP> net accounts
+```
