@@ -141,6 +141,9 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 20 2023]] [Stackler](https://markuched13.github.io/posts/echoctf/stackler.html) `Buffer Overflow`
 - [[Feb 21 2023]] [Nopal](https://markuched13.github.io/posts/echoctf/nopal.html) `Cacti RCE, SNMP RCE`
 
+* * *
+### **Articles:~#**
+- [[Feb 27 2023]] [WindowPrivEsc](https://markuched13.github.io/posts/articles/winprivesc_cheatsheet.html) `Windows Privilege Escalation CheatSheet`
 
 * * *
 ### **Reverse Engineering Practice:~#**
