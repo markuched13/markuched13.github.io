@@ -63,5 +63,9 @@ C:\Users\HP> wmic qfe
 PS C:\Users\HP>  Get-HotFix | ft -AutoSize
 `
 
+#### Get The List Of Installed Programs
 
-
+`
+C:\Users\HP> wmic product get name
+PS C:\Users\HP> Get-WmiObject -Class Win32_Product |  select Name, Version
+`
