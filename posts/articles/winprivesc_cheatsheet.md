@@ -132,3 +132,10 @@
 | `guestmount --add WEBSRV10.vhdx  --ro /mnt/vhdx/ -m /dev/sda1` |Mount VHD/VHDX on Linux|
 | `sudo python2.7 windows-exploit-suggester.py  --update` |Update Windows Exploit Suggester database|
 | `python2.7 windows-exploit-suggester.py  --database 2021-05-13-mssb.xls --systeminfo win7lpe-systeminfo.txt` |Running Windows Exploit Suggester|
+
+
+
+### Resouces
+[HackTricks](https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation)
+[IredTeam](https://www.ired.team/offensive-security-experiments/offensive-security-cheetsheets)
+[PayloadAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)
