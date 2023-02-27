@@ -139,3 +139,4 @@
 [HackTricks](https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation)
 [IredTeam](https://www.ired.team/offensive-security-experiments/offensive-security-cheetsheets)
 [PayloadAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)
+[Priv2Admin](https://github.com/gtworek/Priv2Admin)
