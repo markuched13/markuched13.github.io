@@ -111,3 +111,10 @@ C:\Users\HP> whoami /groups
 ```
 C:\Users\HP> net user
 ```
+
+#### Get All Groups
+
+```
+C:\Users\HP> net localgroup
+```
+
