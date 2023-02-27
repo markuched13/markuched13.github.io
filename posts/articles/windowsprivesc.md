@@ -136,7 +136,7 @@ C:\Users\HP> net accounts
 
 
 
-#### Resources
+### Resources
 [PayloadsAllTheThings](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md)<br>
 [HackTricks](https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation)<br>
 [IredTeam](https://www.ired.team/offensive-security/)
