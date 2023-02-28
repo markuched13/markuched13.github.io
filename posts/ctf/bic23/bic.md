@@ -561,8 +561,19 @@ Looking at it the canary starts at offset `0x10` and our input starts at offset 
 
 So after we overflow the canary value i'll then replace it back to its initial value which is the one we leaked then pad it with 8 bytes since this is a x64 binary
 
-Here's my exploit script [Exploit]()
+Here's my exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/bic23/autopwn.py)
 
+Running it gives us shell
+![image](https://user-images.githubusercontent.com/113513376/222008438-bf3ef38f-00f8-4985-bd11-0c134cdc6a2b.png)
+
+The remote server is down so i can't run it as of now too bad 😞
+
+Anyways i'm done xD
+
+Till next time 👻
+
+<br> <br>
+[Back To Home](../../index.md)
 
 
 
