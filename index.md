@@ -33,7 +33,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 21 2023]] [TakeOver](https://markuched13.github.io/posts/thm/takeover.html) `Subdomain Enumeration`
 - [[Jan 28 2023]] [ReversingELF](https://markuched13.github.io/posts/thm/reversingelf.html) `Reverse Engineering`
 - [[Jan 28 2023]] [0x41haz](https://markuched13.github.io/posts/thm/0x41haz.html) `Reverse Engineering`
-- [[Feb 05 2023]] [EavesDropper](https://markuched13.github.io/posts/thm/eavesdrop.html) `Pspy, Path Hijack, Script`
+- [[Feb 05 2023]] [EavesDropper](https://markuched13.github.io/posts/thm/eavesdrop.html) `Pspy, Path Hijack, Scripting`
 - [[Feb 08 2023]] [PythonBasic](https://markuched13.github.io/posts/thm/pythonbasics.html) `Python`
 - [[Feb 09 2023]] [UnbakedPie](https://markuched13.github.io/posts/thm/unbakedpie.html) `Python Deserialization, Docker, Python Library Hijack`
 - [[Feb 11 2023]] [MD2PDF](https://markuched13.github.io/posts/thm/md2pdf.html) `SSRF`
@@ -134,6 +134,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 14 2023]] [Escape](https://markuched13.github.io/posts/pg/escape.html) `File Upload, Docker, SNMP RCE, Reverse Engineering, Path Hijack, Capabilities`
 - [[Feb 24 2023]] [Craft](https://markuched13.github.io/posts/pg/craft.html) `Macros, File Upload, PrintSpoofer`
 - [[Feb 24 2023]] [Sona](https://markuched13.github.io/posts/pg/sona.html) `Scripting, Python Library Hijack`
+- [[Feb 28 2023]] [Slort](https://markuched13.github.io/posts/pg/slort.html) `LFI, Weak Permissions`
 
 * * *
 ### **EchoCTF Writeups:~#**
