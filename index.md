@@ -112,7 +112,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Jan 17 2023]] [PlanetExpress](https://markuched13.github.io/posts/pg/planetexpress.html) `RCE, Suid`
 - [[Jan 17 2023]] [Internal](https://markuched13.github.io/posts/pg/internal.html) `CVE-2009-3103`
 - [[Jan 21 2023]] [Jacko](https://markuched13.github.io/posts/pg/jacko.html) `H2 Database, PaperStream IP`
-- [[Jan 21 2023]] [BlackNote](https://markuched13.github.io/posts/pg/blackgate.html) `Redis`
+- [[Jan 21 2023]] [BlackGate](https://markuched13.github.io/posts/pg/blackgate.html) `Redis, ROP`
 - [[Jan 21 2023]] [Roquefort](https://markuched13.github.io/posts/pg/roquefort.html) `Gitea, Path Hijack, Cron`
 - [[Jan 22 2023]] [Fractal](https://markuched13.github.io/posts/pg/fractal.html) `Symfony, Mysql, Ftp `
 - [[Jan 23 2023]] [Wheel](https://markuched13.github.io/posts/pg/wheel.html) `XPATH Injection, Reverse Engineering `
