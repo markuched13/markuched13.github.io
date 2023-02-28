@@ -103,7 +103,19 @@ Heading over to the web page shows the default xampp web page for both port 4443
 ![image](https://user-images.githubusercontent.com/113513376/221719866-ef9aef43-19bb-427e-8340-effa4ffe49e3.png)
 ![image](https://user-images.githubusercontent.com/113513376/221719802-22fefa7b-32b5-4bad-a6fd-5d87aaf542df.png)
 
-I'll run gobuster on each of the web service 
+When i tried accessing phpmyadmin i get an error
+![image](https://user-images.githubusercontent.com/113513376/221720508-2b38f8bd-3889-4a7f-9c14-baf4f93ab5b6.png)
+
+But on checking phpinfo it works 
+![image](https://user-images.githubusercontent.com/113513376/221720573-47ba24af-6125-4399-80d5-afd76058c5e1.png)
+
+Reading it shows it allows urlfopen meaning we can include remote files 
+![image](https://user-images.githubusercontent.com/113513376/221720644-5a8639a2-47c0-4933-9bd1-d42ae39f3e56.png)
+
+We also know know that there's a user on the box called rupert
+![image](https://user-images.githubusercontent.com/113513376/221720821-7c5b9862-3e76-4387-80c4-96b05cd1ba12.png)
+
+I'll run gobuster on each of the web service running on both ports
 
 `
 
