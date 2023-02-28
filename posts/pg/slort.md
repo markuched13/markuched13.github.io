@@ -117,8 +117,6 @@ We also know know that there's a user on the box called rupert
 
 I'll run gobuster on each of the web service running on both ports
 ![image](https://user-images.githubusercontent.com/113513376/221721532-057a479e-60de-40a2-9e0e-bda01237398c.png)
-
-Heading over to site on port 8080 shows this
 ![image](https://user-images.githubusercontent.com/113513376/221721592-f94382fe-9d8e-438f-b314-30870026642e.png)
 
 Looking at the url it shows that its including the main.php file
