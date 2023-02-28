@@ -507,4 +507,63 @@ Another thing i'll do is to turn off aslr `Address space layout randomization` b
 
 With this ready i need to get an address off the stack that each run time its address or the last three address bytes won't change and this will be done by leveraging the format string vuln 
 
-Here's the script i used to fuzz both the addr and canary [FUZZ]()
+Here's the script i used to fuzz both the addr and canary [FUZZ](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/bic23/fuzz.py)
+
+Running it leaks off address for me 
+![image](https://user-images.githubusercontent.com/113513376/222005170-7910bcce-2fd1-4277-b5fc-8c9eef2bbacb.png)
+
+If you notice the 11th address we see its the canary and also the 13th address didn't really change
+
+I can confirm whats the value of the 13th address using gdb-pwngdb
+![image](https://user-images.githubusercontent.com/113513376/222005532-f782f5d8-466a-41a9-899c-283cd5ad2fe0.png)
+
+So thats the call to the main function
+
+Since thats ready here's the next thing we want to do
+
+We know that the hide() function is vulnerable to buffer overflow we can take control over the binary 
+
+A leak is also given to us which is the printf address 
+
+The best rop to perform here is return to libc `ret2libc`
+
+The idea is this:
+
+```
+1. Leak the stack and pie address off the stack
+2. Overwrite the value of canary and replace with the leaked canary
+3. Calculate the libc base address
+4. Call sh on system i.e system(/bin/sh)
+```
+
+We need to first take advantage of gets() to overflow the canary variable
+
+Here's the stack layout
+![image](https://user-images.githubusercontent.com/113513376/222007546-ce9ac178-206f-41ab-bbd9-39d57fdb010e.png)
+
+```
+                             **************************************************************
+                             *                          FUNCTION                          *
+                             **************************************************************
+                             undefined hide()
+             undefined         AL:1           <RETURN>
+             undefined8        Stack[-0x10]:8 canary                                  XREF[2]:     001011e0(W), 
+                                                                                                   00101266(R)  
+             undefined1[136]   Stack[-0x98]   input                                   XREF[2]:     00101209(*), 
+                                                                                                   00101224(*)  
+                             hide                                            XREF[4]:     Entry Point(*), main:0010131d(c), 
+                                                                                          001020cc, 00102190(*)  
+        001011cc 55              PUSH       RBP
+
+```
+
+Looking at it the canary starts at offset `0x10` and our input starts at offset `0x98` doing the math ` 0x98 - 0x10 = 0x88` we get the offset as `0x88` which is `136` in decimal
+
+So after we overflow the canary value i'll then replace it back to its initial value which is the one we leaked then pad it with 8 bytes since this is a x64 binary
+
+Here's my exploit script [Exploit]()
+
+
+
+
+
