@@ -666,8 +666,17 @@ Lets get a pop_rdi gadget using ropper
 
 ```
 
-Here's the 
+Here's the script i used [GetAddr](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/pg/blackgate/getaddr.py)
 
+On running it pauses 
+
+```
+└─$ python3 getaddr.py
+[+] Starting local process './redis-status': pid 135706
+[*] Paused (press any to continue)
+```
+
+I will then attach the process to gdb 
 
 
 And we're done xD
