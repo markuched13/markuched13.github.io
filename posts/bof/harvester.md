@@ -368,5 +368,15 @@ run
 Now if you notice the 3rd offset it looks like a libc address i can confirm what it is
 ![image](https://user-images.githubusercontent.com/113513376/222280520-8ffcdf92-94d4-40d6-8909-738b76c19612.png)
 
-Cool its a libc address `
+Cool its a libc address and its name is `nanosleep`
+
+Also we need to get an address which will make us calculate the offset to the real binary address
+![image](https://user-images.githubusercontent.com/113513376/222281633-318ec2d3-494e-4384-9ef8-6b9802540f7e.png)
+
+I like using main()
+
+So with gdb-pwngdb i'll calculate it
+![image](https://user-images.githubusercontent.com/113513376/222282028-e19ebbb2-8bb8-4115-a306-dd3516686fcd.png)
+
+
 
