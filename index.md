@@ -188,7 +188,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 09 2023]] [RopEmporium_Write](https://markuched13.github.io/posts/bof/write.html) `ROP, Section Data Write`
 - [[Feb 18 2023]] [HackTheBox_Controller](https://markuched13.github.io/posts/bof/controller.html) `Ret2Plt`
 - [[Feb 20 2023]] [PICO ClutterOverflow](https://markuched13.github.io/posts/bof/clutter.html) `Variable Overwrite`
-- [[Feb 20 2023]] [HTB Apocalypse21](https://markuched13.github.io/posts/bof/harvester.html) `ROP`
+- [[Mar 02 2023]] [HTB Apocalypse21](https://markuched13.github.io/posts/bof/harvester.html) `ROP`
 
 bof/harvester.md
 
