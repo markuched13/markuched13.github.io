@@ -423,8 +423,15 @@ Also note that we need to subtract 35 from the leaked nanosleep address so that 
 ```
 pwndbg> x 0x7ffff7e983b3
 0x7ffff7e983b3 <__GI___clock_nanosleep+35>:     0x66c3d8f7
-pwndbg>
+pwndbg> x 0x7ffff7e983b3 - 35
+0x7ffff7e98390 <__GI___clock_nanosleep>:        0x7403ff83
+pwndbg> 
 ```
+
+With that ready i need a pop_rdi gadget to pop the value of sh in system also i will need a ret address to allign the stack to prevent movaps stack allignment
+![image](https://user-images.githubusercontent.com/113513376/222285118-913d17ad-fd9f-4fea-97c0-91b96e7724a1.png)
+
+So here's my exploit script [Exploit]()
 
 
 
