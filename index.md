@@ -193,7 +193,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 ### **CTF Writeups:~#**
 * * *
 - [[Jan 14 2023]] [Sabr CTF](https://markuched13.github.io/posts/ctf/sabr/sabr.html) `Web, Misc, Pwn, RE`
-- [[Jan 29 2023]] [BIC Winter CTF](https://markuched13.github.io/posts/ctf/bic23/bic23.html) `RE, Pwn `
+- [[Jan 29 2023]] [BIC Winter CTF](https://markuched13.github.io/posts/ctf/bic23/bicctf.html) `RE, Pwn `
 
 * * *
 #### **Support Or Contact Me:~#**
