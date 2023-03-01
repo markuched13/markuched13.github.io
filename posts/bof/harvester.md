@@ -329,5 +329,17 @@ We see that it reads our input then does a math operation of the initial pie val
 
 Also you should notice that no form of check is done to know if we input a negative number!! sweet 
 
+The binary has all protections enabled so trying to overflow the buffer will cause the canary to trigger
 
+Here's how the exploit is going to be:
+
+```
+1. Leak stack canary address
+2. Leak pie address 
+3. Leak libc address
+```
+
+Since we can't really do something like `%1$p %2$p` i'll just keep on making the script call fight() since its a loop
+
+Here's my fuzz script [Fuzz]()
 
