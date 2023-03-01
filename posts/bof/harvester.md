@@ -31,6 +31,9 @@ harvester: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically 
 
 We're working with a x64 binary and all protections are enabled 💀
 
+A libc file is given so i'll use patchelf to path the binary to use the libc file given
+![image](https://user-images.githubusercontent.com/113513376/222286975-ca438f26-0fec-4a4b-bf40-edc31be08fac.png)
+
 Lets run it to know what it does
 ![image](https://user-images.githubusercontent.com/113513376/222261870-ee0c20ab-040d-49df-a58a-3e0345bdd441.png)
 ![image](https://user-images.githubusercontent.com/113513376/222261951-5a99e553-642d-4907-89cf-405efe793fd2.png)
@@ -431,7 +434,7 @@ pwndbg>
 With that ready i need a pop_rdi gadget to pop the value of sh in system also i will need a ret address to allign the stack to prevent movaps stack allignment
 ![image](https://user-images.githubusercontent.com/113513376/222285118-913d17ad-fd9f-4fea-97c0-91b96e7724a1.png)
 
-So here's my exploit script [Exploit]()
+So here's my exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/practice/harvest_exploit.py)
 
 
 
