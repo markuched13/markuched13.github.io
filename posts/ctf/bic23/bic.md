@@ -212,7 +212,32 @@ We're working with a x64 binary which is dynamically linked and not stripped
 
 And from its protection we see that all protection are enabled except relro which is partial
 
-Lets run it to know what it does
+Before i run it, the binary will by default use my device libc library
+
+```
+┌──(mark㉿haxor)-[~/Desktop/CTF/WinterCon/pwn]
+└─$ ldd shifu
+        linux-vdso.so.1 (0x00007ffff7fc9000)
+        libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ffff7dc4000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007ffff7fcb000)
+
+```
+
+Since we're given the libc library to use i'll use `patchelf` to patch the binary so it will use the libc given
+
+```
+┌──(mark㉿haxor)-[~/Desktop/CTF/WinterCon/pwn]
+└─$ patchelf --set-rpath "." shifu
+                                                                                                     
+┌──(mark㉿haxor)-[~/Desktop/CTF/WinterCon/pwn]
+└─$ ldd shifu
+        linux-vdso.so.1 (0x00007ffff7fc9000)
+        libc.so.6 => ./libc.so.6 (0x00007ffff7c00000)
+        /lib64/ld-linux-x86-64.so.2 (0x00007ffff7fcb000)
+                                                              
+```
+
+Cool we can now run it to know what it does
 
 ```
 ┌──(mark㉿haxor)-[~/Desktop/CTF/WinterCon/pwn]
