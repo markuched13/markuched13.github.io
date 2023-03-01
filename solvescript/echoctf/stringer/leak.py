@@ -8,7 +8,7 @@ context.log_level = 'info'
 
 flag = ''
 
-for i in range(1, 300):
+for i in range(1, 100):
     try:
         io = remote('10.0.14.28', 1337, level='warn')
         io.recvuntil("Give me a word and i'll say it back at you...")
