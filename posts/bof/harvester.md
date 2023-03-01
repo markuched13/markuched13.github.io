@@ -35,5 +35,299 @@ Lets run it to know what it does
 ![image](https://user-images.githubusercontent.com/113513376/222261870-ee0c20ab-040d-49df-a58a-3e0345bdd441.png)
 ![image](https://user-images.githubusercontent.com/113513376/222261951-5a99e553-642d-4907-89cf-405efe793fd2.png)
 
+Using ghidra i'll decompile the binary
+
+Here's the main function
+![image](https://user-images.githubusercontent.com/113513376/222271203-635993cf-3642-4f7f-b2b2-944a628800a6.png)
+
+```
+undefined8 main(void)
+
+{
+  long in_FS_OFFSET;
+  long canary;
+  
+  canary = *(long *)(in_FS_OFFSET + 0x28);
+  setup();
+  printf("\x1b[1;36m");
+  printstr(&banner);
+  harvest();
+  if (canary != *(long *)(in_FS_OFFSET + 0x28)) {
+                    /* WARNING: Subroutine does not return */
+    __stack_chk_fail();
+  }
+  return 0;
+}
+```
+
+We see what it does:
+
+```
+1. Prints the banner 
+2. Calls function harvest()
+```
+
+Here's the decompiled harvest() function
+![image](https://user-images.githubusercontent.com/113513376/222271470-f6853b20-270b-4867-9f6f-74914288057f.png)
+
+```
+void harvest(void)
+
+{
+  long in_FS_OFFSET;
+  int option;
+  undefined8 canary;
+  
+  canary = *(undefined8 *)(in_FS_OFFSET + 0x28);
+  while( true ) {
+    while( true ) {
+      while( true ) {
+        check_pie(pie);
+        option = 0;
+        menu();
+        __isoc99_scanf(&DAT_00101202,&option);
+        if (option != 2) break;
+        inventory();
+      }
+      if (option < 3) break;
+      if (option == 3) {
+        stare();
+      }
+      else {
+        if (option != 4) goto LAB_00100ef0;
+        run();
+      }
+    }
+    if (option != 1) break;
+    fight();
+  }
+LAB_00100ef0:
+  printf("\x1b[1;31m");
+  printstr("This was never an option!\n");
+                    /* WARNING: Subroutine does not return */
+  exit(0);
+}
+```
+
+From the code here's whats going on:
+
+```
+1. A loop is called which does the following below
+2. Recieves our input then does some checks
+3. If our input is 1 it calls the fight() function
+4. If our input is 2 it calls the inventory() function
+5. If our input is 3 it calsl the stare() function
+6. If our input is 4 it calls the run() function
+7. Else if our input isn't to any of it, it exits
+```
+
+Here's the decompiled code for all function
+
+Fight() 
+![image](https://user-images.githubusercontent.com/113513376/222272666-780fc948-4b3a-418e-92d9-18fea4e51399.png)
+
+```
+void fight(void)
+
+{
+  long in_FS_OFFSET;
+  undefined8 input;
+  undefined8 local_30;
+  undefined8 local_28;
+  undefined8 local_20;
+  long canary;
+  
+  canary = *(long *)(in_FS_OFFSET + 0x28);
+  input = 0;
+  local_30 = 0;
+  local_28 = 0;
+  local_20 = 0;
+  printf("\x1b[1;36m");
+  printstr("\nChoose weapon:\n");
+  printstr(&DAT_00101138);
+  read(0,&input,5);
+  printstr("\nYour choice is: ");
+  printf((char *)&input);
+  printf("\x1b[1;31m");
+  printstr("\nYou are not strong enough to fight yet.\n");
+  if (canary != *(long *)(in_FS_OFFSET + 0x28)) {
+                    /* WARNING: Subroutine does not return */
+    __stack_chk_fail();
+  }
+  return;
+}
+```
+
+Inventory()
+![image](https://user-images.githubusercontent.com/113513376/222272998-d25c75bb-6892-4b67-adef-8bb797467d52.png)
+
+```
+void inventory(void)
+
+{
+  long in_FS_OFFSET;
+  int input;
+  char local_13 [3];
+  long canary;
+  
+  canary = *(long *)(in_FS_OFFSET + 0x28);
+  input = 0;
+  show_pies(pie);
+  printstr("\nDo you want to drop some? (y/n)\n> ");
+  read(0,local_13,2);
+  if (local_13[0] == 'y') {
+    printstr("\nHow many do you want to drop?\n> ");
+    __isoc99_scanf(&%d,&input);
+    pie = pie - input;
+    if (pie < 1) {
+      printstr(&result);
+                    /* WARNING: Subroutine does not return */
+      exit(1);
+    }
+    show_pies(pie);
+  }
+  if (canary != *(long *)(in_FS_OFFSET + 0x28)) {
+                    /* WARNING: Subroutine does not return */
+    __stack_chk_fail();
+  }
+  return;
+}
+```
+
+Stare()
+![image](https://user-images.githubusercontent.com/113513376/222273259-a23424d7-eda9-4e30-87e5-994a024806b2.png)
+
+```
+void stare(void)
+
+{
+  long in_FS_OFFSET;
+  undefined input [40];
+  long canary;
+  
+  canary = *(long *)(in_FS_OFFSET + 0x28);
+  printf("\x1b[1;36m");
+  printstr("\nYou try to find its weakness, but it seems invincible..");
+  printstr("\nLooking around, you see something inside a bush.");
+  printf("\x1b[1;32m");
+  printstr(&DAT_0010129a);
+  pie = pie + 1;
+  if (pie == 22) {
+    printf("\x1b[1;32m");
+    printstr("\nYou also notice that if the Harvester eats too many pies, it falls asleep.");
+    printstr("\nDo you want to feed it?\n> ");
+    read(0,input,64);
+    printf("\x1b[1;31m");
+    printstr("\nThis did not work as planned..\n");
+  }
+  if (canary != *(long *)(in_FS_OFFSET + 0x28)) {
+                    /* WARNING: Subroutine does not return */
+    __stack_chk_fail();
+  }
+  return;
+}
+```
+
+Run()
+![image](https://user-images.githubusercontent.com/113513376/222273380-fcbfd4c0-2f5e-4a30-892d-a136bf670ea7.png)
+
+```
+void run(void)
+
+{
+  printf("\x1b[1;36m");
+  printstr("You ran away safely!\n");
+                    /* WARNING: Subroutine does not return */
+  exit(0);
+}
+```
+
+From this code we can tell the vulnerability lays in the stare() and fight() function
+
+The fight function is vulnerable to a format string vulnerability
+
+```
+  read(0,&input,5);
+  printstr("\nYour choice is: ");
+  printf((char *)&input);
+```
+
+We can see that it reads 5 bytes of our input and prints it our without using a format specifier
+
+While the stare() function is vulnerable to buffer overflow
+
+```
+void stare(void)
+
+{
+  long in_FS_OFFSET;
+  undefined input [40];
+  long canary;
+  
+  canary = *(long *)(in_FS_OFFSET + 0x28);
+  printf("\x1b[1;36m");
+  printstr("\nYou try to find its weakness, but it seems invincible..");
+  printstr("\nLooking around, you see something inside a bush.");
+  printf("\x1b[1;32m");
+  printstr(&DAT_0010129a);
+  pie = pie + 1;
+  if (pie == 22) {
+    printf("\x1b[1;32m");
+    printstr("\nYou also notice that if the Harvester eats too many pies, it falls asleep.");
+    printstr("\nDo you want to feed it?\n> ");
+    read(0,input,64);
+    printf("\x1b[1;31m");
+    printstr("\nThis did not work as planned..\n");
+  }
+  if (canary != *(long *)(in_FS_OFFSET + 0x28)) {
+                    /* WARNING: Subroutine does not return */
+    __stack_chk_fail();
+  }
+  return;
+}
+```
+
+We see that it reads 64 bytes of data into a buffer that can only hold up to 40 bytes of data but we need to bypass a check for us to reach the vulnerable 
+part of the program and the check confirms if the value of pie is equal to 22
+
+Here's the function that makes us of getting a pie 
+
+```
+void inventory(void)
+
+{
+  long in_FS_OFFSET;
+  int input;
+  char local_13 [3];
+  long canary;
+  
+  canary = *(long *)(in_FS_OFFSET + 0x28);
+  input = 0;
+  show_pies(pie);
+  printstr("\nDo you want to drop some? (y/n)\n> ");
+  read(0,local_13,2);
+  if (local_13[0] == 'y') {
+    printstr("\nHow many do you want to drop?\n> ");
+    __isoc99_scanf(&%d,&input);
+    pie = pie - input;
+    if (pie < 1) {
+      printstr(&result);
+                    /* WARNING: Subroutine does not return */
+      exit(1);
+    }
+    show_pies(pie);
+  }
+  if (canary != *(long *)(in_FS_OFFSET + 0x28)) {
+                    /* WARNING: Subroutine does not return */
+    __stack_chk_fail();
+  }
+  return;
+}
+```
+
+We see that it reads our input then does a math operation of the initial pie value subtract by our input 
+
+Also you should notice that no form of check is done to know if we input a negative number!! sweet 
+
 
 
