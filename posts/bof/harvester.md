@@ -2,7 +2,7 @@
 
 ### Binary Exploitation 
 
-### TL;DR Solution: Use a format string to leak canary, piebase address & perform a ret2libc attack 
+#### TL;DR Solution: Use a format string to leak canary, piebase address & perform a ret2libc attack 
 
 #### Basic File Checks
 
@@ -341,5 +341,32 @@ Here's how the exploit is going to be:
 
 Since we can't really do something like `%1$p %2$p` i'll just keep on making the script call fight() since its a loop
 
-Here's my fuzz script [Fuzz]()
+Here's my fuzz script [Fuzz](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/practice/harvest_fuzz.py)
+
+Before i run it i'll disable aslr 
+
+```
+Diasble aslr: echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+```
+
+Now i'll run the fuzz script
+![image](https://user-images.githubusercontent.com/113513376/222279472-d2234bee-3827-474b-a5aa-221f6efcd2ef.png)
+
+We can see some addresses but it might be quite convincing to know the canary offset since we can see about 3 addresses ending with `00` 
+
+I'll run the script again and compare the two results
+![image](https://user-images.githubusercontent.com/113513376/222279948-ed6bc180-fce4-4a23-81eb-42ca8fcaf988.png)
+
+But still it looks convincing anyways i'll open up gdb-pwndgb to get the real canary offset
+
+```
+gdb-pwngdb harvester
+break main
+run
+```
+
+Now if you notice the 3rd offset it looks like a libc address i can confirm what it is
+![image](https://user-images.githubusercontent.com/113513376/222280520-8ffcdf92-94d4-40d6-8909-738b76c19612.png)
+
+Cool its a libc address `
 
