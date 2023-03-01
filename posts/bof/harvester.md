@@ -29,4 +29,11 @@ harvester: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically 
 }
 ```
 
-We're working with a x64 binary 
+We're working with a x64 binary and all protections are enabled 💀
+
+Lets run it to know what it does
+![image](https://user-images.githubusercontent.com/113513376/222261870-ee0c20ab-040d-49df-a58a-3e0345bdd441.png)
+![image](https://user-images.githubusercontent.com/113513376/222261951-5a99e553-642d-4907-89cf-405efe793fd2.png)
+
+
+
