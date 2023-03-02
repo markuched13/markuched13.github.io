@@ -19,6 +19,8 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - **Twitter:** `https://twitter.com/0xMarkUche`
 - **Github:** `https://github.com/markuched13`
 
+<h13> Note: Incase any of my writeup don't show sometimes i battle with github to upload files you can just go to my github directly and view the posts 😜 </h3>
+
 * * *
 ### **CyberSecLabs Writeups:~#**
 * * *
@@ -204,3 +206,4 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 
 
 Hey You, Having Any Issues With My Writeups, Articles Send Me A DM on Discord `Hack.You#9120`  Am Always Free To Help......
+
