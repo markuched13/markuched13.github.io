@@ -39,4 +39,22 @@ Doing it manually sucks and its time wasting
 
 So i made a script to help me do it
 
-Here's my leak script [Leak]()
+Here's my leak script [Leak](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/echoctf/stringer/leak.py)
+
+What it will do is to loop from 1 to 99 and keep on sending `%i$s` where `i` is the value iterated which is from `1-99`
+
+Running it works but since my internet connection is really slow it keeps on disconnecting to the remote server 
+![image](https://user-images.githubusercontent.com/113513376/222300954-3d0ec3d5-a319-43f0-a115-64767ef5cdf6.png)
+
+But eventually after few minutes i got the script to leak the flag and i then made just a one linear bash script to only leak the flag
+
+Here's the solve script [Solve](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/echoctf/stringer/solve.sh)
+
+Running it works 
+![image](https://user-images.githubusercontent.com/113513376/222301580-1a69e798-b1db-425b-b7ac-643f123056d5.png)
+
+And we're done 👻
+
+<br> <br> 
+[Back To Home](../../index.md)
+
