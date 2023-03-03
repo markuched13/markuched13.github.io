@@ -106,3 +106,87 @@ void program(char *param_1)
   return;
 }
 ```
+
+Looking at the code we see what it's doin:
+
+```
+1. It checks if our input is the compared value i.e dir,id,flag etc. 
+2. Then it runs the value that its suppose to run when the input is chosen
+```
+
+So there's nothing much too do
+
+And we know that security issues lays within user input
+
+The only portion of the program that allows user to give input is
+
+```
+compare = strcmp(param_1,"hof\n");
+  if (compare == 0) {
+    puts("Register yourself for HTB Hall of Fame!");
+    printf("Enter your name: ");
+    fgets(&DAT_004040b0,10,stdin);
+   puts("See you on HoF soon! :)");
+}
+
+compare = strcmp(param_1,"flag\n");
+   if (compare == 0) {
+      printf("Enter flag: ");
+      fgets(buffer,48,stdin);
+      puts("Whoops, wrong flag!");
+}
+```
+
+And we also see this interesting option
+
+```
+compare = strcmp(param_1,"date\n");
+   if (compare == 0) {
+      system("date");
+}
+```
+
+Which basically just runs system(data) and we will get our current date 
+
+With this we can see the vulnerability is in this portion of the code
+
+```
+char buffer [16];
+
+compare = strcmp(param_1,"flag\n");
+  if (compare == 0) {
+    printf("Enter flag: ");
+    fgets(buffer,48,stdin);
+    puts("Whoops, wrong flag!");
+}
+```
+
+We see that the size of input buffer can only hold up to 16bytes of data but the fgets lets us write in 48 bytes of data
+
+So there's a buffer overflow vulnerability in that portion of the code
+
+Another thing i noticed is that the hof option allows user input. Before it reads the input its initial space is empty
+![image](https://user-images.githubusercontent.com/113513376/222853342-b6703054-34b3-4846-ac27-eb69f1c5053c.png)
+
+What we can basically do is to:
+
+```
+1. Write the value of /bin/sh into the DAT_004040b0 section since hof writes the user input there
+2. Then i'll make a rop chain to call system(DAT_004040b0) which will basically run system on the value stored in DAT_004040b0
+```
+
+One thing we should note that the value just reads in 10 bytes of data
+
+And since we can put `/bin/sh` which is just 7 bytes it's ok to get shell
+
+Firsly lets confirm our theory
+
+Using gdb i'll debug and see if our input is written in DAT_004040b0 when the hof option is called
+
+The address of `DAT_004040b0` is `004040b0` and i used ghidra to just view it 
+
+Ok cool lets fire up gdb-gef
+
+
+
+
