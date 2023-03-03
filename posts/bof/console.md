@@ -48,3 +48,61 @@ We can tell what it does:
 ```
 
 Here's the decompiled program() function
+![image](https://user-images.githubusercontent.com/113513376/222847808-7810d594-52c0-4915-8dc1-ac7395c7309c.png)
+
+```
+void program(char *param_1)
+
+{
+  int compare;
+  char buffer [16];
+  
+  compare = strcmp(param_1,"id\n");
+  if (compare == 0) {
+    puts("guest(1337) guest(1337) HTB(31337)");
+  }
+  else {
+    compare = strcmp(param_1,"dir\n");
+    if (compare == 0) {
+      puts("/home/HTB");
+    }
+    else {
+      compare = strcmp(param_1,"flag\n");
+      if (compare == 0) {
+        printf("Enter flag: ");
+        fgets(buffer,48,stdin);
+        puts("Whoops, wrong flag!");
+      }
+      else {
+        compare = strcmp(param_1,"hof\n");
+        if (compare == 0) {
+          puts("Register yourself for HTB Hall of Fame!");
+          printf("Enter your name: ");
+          fgets(&DAT_004040b0,10,stdin);
+          puts("See you on HoF soon! :)");
+        }
+        else {
+          compare = strcmp(param_1,"ls\n");
+          if (compare == 0) {
+            puts("- Boxes");
+            puts("- Challenges");
+            puts("- Endgames");
+            puts("- Fortress");
+            puts("- Battlegrounds");
+          }
+          else {
+            compare = strcmp(param_1,"date\n");
+            if (compare == 0) {
+              system("date");
+            }
+            else {
+              puts("Unrecognized command.");
+            }
+          }
+        }
+      }
+    }
+  }
+  return;
+}
+```
