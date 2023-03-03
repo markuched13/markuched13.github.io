@@ -4,7 +4,7 @@ description: Try Harder!.
 show_downloads: false
 show_repo: false
 
-gems:
+plugins:
 - jekyll-sitemap
 
 whitelist:
