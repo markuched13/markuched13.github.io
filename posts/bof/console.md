@@ -198,10 +198,16 @@ Well well it works now lets make the exploit 🤓
 I'll get a pop_rdi gadget using ropper
 ![image](https://user-images.githubusercontent.com/113513376/222854591-97a89228-903f-4cf9-83f7-ba31a1f049a5.png)
 
+Here's my exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/pwn/console.py)
+
+Running in on the remote server works 
+![image](https://user-images.githubusercontent.com/113513376/222854957-88af2183-a900-4bba-ae4c-1e13eddb795c.png)
 
 
+And we're done 👻
 
-
+<br> <br>
+[Back To Home](../../index.md)
 
 
 
