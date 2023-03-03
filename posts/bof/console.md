@@ -183,9 +183,25 @@ Firsly lets confirm our theory
 
 Using gdb i'll debug and see if our input is written in DAT_004040b0 when the hof option is called
 
-The address of `DAT_004040b0` is `004040b0` and i used ghidra to just view it 
+The address of `DAT_004040b0` is `004040b0` and i used ghidra to get it
 
 Ok cool lets fire up gdb-gef
+![image](https://user-images.githubusercontent.com/113513376/222854333-30c25866-0239-4602-99d3-7cf59a049b5e.png)
+![image](https://user-images.githubusercontent.com/113513376/222854363-77614c38-171b-4f59-8112-3f627fa43c0e.png)
+![image](https://user-images.githubusercontent.com/113513376/222854420-a8ba4089-af89-419a-884e-e9fbe2a7a6bb.png)
+
+Now lets view the content of the address `0x04040b0`
+![image](https://user-images.githubusercontent.com/113513376/222854486-5bca73c1-0a73-49e6-8ad4-53ddbb694d57.png)
+
+Well well it works now lets make the exploit 🤓
+
+I'll get a pop_rdi gadget using ropper
+![image](https://user-images.githubusercontent.com/113513376/222854591-97a89228-903f-4cf9-83f7-ba31a1f049a5.png)
+
+
+
+
+
 
 
 
