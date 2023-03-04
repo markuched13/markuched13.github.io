@@ -221,6 +221,13 @@ Also since its a stripped binary i can't just call `elf.symbols['main']` so basi
 Here's how i got the address
 ![image](https://user-images.githubusercontent.com/113513376/222913305-70897d3f-2a49-495c-94fa-5ae736f66056.png)
 
+This is the way the payload is going to be 
+
+```
+Overflow + Leak puts got + Return to function thats vuln to buffer overflow (FUN_0010132a)
+```
+
+This is the script i used for it [Script]()
 
 
 
