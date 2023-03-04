@@ -137,6 +137,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 24 2023]] [Craft](https://markuched13.github.io/posts/pg/craft.html) `Macros, File Upload, PrintSpoofer`
 - [[Feb 24 2023]] [Sona](https://markuched13.github.io/posts/pg/sona.html) `Scripting, Python Library Hijack`
 - [[Feb 28 2023]] [Slort](https://markuched13.github.io/posts/pg/slort.html) `LFI, Weak Permissions`
+- [[Mar 04 2023]] [Surf](https://github.com/markuched13/markuched13.github.io/blob/main/posts/pg/surf.md) `Weak Authentication, SSRF, Sudo`
 
 * * *
 ### **EchoCTF Writeups:~#**
