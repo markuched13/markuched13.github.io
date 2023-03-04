@@ -146,4 +146,50 @@ So there's another buffer overflow in this part of the code
 After i tried running the binary and just trying to overflow it i noticed if you feed in 8 bytes to the second input of option 2 it leaks some value
 ![image](https://user-images.githubusercontent.com/113513376/222906699-ef0a6ad3-c1bf-4943-b09f-29c939026fdf.png)
 
+Here's whats happening
+
+```
+  undefined8 local_28;
+  undefined4 *local_20;
+  
+  bVar4 = 0;
+  local_20 = &DAT_001040c0
+
+  printf("How much do you want for it? ");
+  read(0,&local_28,8);
+  iVar1 = strcmp((char *)&local_28,"13.37\n");
+```
+
+Our input is overwriting the new line character and leaking address
+
+But the address it leaks is &DAT_001040c0 which is the pointer to local_20
+
+We know that pie is enabled so first we need to get the pie base address before we can continue exploitation
+
+Lets get the offset
+
+Looking at the vulnerable function of the code
+
+```
+void FUN_0010132a(void)
+
+{
+  undefined auStack72 [72];
+  
+  puts("Sorry, we aren\'t selling right now.");
+  printf("But you can place a request. \nEnter details: ");
+  read(0,auStack72,80);
+  return;
+}
+```
+
+We're allowed to write in 80bytes in a 72 bytes buffer. The amount of space we can just overwrite is just `8` bytes
+
+And 8 bytes isn't enough for us to perform some roping so we need to increase the amount of bytes we can write to the stack
+
+A way of doing this is by doing stack pivoting which basically will free more space for us on the stack
+
+We need a gadget to subtract da
+
+
 
