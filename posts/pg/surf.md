@@ -89,7 +89,20 @@ Cool we see that its accessing the internal service
 url=http://127.0.0.1:8080
 ```
 
-Therefore this is an SSRF vulnerability
+Therefore this is a SSRF vulnerability
+
+With SSRF (Server Side Request Forgery) we can access internal service running on the target
+
+But when i try accessing internal resource i don't really get an output
+
+Lets check if it can reach our host
+
+I'll set a listener on port 80 then try to access it
+![image](https://user-images.githubusercontent.com/113513376/222860719-e0d40298-612a-4640-9765-c3f250d060c8.png)
+
+After forwarding the request i get a connection back on my listener
+![image](https://user-images.githubusercontent.com/113513376/222860811-53f20e65-9e0d-4f2c-9e9e-fbc9c4e2085c.png)
+
 
 
 
