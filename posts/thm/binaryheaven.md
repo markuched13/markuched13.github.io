@@ -136,7 +136,11 @@ Therefore the reverse of it will be
 (chr(username - 8) ^ 4)
 ```
 
-Using a python [script]() i got the decoded value
+Using a python [script](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/thm/binary_heaven/username.py) i got the decoded value
 ![image](https://user-images.githubusercontent.com/113513376/222933644-d7a7cff0-9d79-4812-a083-41212c9d4515.png)
+
+Submitting that works xD
+![image](https://user-images.githubusercontent.com/113513376/222933718-19d05090-648b-4827-aa24-2b6a427f86f0.png)
+
 
 
