@@ -103,6 +103,55 @@ I'll set a listener on port 80 then try to access it
 After forwarding the request i get a connection back on my listener
 ![image](https://user-images.githubusercontent.com/113513376/222860811-53f20e65-9e0d-4f2c-9e9e-fbc9c4e2085c.png)
 
+Out of curiosity i fuzzed for internal ports to know if maybe theres another web server running except the one on port 8080
+![image](https://user-images.githubusercontent.com/113513376/222863998-6697a5a6-ca74-425e-9165-ef042939abe8.png)
+![image](https://user-images.githubusercontent.com/113513376/222864017-5ea5790a-4898-4bd9-9acd-d2f1f9494480.png)
+
+Only 2 web server running on the target
+
+Anyways if you notice what the check said
+![image](https://user-images.githubusercontent.com/113513376/222864062-3e8764ff-2c83-4494-b72c-4834dec3d973.png)
+
+It refers to `phpfusion`
+
+Searching google for it shows an exploit
+![image](https://user-images.githubusercontent.com/113513376/222864100-f1e4dedc-7ded-4057-a38e-8ba724954b01.png)
+
+Reading it gives
+![image](https://user-images.githubusercontent.com/113513376/222864174-94f88f25-492f-4f96-9783-1bf01cd9a271.png)
+![image](https://user-images.githubusercontent.com/113513376/222864214-8dc20d19-6e19-4a1c-8950-0fdda3a678e4.png)
+
+What basically is happening is that its running system on base64_decode(payload)
+
+Where the payload is a base64 encoded value
+
+We can't run this on the remote server since we can't access it directly
+
+So i'll just do it manually and take advantage of the ssrf to run system command
+
+Firstly to confirm if it works i'll generate a base64 encoded value to send icmp request to me which i'll then capture using tcpdump
+![image](https://user-images.githubusercontent.com/113513376/222864474-f7c9b9db-67b5-4eec-a734-1ba11fa7260e.png)
+
+Then i'll url encode the payload
+![image](https://user-images.githubusercontent.com/113513376/222864511-8062e727-a32f-4f37-b9c5-68cd476724e9.png)
+
+With this i will send it to the target
+![image](https://user-images.githubusercontent.com/113513376/222864608-70c8b349-931e-490e-b6cf-0c57ef0d3825.png)
+
+Back on tcpdump we get icmp packets flowing
+![image](https://user-images.githubusercontent.com/113513376/222864797-b94d282b-cfa3-420e-8ef2-4a8cd896278f.png)
+
+Now i'll repeat the same process but this time we need to get shell 🐚
+
+But note that from the exploit code 
+
+```
+# !!spaces are important in order to avoid ==!!
+```
+
+So we need to add space if we get `==` from our generated payload
+
+
 
 
 
