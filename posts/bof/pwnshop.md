@@ -196,7 +196,9 @@ This `0x0000000000001219: sub rsp, 0x28; ret;` looks okay cause it subtracts 0x2
 
 So the idea is that the value that is being leaked is going to be `&DAT_001040c0` with that we can calculate the piebase address
 
-Here's m
+Using ghidra i get the offset of the `&DAT_001040c0` section which is `0x40c0`
+
+
 
 
 
