@@ -143,7 +143,7 @@ Here's what it does:
 
 So there's another buffer overflow in this part of the code
 
-After i tried running the binary and just trying to overflow it i noticed if you feed in 8 bytes to the second input of option 2 it leaks some value
+After i tried running the binary and just trying to overflow it i noticed if you feed in 7 or 8 bytes to the second input of option 2 it leaks some value
 ![image](https://user-images.githubusercontent.com/113513376/222906699-ef0a6ad3-c1bf-4943-b09f-29c939026fdf.png)
 
 Here's whats happening
@@ -162,9 +162,19 @@ Here's whats happening
 
 Our input is overwriting the new line character and leaking address
 
-But the address it leaks is &DAT_001040c0 which is the pointer to local_20
+But the address it leaks is `&DAT_001040c0` which is the pointer to `local_20`
+
+Also note that `DAT_001040c0` is in the `.bss` section of the binary
 
 We know that pie is enabled so first we need to get the pie base address before we can continue exploitation
+
+So the idea is that the value that is being leaked is going to be `&DAT_001040c0` with that we can calculate the piebase address
+
+Using ghidra i get the offset of the `&DAT_001040c0` section which is `0x40c0`
+
+Here's the script to leak the pie base address [Leak](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/pwn/pwnshop/pie_leak.py)
+
+Now lets do some exploitation 🤓
 
 Lets get the offset
 
@@ -194,9 +204,23 @@ We need a gadget to subtract data off the stack. Using ropper i get a gadget
 
 This `0x0000000000001219: sub rsp, 0x28; ret;` looks okay cause it subtracts 0x28 off the rsp 
 
-So the idea is that the value that is being leaked is going to be `&DAT_001040c0` with that we can calculate the piebase address
+I'll also get a pop_rdi gadget using ropper
+![image](https://user-images.githubusercontent.com/113513376/222912138-1b2005ad-e092-415f-a0ef-90d71f3aa7ab.png)
 
-Using ghidra i get the offset of the `&DAT_001040c0` section which is `0x40c0`
+Here's the way to get the offset
+![image](https://user-images.githubusercontent.com/113513376/222911333-1c24d841-9681-4df0-9498-2fbc7af69a01.png)
+![image](https://user-images.githubusercontent.com/113513376/222911388-6378a8c7-1f14-4527-afc0-1af4917eabef.png)
+
+The offset is `72` 
+
+I'll just perform a ret2libc attack. Since we know that the got of puts is already going to be populated since its already called in the main function
+![image](https://user-images.githubusercontent.com/113513376/222911789-41860016-8add-4f0e-be6d-659a6f2ecbe4.png)
+
+Also since its a stripped binary i can't just call `elf.symbols['main']` so basically after i leak the got of puts i'll need to return back to the vulnerable function to perform another rop chain 
+
+Here's how i got the address
+![image](https://user-images.githubusercontent.com/113513376/222913305-70897d3f-2a49-495c-94fa-5ae736f66056.png)
+
 
 
 
