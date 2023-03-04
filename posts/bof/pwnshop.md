@@ -183,13 +183,20 @@ void FUN_0010132a(void)
 }
 ```
 
-We're allowed to write in 80bytes in a 72 bytes buffer. The amount of space we can just overwrite is just `8` bytes
+We're allowed to write in 80 bytes in a 72 bytes buffer. The amount of space we can just overwrite is just `8` bytes
 
 And 8 bytes isn't enough for us to perform some roping so we need to increase the amount of bytes we can write to the stack
 
 A way of doing this is by doing stack pivoting which basically will free more space for us on the stack
 
-We need a gadget to subtract da
+We need a gadget to subtract data off the stack. Using ropper i get a gadget
+![image](https://user-images.githubusercontent.com/113513376/222907538-1c12b515-7e76-4f00-b50a-d31bdf422037.png)
+
+This `0x0000000000001219: sub rsp, 0x28; ret;` looks okay cause it subtracts 0x28 off the rsp 
+
+So the idea is that the value that is being leaked is going to be `&DAT_001040c0` with that we can calculate the piebase address
+
+Here's m
 
 
 
