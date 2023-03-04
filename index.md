@@ -196,6 +196,7 @@ Yo 👋, Welcome To My Cyber Security Blog I'm Mark, I Post Different Hacking Tr
 - [[Feb 20 2023]] [PICO ClutterOverflow](https://markuched13.github.io/posts/bof/clutter.html) `Variable Overwrite`
 - [[Mar 02 2023]] [HTBApocalypse21_Harvester](https://markuched13.github.io/posts/bof/harvester.html) `ROP (PIE Leak + Canary Bypass + Ret2Libc`
 - [[Mar 04 2023]] [HTB_Console](https://github.com/markuched13/markuched13.github.io/blob/main/posts/bof/console.md) `ROP (Section Data Write)`
+- [[Mar 04 2023]] [HTB_PwnShop](https://github.com/markuched13/markuched13.github.io/blob/main/posts/bof/pwnshop.md) `ROP (PIE Leak + Ret2Libc)`
 
 
 * * *
