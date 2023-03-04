@@ -227,7 +227,54 @@ This is the way the payload is going to be
 Overflow + Leak puts got + Return to function thats vuln to buffer overflow (FUN_0010132a)
 ```
 
-This is the script i used for it [Script]()
+This is the script i used for it [Script](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/pwn/pwnshop/got_leak.py)
+
+I decided to directly run it on the remote server cause i'm having issue running the final exploit locally
+
+And since the remote server will likely use a different libc from ours lets leak then patch the binary
+
+Running it remotely leaks the address
+![image](https://user-images.githubusercontent.com/113513376/222925140-805a9c93-b91d-4e0c-a707-241d2e0d596a.png)
+
+So now we can use [LibcDB](https://libc.blukat.me/) to get the likely libc the remote file uses
+![image](https://user-images.githubusercontent.com/113513376/222925024-b94182e7-21d3-44a8-a098-32de04f676cc.png)
+
+The libc is going to between the 3rd and 4th since the binary is x64
+
+Looking at it shows the offset to various syscalls
+![image](https://user-images.githubusercontent.com/113513376/222925066-942a76d1-2e8a-4385-848c-36e808767f9c.png)
+
+I downloaded the libc file
+
+```
+┌──(mark㉿haxor)-[~/…/BofLearn/Challs/HTB/pwnshop]
+└─$ ls -l libc6_2.23-0ubuntu11.2_amd64.so pwnshop 
+-rw-r--r-- 1 mark mark 1868984 Jan 26  2021 libc6_2.23-0ubuntu11.2_amd64.so
+-rwxr-xr-x 1 mark mark   14384 Nov 18  2020 pwnshop
+```
+
+Now here's my exploit [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/pwn/pwnshop/exploit.py)
+
+And i had to automate it using rop object cause i had issue with data receive 😞
+
+But anyways here's what the exploit does
+
+```
+1. It leaks the pie base address
+2. Leaks puts got
+2. Calculates the libc base address
+3. Run system('/bin/sh')
+```
+
+Running it works
+![image](https://user-images.githubusercontent.com/113513376/222925874-305f1498-f957-4c96-86ac-85613a83d77b.png)
+
+And we're done 👻
+
+<br> <br>
+[Back To Home](../../index.md)
+
+
 
 
 
