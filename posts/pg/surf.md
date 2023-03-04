@@ -164,6 +164,15 @@ stty raw -echo;fg
 reset
 ```
 
+Only one user on the box
+
+```
+www-data@Surf:/tmp$ ls -l /home
+total 4
+drwxr-xr-x 2 james james 4096 Nov  9  2021 james
+www-data@Surf:/tmp$ 
+```
+
 Looking around the web app files i got this
 ![image](https://user-images.githubusercontent.com/113513376/222868781-df309945-f575-4d82-9271-1697ce13d3de.png)
 ![image](https://user-images.githubusercontent.com/113513376/222868791-0a303220-518c-45d0-bfb9-e0256b28dd6f.png)
@@ -173,6 +182,31 @@ I tried getting like cred
 ![image](https://user-images.githubusercontent.com/113513376/222869005-b7459e3c-e253-41fc-aca5-3ce76dba4158.png)
 ![image](https://user-images.githubusercontent.com/113513376/222869023-56105764-577a-4540-8e5c-02331a338f31.png)
 
+But unfortunately i couldn't brute force it
 
+So looking over the other web directory i got another config file
+![image](https://user-images.githubusercontent.com/113513376/222869149-8ab9def2-f7c8-49c5-9cd8-cd759b156d39.png)
+
+Trying it to switch as user james with password `FlyToTheMoon213!` works
+![image](https://user-images.githubusercontent.com/113513376/222869257-c635c3e6-7af9-46a0-8c4f-9ee7c5076726.png)
+
+Lets get root 🤓
+
+Running `sudo -l` shows the user `james` can run `php /var/backups/database-backup.php` as user `root`
+![image](https://user-images.githubusercontent.com/113513376/222869300-a34a95cd-686a-48ca-8c36-5ad3001a93e4.png)
+
+Checking the perm shows that user www-data owns it
+![image](https://user-images.githubusercontent.com/113513376/222869402-af932299-208a-4cff-935b-00eff46db155.png)
+
+So if we are user www-data we can replace it to something else then run it sweet
+
+I'll exit my shell to land as user www-data then change its content to change the permission of `/bin/bash` to a `suid` binary
+![image](https://user-images.githubusercontent.com/113513376/222870055-51e89a9a-e00e-4613-9b1d-ea102a7338d0.png)
+![image](https://user-images.githubusercontent.com/113513376/222870087-7d4b8121-42e3-4001-b76e-99bf97a1e250.png)
+
+And we're done 👻
+
+<br> <br>
+[Back To Home](../../index.md)
 
 
