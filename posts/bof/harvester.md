@@ -344,7 +344,7 @@ Here's how the exploit is going to be:
 
 Since we can't really do something like `%1$p %2$p` i'll just keep on making the script call fight() since its a loop
 
-Here's my fuzz script [Fuzz](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/practice/harvest_fuzz.py)
+Here's my fuzz script [Fuzz](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/practice/harvester/fuzz.py)
 
 Before i run it i'll disable aslr 
 
@@ -434,7 +434,7 @@ pwndbg>
 With that ready i need a pop_rdi gadget to pop the value of sh in system also i will need a ret address to allign the stack to prevent movaps stack allignment
 ![image](https://user-images.githubusercontent.com/113513376/222285118-913d17ad-fd9f-4fea-97c0-91b96e7724a1.png)
 
-So here's my exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/practice/harvest_exploit.py)
+So here's my exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/practice/harvester/exploit.py)
 
 Running it works 👻
 
