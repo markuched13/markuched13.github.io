@@ -151,6 +151,27 @@ But note that from the exploit code
 
 So we need to add space if we get `==` from our generated payload
 
+I used curl as its more efficient rather than us url encoding stuffs smh
+![image](https://user-images.githubusercontent.com/113513376/222868594-7962c29d-51c5-4cf1-ba61-76743f2022f8.png)
+
+Lets stabilize our shell
+
+```
+python3 -c "import pty; pty.spawn('/bin/bash')"
+export TERM=xterm
+CTRL +Z
+stty raw -echo;fg
+reset
+```
+
+Looking around the web app files i got this
+![image](https://user-images.githubusercontent.com/113513376/222868781-df309945-f575-4d82-9271-1697ce13d3de.png)
+![image](https://user-images.githubusercontent.com/113513376/222868791-0a303220-518c-45d0-bfb9-e0256b28dd6f.png)
+
+I tried getting like cred 
+![image](https://user-images.githubusercontent.com/113513376/222868990-d5c8d064-dbb9-4478-aba5-2d1d162a20b5.png)
+![image](https://user-images.githubusercontent.com/113513376/222869005-b7459e3c-e253-41fc-aca5-3ce76dba4158.png)
+![image](https://user-images.githubusercontent.com/113513376/222869023-56105764-577a-4540-8e5c-02331a338f31.png)
 
 
 
