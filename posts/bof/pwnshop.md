@@ -231,7 +231,7 @@ This is the script i used for it [Script](https://github.com/markuched13/markuch
 
 I decided to directly run it on the remote server cause i'm having issue running the final exploit locally
 
-And since the remote server will likely use a different libc from ours lets leak then patch the binary
+And since the remote server will likely use a different libc from ours lets leak 
 
 Running it remotely leaks the address
 ![image](https://user-images.githubusercontent.com/113513376/222925140-805a9c93-b91d-4e0c-a707-241d2e0d596a.png)
