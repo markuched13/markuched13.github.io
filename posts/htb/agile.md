@@ -99,5 +99,47 @@ But vault.py is for the /vault directory
 ![image](https://user-images.githubusercontent.com/113513376/222963730-6f16cd52-0cb4-41ee-b7cd-45a04e180ef2.png)
 ![image](https://user-images.githubusercontent.com/113513376/222963743-3814e07a-60e9-499a-9e10-d6a9d2063e80.png)
 
+After reading the code i understood that some routes are for editing the db
 
+But this portion of the code is interesting
+![image](https://user-images.githubusercontent.com/113513376/222963953-aa7eeebb-18bd-4d0d-a68a-e5d9f3c995bb.png)
+
+We can tell that:
+
+```
+1. It checks if the url is /vault/row/<id> where id=integer
+2. Then it uses the password file template
+3. It checks if id=<id> 
+4. Then it returns the corresponding value of the id being accessed
+```
+
+With this we know that since no form of cookie check or some mitigation is done we can likely access other users password info
+
+I made a script to help me check if there are valid id's in /vault/row/FUZZ
+
+Here's my script [IDOR](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/b2b/agile/idor.py)
+
+Running it gives this
+![image](https://user-images.githubusercontent.com/113513376/222965288-b4327f0c-20bf-4611-b330-b772aa8f36f7.png)
+
+Now i can access it manually (would have scripted it tho 😞)
+![image](https://user-images.githubusercontent.com/113513376/222965386-638789a2-8afb-4cd9-b6c8-f4c46ddda84e.png)
+![image](https://user-images.githubusercontent.com/113513376/222965405-273fbfe5-d64f-4685-b91b-d2dccdc6174b.png)
+![image](https://user-images.githubusercontent.com/113513376/222965429-6a4445a5-6514-436e-8b45-839e4f033e50.png)
+![image](https://user-images.githubusercontent.com/113513376/222965454-09c1c592-93b6-45ca-9e52-b439ea111e97.png)
+![image](https://user-images.githubusercontent.com/113513376/222965498-993bdd78-a96e-4bb3-820d-cb862d28f5be.png)
+
+I saved em all in a file
+![image](https://user-images.githubusercontent.com/113513376/222965750-02b3ca0f-5450-4c83-8090-186829895496.png)
+
+Remember this we initially got the `/etc/passwd` file so likely one of this password will be for the user
+
+I extracted the first row from the `/etc/passwd` file
+![image](https://user-images.githubusercontent.com/113513376/222966114-9ef498a1-37fe-49b8-8f13-decfd147dac5.png)
+
+I'll do the same to extract those password value from the pass.txt file
+![image](https://user-images.githubusercontent.com/113513376/222965973-85cea812-7afe-4ecd-96e7-8e776ca5839a.png)
+
+Then i'll run hydra to brute force user and password
+![image](https://user-images.githubusercontent.com/113513376/222966210-ed0e6951-430f-43b3-9bdf-29a0e8679739.png)
 
