@@ -9,6 +9,7 @@ We're given two files and the first question on thm asks:
 What is the username?
 ```
 
+### Binary 1
 Lets check the binary file type 
 ![image](https://user-images.githubusercontent.com/113513376/222932941-9c3602d8-5fab-4495-8b91-eb1b52a7ae03.png)
 
@@ -142,5 +143,36 @@ Using a python [script](https://github.com/markuched13/markuched13.github.io/blo
 Submitting that works xD
 ![image](https://user-images.githubusercontent.com/113513376/222933718-19d05090-648b-4827-aa24-2b6a427f86f0.png)
 
+### Binary 2
+I'll run the binary to get an idea of what it does
+![image](https://user-images.githubusercontent.com/113513376/222934142-0d6ebf5f-88e7-418d-9e42-d87b8c4fbb07.png)
 
+Tts asking for password i'll decompile it using ghidra
 
+Since its also not stripped we'll see the function names
+
+And the function i'll go first to is the `main.main` function cause thats the start function in a go binary
+![image](https://user-images.githubusercontent.com/113513376/222934686-948c39cd-6022-4cc1-ba23-1a93076a3f08.png)
+
+But tbh looking at it makes me cry 😂 (i don't know go)
+
+So rather lets open it up in gdb and see if we can get anything from there
+
+But gdb output doesn't really look too good in my eye
+![image](https://user-images.githubusercontent.com/113513376/222935010-079774ad-d20e-42ca-9eb4-ebe658280e0a.png)
+![image](https://user-images.githubusercontent.com/113513376/222935016-3b2b294d-745b-4168-8f9f-306f0ad9b4e8.png)
+![image](https://user-images.githubusercontent.com/113513376/222935020-faea441e-f3ea-4736-8222-3ab79abed6e9.png)
+![image](https://user-images.githubusercontent.com/113513376/222935024-f2e75dba-c24c-42da-a475-fd3a0bcd230c.png)
+
+So let me try radare2 
+![image](https://user-images.githubusercontent.com/113513376/222935047-22388f5f-7f07-4196-aef7-1a84981cdc8d.png)
+![image](https://user-images.githubusercontent.com/113513376/222935060-9acdb0a1-7e9b-4cda-87f0-095030fec044.png)
+![image](https://user-images.githubusercontent.com/113513376/222935077-abc52d0b-9b67-4fbc-849d-af4aff7a97ab.png)
+
+Hmmmmm whats this weird long string
+
+```
+GOg0esGrrr!IdeographicMedefaidrinNandinagariNew_Tai_LueOld_PersianOld_SogdianPau_Cin_HauSignWritingSoft_DottedWarang_CitiWhite_
+```
+
+Trying that as password works 
