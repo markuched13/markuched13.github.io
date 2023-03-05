@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# Author: Hack.You
+
 # i = 0
 # int(username) + long(i) * 4 != (char(input[i]) ^ 4) + 8
 
