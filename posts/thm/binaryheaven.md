@@ -267,12 +267,46 @@ Here's my exploit script [Exploit](https://github.com/markuched13/markuched13.gi
 Running it locally works
 ![image](https://user-images.githubusercontent.com/113513376/222937704-8954d21d-41a0-4e86-acb6-e900d03532ab.png)
 
-Also we don't really need the remote libc file cause since we have access to the machine i already specified in my exploit that the libc should be gotten from the elf libc
+Now i'll run it so that it will connect to the ssh server and exploit the binary
+![image](https://user-images.githubusercontent.com/113513376/222938509-3e16a37a-df8a-4ca0-a316-52c3c9c4d4cf.png)
+
+I'll get a more stable shell
+![image](https://user-images.githubusercontent.com/113513376/222938647-4b0e1e53-276a-46ac-a625-1867353a1d3c.png)
+
+And to stabilize the shell i'll do this:
 
 ```
-libc = elf.libc
+python3 -c "import pty; pty.spawn('/bin/sh')"
+export TERM=xterm
+CTRL +Z
+stty raw -echo;fg
 ```
 
+Now lets get root 🤓
 
+There's a binary in the user's desktop with its C code
+![image](https://user-images.githubusercontent.com/113513376/222938770-b0ee3fc6-3648-42a5-b225-aa9710998fe0.png)
+
+And the C code basically runs `"/usr/bin/env echo Get out of heaven lol"`
+
+We can see the vulnerability already 
+
+Lets confirm by runnning the binary to know if its the owner of the C code
+![image](https://user-images.githubusercontent.com/113513376/222938823-8ea081f2-24fd-4070-a786-3160d20f49b9.png)
+
+Yeah it is 
+
+Now the vulnerability is that it runs system `echo` without specifying its full path
+
+So we can perform a path hijack
+![image](https://user-images.githubusercontent.com/113513376/222939015-efd43a01-8981-4734-ad4a-6493d329d9dc.png)
+
+We can get root shell from there
+![image](https://user-images.githubusercontent.com/113513376/222939045-fd3b4009-5200-48ba-860c-76a5278efce6.png)
+
+And we're done 👻
+
+<br> <br> 
+[Back To Home](../../index.md)
 
 
