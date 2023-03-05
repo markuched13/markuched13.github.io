@@ -65,3 +65,39 @@ Cool we have directory transversal + local file read
 At this point i'll like to know where the app source code is. And the only way i can get that is by fuzzing for `/proc/FUZZ/cmdline` 
 
 You can use ffuf to get the process then view them manually or use a bash command to curl while it fuzzed but i'll use python 
+
+Here's my fuzz script [Fuzz](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/htb/b2b/agile/fuzz.py)
+
+Running it takes some while but after it runs finish it creates various file*.txt 
+
+Using a one linear bash command i'll read the content of each of them
+![image](https://user-images.githubusercontent.com/113513376/222963104-6f45c1d8-ea14-4d0a-975d-9fae02e2921c.png)
+
+Reading the output.txt file shows the process we fuzzed
+![image](https://user-images.githubusercontent.com/113513376/222963170-01295977-29e3-45e6-be54-e0d326950672.png)
+
+And its running `python3` on `app.py ( wsgi:app )`
+
+Remember previously we generated the debug error when we tried loggin in with SQli 
+
+Which also leaked the files
+
+I'll download the app.py file
+![image](https://user-images.githubusercontent.com/113513376/222963402-c3ae752a-b18f-4086-b5e1-d77ef90f9622.png)
+
+Also we leaked the vault.py file from the error
+![image](https://user-images.githubusercontent.com/113513376/222963444-c118eeb8-c93b-463e-a84e-d4d492aed58c.png)
+
+Here's the file
+![image](https://user-images.githubusercontent.com/113513376/222963463-b0569795-1255-4cd6-bbe2-72033f639fe9.png)
+
+Reading the app.py shows more of like the source app file for wsgi server
+
+But vault.py is for the /vault directory
+![image](https://user-images.githubusercontent.com/113513376/222963692-2d40b12d-8759-4315-918e-a8ac53af3090.png)
+![image](https://user-images.githubusercontent.com/113513376/222963707-51028b70-eb91-47ce-9448-90fea7588b0c.png)
+![image](https://user-images.githubusercontent.com/113513376/222963730-6f16cd52-0cb4-41ee-b7cd-45a04e180ef2.png)
+![image](https://user-images.githubusercontent.com/113513376/222963743-3814e07a-60e9-499a-9e10-d6a9d2063e80.png)
+
+
+
