@@ -260,4 +260,6 @@ Now lets get the offset needed to overwrite the EIP
 
 The offset is `32`
 
+So what ret2libc does is that it leverage functions within the libc, such as system to call /bin/sh
 
+Here's my exploit script [Exploit]()
