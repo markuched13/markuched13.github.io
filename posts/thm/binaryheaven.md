@@ -175,4 +175,89 @@ Hmmmmm whats this weird long string
 GOg0esGrrr!IdeographicMedefaidrinNandinagariNew_Tai_LueOld_PersianOld_SogdianPau_Cin_HauSignWritingSoft_DottedWarang_CitiWhite_
 ```
 
-Trying that as password works 
+The password length is crazy so i disassembled it in gdb-pwngdb
+
+And saw this 
+![image](https://user-images.githubusercontent.com/113513376/222936287-b9857e4f-3372-4372-8496-68ac2b33c70a.png)
+
+So the expected length of the password is 11
+
+Using python or u can do it manually 😂 i'll get the first 11 bytes
+![image](https://user-images.githubusercontent.com/113513376/222936512-2b240a4e-33dc-4254-92f2-85c0fa15c1b9.png)
+
+Trying it as the password works
+![image](https://user-images.githubusercontent.com/113513376/222936542-e359eff6-450d-4213-af3c-7b06ff5861f2.png)
+
+Now i'll login to ssh as `guardian:GOg0esGrrr!`
+![image](https://user-images.githubusercontent.com/113513376/222936583-a7202eea-c8d3-44e0-86b6-8f76a0fc7a3b.png)
+
+There are two users on the box
+![image](https://user-images.githubusercontent.com/113513376/222936601-a404637e-8b13-41fd-971d-b8102a6fb445.png)
+
+Searching for suid shows this
+![image](https://user-images.githubusercontent.com/113513376/222936619-1927af7f-1c35-42f4-a075-7533aabd70c8.png)
+
+I'll download it to my machine for further analyzing
+![image](https://user-images.githubusercontent.com/113513376/222936657-ed5eeb39-4bfa-4c18-9599-6c959ef3c7a7.png)
+
+Lets do the basic file checks
+![image](https://user-images.githubusercontent.com/113513376/222936753-3121c35d-ba5f-4a63-a2f2-a0c576d96a2e.png)
+
+We're working with a x86 binary and from looking at its protections it has NX and PIE enabled
+
+And what those does is that:
+
+```
+1. NX prevents shellcode injection to the stack and the execution of it
+2. PIE randomize memory addresses
+```
+
+I'll run it to know what it does
+![image](https://user-images.githubusercontent.com/113513376/222936799-9af042e7-fc1b-4a12-943d-212dcb9c2fdd.png)
+
+Cool it leaks system address and requires our input
+
+I'll decompile the binary using ghidra
+
+Since its not stripped i'll see function names
+
+Here's the main function
+![image](https://user-images.githubusercontent.com/113513376/222936914-4d09542c-d7a9-4a9b-ac9c-8903b6a37e3d.png)
+
+It just calls the vuln function
+
+And here's the vuln function
+![image](https://user-images.githubusercontent.com/113513376/222936926-a53548d2-bae9-4ce5-99fb-00f0daf95269.png)
+
+```
+void vuln(void)
+
+{
+  undefined input [24];
+  
+  FUN_00011100("Binexgod said he want to make this easy.");
+  FUN_000110c0("System is at: %lp\n",system);
+  FUN_000110d0(input);
+  return;
+}
+```
+
+The vuln function leaks the address of system then recieves our input which is stored in a buffer that can only hold up 24 bytes of data
+
+I'll try overflowing it with 30 A's
+![image](https://user-images.githubusercontent.com/113513376/222937029-82eafa86-31b7-4bfb-b770-8b59f8f25aa7.png)
+
+Cool we have segmentation fault
+
+Since we already have a libc leak i'll just perform Ret2Libc
+
+Firstly i'll need to get the remote libc library file since my libc will be different from the remote own
+![image](https://user-images.githubusercontent.com/113513376/222937123-637cc850-f914-4be5-91f6-73e27296c187.png)
+
+Now lets get the offset needed to overwrite the EIP
+![image](https://user-images.githubusercontent.com/113513376/222937225-2b6ef3fd-804c-4c3e-bf7a-3321441f67c8.png)
+![image](https://user-images.githubusercontent.com/113513376/222937235-e8a5a616-ded3-4eeb-8c64-717345ae91ae.png)
+
+The offset is `32`
+
+
