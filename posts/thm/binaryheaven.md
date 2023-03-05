@@ -262,4 +262,17 @@ The offset is `32`
 
 So what ret2libc does is that it leverage functions within the libc, such as system to call /bin/sh
 
-Here's my exploit script [Exploit]()
+Here's my exploit script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/thm/binary_heaven/exploit.py)
+
+Running it locally works
+![image](https://user-images.githubusercontent.com/113513376/222937704-8954d21d-41a0-4e86-acb6-e900d03532ab.png)
+
+Also we don't really need the remote libc file cause since we have access to the machine i already specified in my exploit that the libc should be gotten from the elf libc
+
+```
+libc = elf.libc
+```
+
+
+
+
