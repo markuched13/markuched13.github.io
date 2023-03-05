@@ -143,3 +143,21 @@ I'll do the same to extract those password value from the pass.txt file
 Then i'll run hydra to brute force user and password
 ![image](https://user-images.githubusercontent.com/113513376/222966210-ed0e6951-430f-43b3-9bdf-29a0e8679739.png)
 
+Cool we have a cred `corum:5db7caa1d13cc37c9fc2`
+
+Trying it over ssh works 
+![image](https://user-images.githubusercontent.com/113513376/222966633-3c32b29e-95c4-4e71-b6c6-b67cfad7ecf3.png)
+
+There are 3 users on the box 
+![image](https://user-images.githubusercontent.com/113513376/222966691-4dc96125-0e48-4fbb-be19-a3420b9e9a2a.png)
+
+Lets perform some privesc 🤓
+
+Searching for SUID shows that `/opt/google/chrome/chrome-sandbox` has the suid perm set on it 
+![image](https://user-images.githubusercontent.com/113513376/222966730-76051cc6-b4c5-4b78-8191-0baa7ce63769.png)
+
+I searched online for what it is and got some resources for example this
+
+```
+[Resource](https://chromium.googlesource.com/chromium/src/+/0e94f26e8/docs/linux_suid_sandbox.md)
+```
