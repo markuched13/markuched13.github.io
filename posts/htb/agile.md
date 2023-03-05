@@ -160,4 +160,25 @@ I searched online for what it is and got some resources for example this
 
 ```
 [Resource](https://chromium.googlesource.com/chromium/src/+/0e94f26e8/docs/linux_suid_sandbox.md)
+[Resource](https://chromium.googlesource.com/chromium/src/+/main/docs/linux/suid_sandbox_development.md)
 ```
+
+But i didn't really understand it so lets check for internal service running on the target
+![image](https://user-images.githubusercontent.com/113513376/222967357-7dea1865-7c17-40d5-89d6-7e07043f455e.png)
+
+I'll port forward all this port back to my host
+![image](https://user-images.githubusercontent.com/113513376/222967462-112d0022-0612-4aa2-9b76-0cac680ada37.png)
+
+Now i can confirm if it worked
+![image](https://user-images.githubusercontent.com/113513376/222967747-b62f1fef-ca3b-42a1-af2c-547a9d32ac9d.png)
+![image](https://user-images.githubusercontent.com/113513376/222967831-cd894f53-0fc7-4317-80ff-6c543a18b50e.png)
+![image](https://user-images.githubusercontent.com/113513376/222967847-d0d712d0-49cb-47aa-bf94-5637b36097c1.png)
+
+Checking the service on port 5000 doesn't load
+
+But for port 5555 shows a web service which is similar to the one we got earlier
+![image](https://user-images.githubusercontent.com/113513376/222967874-54601b34-e760-48c5-bd2d-044743c20be7.png)
+![image](https://user-images.githubusercontent.com/113513376/222967878-bf7dea73-bf67-4081-a333-94a07efd73c0.png)
+
+I'll create an account then try to leak passwords maybe there will be another cred
+
