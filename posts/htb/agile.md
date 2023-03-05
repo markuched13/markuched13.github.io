@@ -182,3 +182,81 @@ But for port 5555 shows a web service which is similar to the one we got earlier
 
 I'll create an account then try to leak passwords maybe there will be another cred
 
+When i tried using my idor leak password script it runs but then the remote server gives internal error
+
+So we can't send large amount of requests to it
+
+But trying it manually shows another user cred `edwards:d07867c6267dcb5df0af`
+![image](https://user-images.githubusercontent.com/113513376/222968274-e7558907-7262-4e19-b18b-5ed7158a98aa.png)
+
+Trying it over ssh works 
+![image](https://user-images.githubusercontent.com/113513376/222968346-e641cd3e-6d59-42fc-918c-931c120a9fa1.png)
+
+Checking if the user has sudo perm shows this
+![image](https://user-images.githubusercontent.com/113513376/222968378-2391c4c8-b83c-4782-9ec1-a4b55a318c1a.png)
+
+So we can `sudoedit` as `dev_admin` on `sudoedit /app/app-testing/tests/functional/creds.txt` & `/app/config_test.json`
+
+I read the first file which shows a mysql cred
+![image](https://user-images.githubusercontent.com/113513376/222968438-af4cff58-4a00-48c3-8967-ad3fed7a36a1.png)
+
+And the second file seems to be some cred for user edwards weird 🤔
+![image](https://user-images.githubusercontent.com/113513376/222968474-7dc5cad4-267b-464c-b8c5-5dbfdfa5e1a6.png)
+
+```
+Command: sudo -u dev_admin sudoedit /app/config_test.json
+         sudo -u dev_admin sudoedit /app/app-testing/tests/functional/creds.txt
+```
+
+I then tried login in to mysql using the cred `superpasstester:VUO8A2c2#3FnLq3*a9DX1U` 
+
+And it works 
+![image](https://user-images.githubusercontent.com/113513376/222968619-479ca789-e2fc-4701-b102-27467a7b9fb7.png)
+![image](https://user-images.githubusercontent.com/113513376/222968643-f1e9bd98-b297-4b31-b4a8-26f717652d86.png)
+
+Nothing really interesting in the db
+
+Now if you notice the sudo perm
+![image](https://user-images.githubusercontent.com/113513376/222968867-873a2f1a-3d32-4da5-b8dd-9274da7ec46a.png)
+
+It uses `sudoedit`. Searching google for exploit shows me this
+![image](https://user-images.githubusercontent.com/113513376/222968962-fe397361-8a53-4a9b-be04-b0604d35f84a.png)
+
+But on looking at the exploit script it works only when the user has root perm over sudoedit then it writes data into the `/etc/sudoers` file
+![image](https://user-images.githubusercontent.com/113513376/222969025-8185f7da-39a3-4867-bb4f-5c2bb59f2c60.png)
+
+Looking at the last line shows the main exploit that is being ran
+
+```
+EDITOR="vim -- /etc/sudoers" $EXPLOITABLE
+```
+
+So with this, we can read any file that belongs to user dev_admin
+
+While i searched for important file i got this
+![image](https://user-images.githubusercontent.com/113513376/222969481-2bf9ae4d-f59a-470e-9f8d-a3f77afbb18a.png)
+
+There's `/app/venv/bin/activate` which basically is like a virtual environment 
+
+Now i can get shell as user dev_admin
+
+```
+Command: EDITOR="vi -- /app/venv/bin/activate" sudo -u dev_admin sudoedit /app/app-testing/tests/functional/creds.txt 
+```
+
+Running that will let us read the activate file
+
+And since this is a bash file we can add our command so that when we try using the virtual enviroment our command will also be executed
+![image](https://user-images.githubusercontent.com/113513376/222969699-b950218f-a031-457d-8c6c-396a53055dc7.png)
+
+Now if we try switching to the virtual environment our payload will also be executed
+![image](https://user-images.githubusercontent.com/113513376/222969892-2e2ef784-5590-4944-a233-aaa7f66d4169.png)
+
+From here we can switch to root
+![image](https://user-images.githubusercontent.com/113513376/222969905-1e494bd4-47b0-42d9-b772-298a5666002f.png)
+
+
+And we're done 👻
+
+<br> <br>
+[Back To Home](../../index.md)
