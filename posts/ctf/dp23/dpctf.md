@@ -59,7 +59,7 @@ Checking JH [github](https://github.com/JohnHammond/ctf-katana)
 I got some values to use 
 ![image](https://user-images.githubusercontent.com/113513376/223128985-07e84727-e918-4dde-9772-65bda9a18fc3.png)
 
-So here's the final exploit to run arbitary commands [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/dpctf/web/lazydevs/exploit.sh)
+So here's my final exploit to run arbitary commands [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/dpctf/web/lazydevs/exploit.sh)
 
 Running the script gives command execution
 ![image](https://user-images.githubusercontent.com/113513376/223131580-ce997114-f003-4f61-ad8f-f63b022a8344.png)
