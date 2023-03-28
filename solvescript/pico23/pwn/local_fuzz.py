@@ -3,7 +3,7 @@
 from pwn import *
 import warnings
 
-context.log_level = 'info'
+context.log_level = 'warning'
 warnings.filterwarnings('ignore')
 
 for i in range(40, 50):
