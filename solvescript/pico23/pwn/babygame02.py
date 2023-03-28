@@ -26,6 +26,8 @@ def brute():
             return offset
             break
 
+offset = brute()
+
 def getflag(offset):
     io = remote(f'{hostname}', f'{port}')
     io.sendline('l'+offset)
@@ -35,5 +37,4 @@ def getflag(offset):
     flag = io.recvall()
     success(flag)
 
-offset = brute()
 getflag(offset)
