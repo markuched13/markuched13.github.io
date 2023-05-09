@@ -22,7 +22,7 @@ for i in range(0, len(cipher), 2):
 
 print(f'Encoded text: {cipher}')
 print(f'Alphabet list: {"".join(alphabets)}')
-print(f"Decoded: {''.join(decode)[:5]}::{''.join(decode)[10:]}")
+print(f"Decoded: {''.join(decode)[:5]}::{''.join(decode)[5:]}")
 
 
 
