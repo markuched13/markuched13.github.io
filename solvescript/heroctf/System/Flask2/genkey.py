@@ -10,8 +10,8 @@ probably_public_bits = [
 
 private_bits = [
     '2485377892354',# str(uuid.getnode()),  /sys/class/net/eth0/address
-    '49bab8e92cca463691a8b330fc54cc89',# /etc/machine-id
-    b'0000000000000000',# os.urandom(16)
+    '68f432c96a6d45f585a019af1ad31fc2',# /etc/machine-id
+    b'\x00'*16,# os.urandom(16)
 ]
 
 
