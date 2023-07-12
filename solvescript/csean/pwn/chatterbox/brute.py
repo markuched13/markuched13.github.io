@@ -29,4 +29,4 @@ if __name__ == '__main__':
     start = pool(int('5'))
     start.map(brute_password, wordlist)
 
-# Credential: admin:july1
+# Credential: admin:july10
