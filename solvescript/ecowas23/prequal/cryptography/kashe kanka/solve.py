@@ -18,3 +18,5 @@ for char_ in combination():
             print(decoded.decode('utf-8'))
     except Exception as e:
         print(e)
+
+# Flag:  flag{xor_puts_the_pun_in_pun_based_flag}
