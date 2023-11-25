@@ -1,5 +1,3 @@
-#!/usr/bin/python3
-# Author: Hack.You
 from termcolor import colored
 import json
 import base64
