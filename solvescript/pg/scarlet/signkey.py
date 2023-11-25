@@ -7,17 +7,7 @@ import sys
 import hmac
 import hashlib
 
-print(colored('''
- _   _  ___   ___  ____     ____  ___  ____
-| \ | |/ _ \ / _ \| __ )   / ___|/ _ \|  _ \\
-|  \| | | | | | | |  _ \  | |  _| | | | | | |
-| |\  | |_| | |_| | |_) | | |_| | |_| | |_| |
-|_| \_|\___/ \___/|____/   \____|\___/|____/
-
-''' , 'red'))
-
 if len(sys.argv) < 2:
-    print('\033[91m' + '@Author: Hack.You' + '\033[0m')
     print(colored(f"Usage: python3 {sys.argv[0]} username2sign", 'blue'))
     sys.exit(0)
 
